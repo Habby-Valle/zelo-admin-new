@@ -21,6 +21,20 @@ export const subscriptionKeys = {
 export const planKeys = {
   all: ["plans"] as const,
   lists: () => [...planKeys.all, "list"] as const,
-  list: (params?: { isActive?: boolean; pageSize?: number }) =>
-    [...planKeys.lists(), params] as const,
+  list: (params?: {
+    search?: string
+    isActive?: boolean | null
+    page?: number
+    pageSize?: number
+    scope?: string
+  }) => [...planKeys.lists(), params] as const,
+  details: () => [...planKeys.all, "detail"] as const,
+  detail: (id: string) => [...planKeys.details(), id] as const,
+}
+
+export const benefitKeys = {
+  all: ["benefits"] as const,
+  lists: () => [...benefitKeys.all, "list"] as const,
+  details: () => [...benefitKeys.all, "detail"] as const,
+  detail: (id: string) => [...benefitKeys.details(), id] as const,
 }
