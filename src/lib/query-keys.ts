@@ -67,6 +67,14 @@ export const broadcastKeys = {
   list: () => [...broadcastKeys.lists()] as const,
 }
 
+export const feedbackKeys = {
+  all: ["feedbacks"] as const,
+  lists: () => [...feedbackKeys.all, "list"] as const,
+  list: (params: object) => [...feedbackKeys.lists(), params] as const,
+  details: () => [...feedbackKeys.all, "detail"] as const,
+  detail: (id: number) => [...feedbackKeys.details(), id] as const,
+}
+
 export const auditLogKeys = {
   all: ["audit-logs"] as const,
   lists: () => [...auditLogKeys.all, "list"] as const,
