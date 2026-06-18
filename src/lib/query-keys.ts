@@ -67,6 +67,15 @@ export const broadcastKeys = {
   list: () => [...broadcastKeys.lists()] as const,
 }
 
+export const reportKeys = {
+  all: ["reports"] as const,
+  shifts: (params: object) => [...reportKeys.all, "shifts", params] as const,
+  checklists: (params: object) => [...reportKeys.all, "checklists", params] as const,
+  patientsGrowth: (params: object) => [...reportKeys.all, "patients-growth", params] as const,
+  sos: (params: object) => [...reportKeys.all, "sos", params] as const,
+  caregivers: (params: object) => [...reportKeys.all, "caregivers", params] as const,
+}
+
 export const feedbackKeys = {
   all: ["feedbacks"] as const,
   lists: () => [...feedbackKeys.all, "list"] as const,
