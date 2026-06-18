@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import {
   LayoutDashboard,
@@ -93,8 +94,15 @@ export function Sidebar() {
   return (
     <aside className="flex h-full w-64 flex-col border-r bg-card">
       <div className="flex h-16 items-center gap-3 border-b px-5">
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border bg-muted">
-          <span className="text-base font-bold text-primary">Z</span>
+        <div className="relative flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-lg border bg-muted">
+          <Image
+            src="/logo.png"
+            alt="Zelo"
+            fill
+            sizes="36px"
+            className="object-contain p-1"
+            unoptimized
+          />
         </div>
         <div className="min-w-0 leading-none">
           <p className="text-[10px] font-semibold tracking-widest text-muted-foreground uppercase">

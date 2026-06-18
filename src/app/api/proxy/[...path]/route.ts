@@ -15,11 +15,10 @@ async function proxy(request: NextRequest, { params }: { params: Promise<{ path:
   }
 
   const contentType = request.headers.get("content-type")
-  if (contentType) {
+  const isFormData = contentType?.includes("multipart/form-data")
+  if (contentType && !isFormData) {
     headers["Content-Type"] = contentType
   }
-
-  const isFormData = contentType?.includes("multipart/form-data")
 
   const body = isFormData ? await request.formData() : await request.text().catch(() => undefined)
 
@@ -54,3 +53,4 @@ export const POST = proxy
 export const PUT = proxy
 export const PATCH = proxy
 export const DELETE = proxy
+export const OPTIONS = proxy
