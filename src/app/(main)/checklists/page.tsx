@@ -1,1 +1,5 @@
-export default function ChecklistsPage() { return <div>Checklists - Em desenvolvimento</div> }
+import { ChecklistsPageClient } from "@/features/checklists/components"
+
+export default function ChecklistsPage() {
+  return <ChecklistsPageClient />
+}

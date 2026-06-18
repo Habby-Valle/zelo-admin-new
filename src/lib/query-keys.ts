@@ -84,6 +84,14 @@ export const feedbackKeys = {
   detail: (id: number) => [...feedbackKeys.details(), id] as const,
 }
 
+export const checklistKeys = {
+  all: ["checklists"] as const,
+  lists: () => [...checklistKeys.all, "list"] as const,
+  list: (params: object) => [...checklistKeys.lists(), params] as const,
+  details: () => [...checklistKeys.all, "detail"] as const,
+  detail: (id: number) => [...checklistKeys.details(), id] as const,
+}
+
 export const shiftKeys = {
   all: ["shifts"] as const,
   lists: () => [...shiftKeys.all, "list"] as const,
