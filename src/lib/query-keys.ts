@@ -46,6 +46,14 @@ export const inviteKeys = {
   list: (params: object) => [...inviteKeys.lists(), params] as const,
 }
 
+export const patientKeys = {
+  all: ["patients"] as const,
+  lists: () => [...patientKeys.all, "list"] as const,
+  list: (params: object) => [...patientKeys.lists(), params] as const,
+  details: () => [...patientKeys.all, "detail"] as const,
+  detail: (id: string) => [...patientKeys.details(), id] as const,
+}
+
 export const benefitKeys = {
   all: ["benefits"] as const,
   lists: () => [...benefitKeys.all, "list"] as const,

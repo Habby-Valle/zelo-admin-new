@@ -125,16 +125,16 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
   const router = useRouter()
   const { data: clinic, isLoading: loadingClinic } = useClinic(id)
   const { data: patientsData, isLoading: loadingPatients } = usePatients({
-    clinicId: id,
+    clinicId: String(id),
     pageSize: 5,
   })
   const { data: caregiversData, isLoading: loadingCaregivers } = useUsers({
     role: "caregiver",
-    clinicId: id,
+    clinicId: String(id),
     pageSize: 5,
   })
   const { data: shiftsData, isLoading: loadingShifts } = useShifts({
-    clinicId: id,
+    clinicId: String(id),
     pageSize: 5,
   })
   const { data: sosData, isLoading: loadingSos } = useSosAlerts({

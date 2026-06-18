@@ -1,3 +1,4 @@
-export type { Patient } from "./types"
-export { getPatientsApi } from "./services"
-export { usePatients } from "./hooks"
+export type * from "./types"
+export * from "./services"
+export * from "./hooks"
+export * from "./components"
