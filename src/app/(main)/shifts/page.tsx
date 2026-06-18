@@ -1,1 +1,5 @@
-export default function ShiftsPage() { return <div>Turnos - Em desenvolvimento</div> }
+import { ShiftsPageClient } from "@/features/shifts/components"
+
+export default function ShiftsPage() {
+  return <ShiftsPageClient />
+}

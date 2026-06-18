@@ -84,6 +84,14 @@ export const feedbackKeys = {
   detail: (id: number) => [...feedbackKeys.details(), id] as const,
 }
 
+export const shiftKeys = {
+  all: ["shifts"] as const,
+  lists: () => [...shiftKeys.all, "list"] as const,
+  list: (params: object) => [...shiftKeys.lists(), params] as const,
+  details: () => [...shiftKeys.all, "detail"] as const,
+  detail: (id: number) => [...shiftKeys.details(), id] as const,
+}
+
 export const auditLogKeys = {
   all: ["audit-logs"] as const,
   lists: () => [...auditLogKeys.all, "list"] as const,
