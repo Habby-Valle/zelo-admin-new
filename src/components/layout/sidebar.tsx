@@ -18,6 +18,7 @@ import {
   TestTube,
   CheckCircle,
   Megaphone,
+  AlertTriangle,
 } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -80,6 +81,7 @@ const navItems = [
   { label: "Relatórios", href: "/reports", icon: BarChart3 },
   { label: "Logs de Auditoria", href: "/audit-logs", icon: Shield },
   { label: "Broadcast", href: "/broadcast", icon: Megaphone },
+  { label: "SOS", href: "/sos", icon: AlertTriangle },
   { label: "Configurações", href: "/settings", icon: Settings },
 ]
 
