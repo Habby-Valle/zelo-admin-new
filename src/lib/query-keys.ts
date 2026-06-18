@@ -61,6 +61,12 @@ export const benefitKeys = {
   detail: (id: string) => [...benefitKeys.details(), id] as const,
 }
 
+export const broadcastKeys = {
+  all: ["broadcasts"] as const,
+  lists: () => [...broadcastKeys.all, "list"] as const,
+  list: () => [...broadcastKeys.lists()] as const,
+}
+
 export const auditLogKeys = {
   all: ["audit-logs"] as const,
   lists: () => [...auditLogKeys.all, "list"] as const,
