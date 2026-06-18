@@ -32,6 +32,20 @@ export const planKeys = {
   detail: (id: string) => [...planKeys.details(), id] as const,
 }
 
+export const userKeys = {
+  all: ["users"] as const,
+  lists: () => [...userKeys.all, "list"] as const,
+  list: (params: object) => [...userKeys.lists(), params] as const,
+  details: () => [...userKeys.all, "detail"] as const,
+  detail: (id: string) => [...userKeys.details(), id] as const,
+}
+
+export const inviteKeys = {
+  all: ["invites"] as const,
+  lists: () => [...inviteKeys.all, "list"] as const,
+  list: (params: object) => [...inviteKeys.lists(), params] as const,
+}
+
 export const benefitKeys = {
   all: ["benefits"] as const,
   lists: () => [...benefitKeys.all, "list"] as const,
