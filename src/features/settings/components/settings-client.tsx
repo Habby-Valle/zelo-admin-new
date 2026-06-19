@@ -1,17 +1,17 @@
-"use client"
+"use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Shield, User, Settings } from "lucide-react"
-import { AccountSettings } from "./account-settings"
-import { SystemSettingsTab } from "./system-settings"
-import { LgpdSettings } from "./lgpd-settings"
-import { useLgpdConfig } from "@/features/settings/hooks"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Shield, User, Settings } from "lucide-react";
+import { AccountSettings } from "./account-settings";
+import { SystemSettingsTab } from "./system-settings";
+import { LgpdSettings } from "./lgpd-settings";
+import { useLgpdConfig } from "@/features/settings/hooks";
 
 export function SettingsClient() {
-  const { data: lgpdConfig } = useLgpdConfig()
+  const { data: lgpdConfig } = useLgpdConfig();
 
   return (
-    <Tabs defaultValue="account" className="space-y-6 flex-col">
+    <Tabs defaultValue="account" className="flex-col space-y-6">
       <TabsList>
         <TabsTrigger value="account" className="gap-2">
           <User className="h-4 w-4" />
@@ -33,11 +33,13 @@ export function SettingsClient() {
 
       <TabsContent value="lgpd">
         <LgpdSettings
-          config={lgpdConfig ?? {
-            retention_policies: [],
-            encryption_key_configured: false,
-            encryption_statuses: [],
-          }}
+          config={
+            lgpdConfig ?? {
+              retention_policies: [],
+              encryption_key_configured: false,
+              encryption_statuses: [],
+            }
+          }
         />
       </TabsContent>
 
@@ -45,5 +47,5 @@ export function SettingsClient() {
         <SystemSettingsTab />
       </TabsContent>
     </Tabs>
-  )
+  );
 }

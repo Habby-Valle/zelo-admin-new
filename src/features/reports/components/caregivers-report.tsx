@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { UserCheck, Download } from "lucide-react"
+import { UserCheck, Download } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -10,16 +10,16 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { CaregiverReportData } from "@/features/reports/types"
+} from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { CaregiverReportData } from "@/features/reports/types";
 
 interface CaregiversReportProps {
-  data: CaregiverReportData[]
-  loading: boolean
-  onExport?: () => void
+  data: CaregiverReportData[];
+  loading: boolean;
+  onExport?: () => void;
 }
 
 export function CaregiversReport({ data, loading, onExport }: CaregiversReportProps) {
@@ -33,7 +33,7 @@ export function CaregiversReport({ data, loading, onExport }: CaregiversReportPr
           <Skeleton className="h-64 w-full" />
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -61,12 +61,8 @@ export function CaregiversReport({ data, loading, onExport }: CaregiversReportPr
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b text-left">
-                    <th className="pb-2 font-medium text-muted-foreground">
-                      Cuidador
-                    </th>
-                    <th className="pb-2 text-right font-medium text-muted-foreground">
-                      Turnos
-                    </th>
+                    <th className="pb-2 font-medium text-muted-foreground">Cuidador</th>
+                    <th className="pb-2 text-right font-medium text-muted-foreground">Turnos</th>
                     <th className="pb-2 text-right font-medium text-muted-foreground">
                       Concluídos
                     </th>
@@ -83,15 +79,9 @@ export function CaregiversReport({ data, loading, onExport }: CaregiversReportPr
                     <tr key={cg.caregiverId} className="border-b last:border-0">
                       <td className="py-2 font-medium">{cg.caregiverName}</td>
                       <td className="py-2 text-right">{cg.totalShifts}</td>
-                      <td className="py-2 text-right text-green-600">
-                        {cg.completedShifts}
-                      </td>
-                      <td className="py-2 text-right text-red-600">
-                        {cg.cancelledShifts}
-                      </td>
-                      <td className="py-2 text-right text-blue-600">
-                        {cg.completedChecklists}
-                      </td>
+                      <td className="py-2 text-right text-green-600">{cg.completedShifts}</td>
+                      <td className="py-2 text-right text-red-600">{cg.cancelledShifts}</td>
+                      <td className="py-2 text-right text-blue-600">{cg.completedChecklists}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -100,11 +90,7 @@ export function CaregiversReport({ data, loading, onExport }: CaregiversReportPr
 
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart
-                  data={data}
-                  layout="vertical"
-                  margin={{ left: 100 }}
-                >
+                <BarChart data={data} layout="vertical" margin={{ left: 100 }}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis type="number" fontSize={12} tickLine={false} />
                   <YAxis
@@ -141,5 +127,5 @@ export function CaregiversReport({ data, loading, onExport }: CaregiversReportPr
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

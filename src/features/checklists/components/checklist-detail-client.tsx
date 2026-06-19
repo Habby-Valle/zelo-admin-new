@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Calendar,
@@ -11,16 +11,16 @@ import {
   Pencil,
   Settings,
   Trash2,
-} from "lucide-react"
-import { toast } from "sonner"
+} from "lucide-react";
+import { toast } from "sonner";
 
-import { useChecklist, useDeleteChecklist } from "@/features/checklists/hooks"
-import { ChecklistDialog } from "./checklist-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { MaterialIcon } from "@/components/shared/material-icon"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import { useChecklist, useDeleteChecklist } from "@/features/checklists/hooks";
+import { ChecklistDialog } from "./checklist-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { MaterialIcon } from "@/components/shared/material-icon";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -28,7 +28,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,39 +38,39 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
 const ITEM_TYPE_LABELS: Record<string, string> = {
   boolean: "Sim/Não",
   text: "Texto",
   number: "Número",
   select: "Seleção",
-}
+};
 
 interface ChecklistDetailClientProps {
-  id: number
+  id: number;
 }
 
 export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
-  const router = useRouter()
-  const { data: checklist, isLoading } = useChecklist(id)
-  const deleteChecklist = useDeleteChecklist()
+  const router = useRouter();
+  const { data: checklist, isLoading } = useChecklist(id);
+  const deleteChecklist = useDeleteChecklist();
 
-  const [editOpen, setEditOpen] = useState(false)
-  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [editOpen, setEditOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const handleDelete = () => {
     deleteChecklist.mutate(id, {
       onSuccess: () => {
-        toast.success("Template excluído.")
-        router.push("/checklists")
+        toast.success("Template excluído.");
+        router.push("/checklists");
       },
       onError: () => {
-        toast.error("Erro ao excluir template.")
-        setDeleteOpen(false)
+        toast.error("Erro ao excluir template.");
+        setDeleteOpen(false);
       },
-    })
-  }
+    });
+  };
 
   if (isLoading) {
     return (
@@ -95,7 +95,7 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
           ))}
         </div>
       </div>
-    )
+    );
   }
 
   if (!checklist) {
@@ -106,10 +106,10 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
           Voltar
         </Button>
       </div>
-    )
+    );
   }
 
-  const items = checklist.items ?? []
+  const items = checklist.items ?? [];
 
   return (
     <div className="space-y-6">
@@ -153,11 +153,7 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
             <Pencil className="mr-1.5 h-4 w-4" />
             Editar
           </Button>
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setDeleteOpen(true)}
-          >
+          <Button variant="destructive" size="sm" onClick={() => setDeleteOpen(true)}>
             <Trash2 className="mr-1.5 h-4 w-4" />
             Excluir
           </Button>
@@ -167,9 +163,7 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
       <div className="grid gap-4 md:grid-cols-3">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Clínica
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Clínica</CardTitle>
             <Settings className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -196,9 +190,7 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Criado em
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Criado em</CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -220,9 +212,7 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
         </CardHeader>
         <CardContent>
           {items.length === 0 ? (
-            <p className="text-sm text-muted-foreground">
-              Nenhum item cadastrado neste template.
-            </p>
+            <p className="text-sm text-muted-foreground">Nenhum item cadastrado neste template.</p>
           ) : (
             <div className="rounded-md border">
               <Table>
@@ -239,14 +229,10 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
                 <TableBody>
                   {items.map((item, idx) => (
                     <TableRow key={item.id}>
-                      <TableCell className="text-muted-foreground">
-                        {idx + 1}
-                      </TableCell>
+                      <TableCell className="text-muted-foreground">{idx + 1}</TableCell>
                       <TableCell className="font-medium">{item.name}</TableCell>
                       <TableCell>
-                        <Badge variant="outline">
-                          {ITEM_TYPE_LABELS[item.type] ?? item.type}
-                        </Badge>
+                        <Badge variant="outline">{ITEM_TYPE_LABELS[item.type] ?? item.type}</Badge>
                       </TableCell>
                       <TableCell>
                         {item.required ? (
@@ -289,19 +275,15 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
         </CardContent>
       </Card>
 
-      <ChecklistDialog
-        open={editOpen}
-        onOpenChange={setEditOpen}
-        checklist={checklist}
-      />
+      <ChecklistDialog open={editOpen} onOpenChange={setEditOpen} checklist={checklist} />
 
       <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir template?</AlertDialogTitle>
             <AlertDialogDescription>
-              O template <strong>{checklist.name}</strong> será excluído
-              permanentemente. Esta ação não pode ser desfeita.
+              O template <strong>{checklist.name}</strong> será excluído permanentemente. Esta ação
+              não pode ser desfeita.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -317,5 +299,5 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

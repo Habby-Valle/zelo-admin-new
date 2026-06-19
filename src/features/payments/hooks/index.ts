@@ -4,4 +4,4 @@ export {
   usePaymentStats,
   useClinicPayments,
   useClinicPaymentStats,
-} from "./use-payments"
+} from "./use-payments";

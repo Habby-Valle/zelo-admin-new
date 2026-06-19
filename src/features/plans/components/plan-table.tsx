@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Plus,
   MoreHorizontal,
@@ -11,9 +11,9 @@ import {
   ToggleRight,
   CreditCard,
   Loader2,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -21,23 +21,23 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Card, CardContent } from "@/components/ui/card"
+} from "@/components/ui/table";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,23 +47,23 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { Plan } from "@/features/plans/types"
-import { useDeletePlan, useTogglePlanActive } from "@/features/plans/hooks"
-import { formatCurrency } from "@/lib/format"
+} from "@/components/ui/alert-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { Plan } from "@/features/plans/types";
+import { useDeletePlan, useTogglePlanActive } from "@/features/plans/hooks";
+import { formatCurrency } from "@/lib/format";
 
 interface PlanTableProps {
-  plans: Plan[]
-  total: number
-  page: number
-  pageSize: number
-  search: string
-  isActive: string
-  isLoading?: boolean
-  onSearchChange: (v: string) => void
-  onActiveChange: (v: string) => void
-  onPageChange: (v: number) => void
+  plans: Plan[];
+  total: number;
+  page: number;
+  pageSize: number;
+  search: string;
+  isActive: string;
+  isLoading?: boolean;
+  onSearchChange: (v: string) => void;
+  onActiveChange: (v: string) => void;
+  onPageChange: (v: number) => void;
 }
 
 export function PlanTable({
@@ -78,18 +78,18 @@ export function PlanTable({
   onActiveChange,
   onPageChange,
 }: PlanTableProps) {
-  const router = useRouter()
-  const [deleteId, setDeleteId] = useState<string | null>(null)
-  const deletePlan = useDeletePlan()
-  const toggleActive = useTogglePlanActive()
+  const router = useRouter();
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const deletePlan = useDeletePlan();
+  const toggleActive = useTogglePlanActive();
 
-  const totalPages = Math.ceil(total / pageSize)
+  const totalPages = Math.ceil(total / pageSize);
 
   async function handleDelete() {
-    if (!deleteId) return
+    if (!deleteId) return;
     deletePlan.mutate(deleteId, {
       onSuccess: () => setDeleteId(null),
-    })
+    });
   }
 
   return (
@@ -136,11 +136,21 @@ export function PlanTable({
               {isLoading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={i}>
-                    <TableCell><Skeleton className="h-4 w-40" /></TableCell>
-                    <TableCell><Skeleton className="h-4 w-20" /></TableCell>
-                    <TableCell><Skeleton className="h-4 w-20" /></TableCell>
-                    <TableCell className="text-center"><Skeleton className="mx-auto h-4 w-8" /></TableCell>
-                    <TableCell className="text-center"><Skeleton className="mx-auto h-5 w-16" /></TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-40" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-20" />
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Skeleton className="mx-auto h-4 w-8" />
+                    </TableCell>
+                    <TableCell className="text-center">
+                      <Skeleton className="mx-auto h-5 w-16" />
+                    </TableCell>
                     <TableCell />
                   </TableRow>
                 ))
@@ -155,10 +165,7 @@ export function PlanTable({
                 </TableRow>
               ) : (
                 plans.map((plan) => (
-                  <TableRow
-                    key={plan.id}
-                    className={!plan.is_active ? "opacity-60" : ""}
-                  >
+                  <TableRow key={plan.id} className={!plan.is_active ? "opacity-60" : ""}>
                     <TableCell>
                       <div className="flex flex-col">
                         <span className="font-medium">{plan.name}</span>
@@ -173,9 +180,7 @@ export function PlanTable({
                       {formatCurrency(plan.monthly_price)}
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {plan.yearly_price != null
-                        ? formatCurrency(plan.yearly_price)
-                        : "—"}
+                      {plan.yearly_price != null ? formatCurrency(plan.yearly_price) : "—"}
                     </TableCell>
                     <TableCell className="text-center text-sm text-muted-foreground">
                       {plan.benefits.length}
@@ -187,13 +192,11 @@ export function PlanTable({
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
-                        <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg hover:bg-muted hover:text-foreground transition-colors">
+                        <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-muted hover:text-foreground">
                           <MoreHorizontal className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem
-                            onClick={() => router.push(`/plans/${plan.id}`)}
-                          >
+                          <DropdownMenuItem onClick={() => router.push(`/plans/${plan.id}`)}>
                             <Pencil className="mr-2 h-4 w-4" />
                             Ver detalhes
                           </DropdownMenuItem>
@@ -237,14 +240,24 @@ export function PlanTable({
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Mostrando {(page - 1) * pageSize + 1} a{" "}
-            {Math.min(page * pageSize, total)} de {total} resultados
+            Mostrando {(page - 1) * pageSize + 1} a {Math.min(page * pageSize, total)} de {total}{" "}
+            resultados
           </p>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => onPageChange(page - 1)} disabled={page <= 1}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onPageChange(page - 1)}
+              disabled={page <= 1}
+            >
               Anterior
             </Button>
-            <Button variant="outline" size="sm" onClick={() => onPageChange(page + 1)} disabled={page >= totalPages}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => onPageChange(page + 1)}
+              disabled={page >= totalPages}
+            >
               Próxima
             </Button>
           </div>
@@ -272,5 +285,5 @@ export function PlanTable({
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

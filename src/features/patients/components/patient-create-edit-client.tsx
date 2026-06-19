@@ -1,22 +1,22 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { useState, useEffect } from "react"
-import { ArrowLeft } from "lucide-react"
-import { useCreatePatient, usePatient, useUpdatePatient } from "@/features/patients/hooks"
-import { PatientForm } from "@/features/patients/components/patient-form"
-import type { PatientFormValues } from "@/lib/validations/patient"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import { toast } from "sonner"
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { ArrowLeft } from "lucide-react";
+import { useCreatePatient, usePatient, useUpdatePatient } from "@/features/patients/hooks";
+import { PatientForm } from "@/features/patients/components/patient-form";
+import type { PatientFormValues } from "@/lib/validations/patient";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 export function PatientCreateClient() {
-  const router = useRouter()
-  const createMutation = useCreatePatient()
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const createMutation = useCreatePatient();
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (values: PatientFormValues) => {
-    setError(null)
+    setError(null);
     try {
       await createMutation.mutateAsync({
         name: values.name,
@@ -32,13 +32,13 @@ export function PatientCreateClient() {
         medications: values.medications ?? "",
         observations: values.observations ?? "",
         media_id: values.media_id ?? null,
-      })
-      toast.success("Paciente criado com sucesso")
-      router.push("/patients")
+      });
+      toast.success("Paciente criado com sucesso");
+      router.push("/patients");
     } catch {
-      setError("Erro ao criar paciente")
+      setError("Erro ao criar paciente");
     }
-  }
+  };
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
@@ -55,17 +55,17 @@ export function PatientCreateClient() {
         submitLabel="Criar Paciente"
       />
     </div>
-  )
+  );
 }
 
 export function PatientEditClient({ id }: { id: string }) {
-  const router = useRouter()
-  const { data: patient, isLoading } = usePatient(id)
-  const updateMutation = useUpdatePatient()
-  const [error, setError] = useState<string | null>(null)
+  const router = useRouter();
+  const { data: patient, isLoading } = usePatient(id);
+  const updateMutation = useUpdatePatient();
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (values: PatientFormValues) => {
-    setError(null)
+    setError(null);
     try {
       await updateMutation.mutateAsync({
         id,
@@ -84,13 +84,13 @@ export function PatientEditClient({ id }: { id: string }) {
           observations: values.observations ?? "",
           media_id: values.media_id ?? null,
         },
-      })
-      toast.success("Paciente atualizado com sucesso")
-      router.push(`/patients/${id}`)
+      });
+      toast.success("Paciente atualizado com sucesso");
+      router.push(`/patients/${id}`);
     } catch {
-      setError("Erro ao atualizar paciente")
+      setError("Erro ao atualizar paciente");
     }
-  }
+  };
 
   if (isLoading) {
     return (
@@ -98,7 +98,7 @@ export function PatientEditClient({ id }: { id: string }) {
         <Skeleton className="h-8 w-40" />
         <Skeleton className="h-96 w-full" />
       </div>
-    )
+    );
   }
 
   if (!patient) {
@@ -107,7 +107,7 @@ export function PatientEditClient({ id }: { id: string }) {
         <p className="text-muted-foreground">Paciente não encontrado.</p>
         <Button onClick={() => router.push("/patients")}>Voltar</Button>
       </div>
-    )
+    );
   }
 
   return (
@@ -140,5 +140,5 @@ export function PatientEditClient({ id }: { id: string }) {
         submitLabel="Salvar Alterações"
       />
     </div>
-  )
+  );
 }

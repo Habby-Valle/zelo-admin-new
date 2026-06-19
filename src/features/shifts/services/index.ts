@@ -7,4 +7,4 @@ export {
   updateShiftStatusFetch,
   addShiftPatientFetch,
   removeShiftPatientFetch,
-} from "./shifts.service"
+} from "./shifts.service";

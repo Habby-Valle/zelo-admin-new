@@ -1,16 +1,16 @@
-import { Shield } from "lucide-react"
-import { AuditLogDetailClient } from "@/features/audit-logs/components"
+import { Shield } from "lucide-react";
+import { AuditLogDetailClient } from "@/features/audit-logs/components";
 
 export const metadata = {
   title: "Detalhes do Log de Auditoria",
-}
+};
 
 interface AuditLogDetailPageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export default async function AuditLogDetailPage({ params }: AuditLogDetailPageProps) {
-  const { id } = await params
+  const { id } = await params;
 
   return (
     <div className="space-y-6">
@@ -23,5 +23,5 @@ export default async function AuditLogDetailPage({ params }: AuditLogDetailPageP
 
       <AuditLogDetailClient id={id} />
     </div>
-  )
+  );
 }

@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { useCallback, useMemo, useState } from "react"
-import { useRouter, usePathname, useSearchParams } from "next/navigation"
-import { AlertTriangle, CheckCircle2, Clock } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useCallback, useMemo, useState } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { AlertTriangle, CheckCircle2, Clock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -20,7 +20,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -29,45 +29,45 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/alert-dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   useSosAlerts,
   useSosSummary,
   useAcknowledgeSosAlert,
   useResolveSosAlert,
-} from "@/features/sos/hooks"
-import { useClinics } from "@/features/clinics/hooks"
-import type { SosStatus } from "@/features/sos/types"
+} from "@/features/sos/hooks";
+import { useClinics } from "@/features/clinics/hooks";
+import type { SosStatus } from "@/features/sos/types";
 
 const STATUS_LABELS: Record<SosStatus, string> = {
   active: "Ativo",
   acknowledged: "Confirmado",
   resolved: "Resolvido",
-}
+};
 
 const STATUS_VARIANTS: Record<SosStatus, "destructive" | "secondary" | "outline"> = {
   active: "destructive",
   acknowledged: "secondary",
   resolved: "outline",
-}
+};
 
 const STATUS_ICONS: Record<SosStatus, React.ReactNode> = {
   active: <AlertTriangle className="mr-1 h-3 w-3" />,
   acknowledged: <Clock className="mr-1 h-3 w-3" />,
   resolved: <CheckCircle2 className="mr-1 h-3 w-3" />,
-}
+};
 
 export function SosPageClient() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
-  const status = (searchParams.get("status") ?? "all") as SosStatus | "all"
-  const clinicId = searchParams.get("clinicId") ?? "all"
-  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10))
-  const pageSize = 20
+  const status = (searchParams.get("status") ?? "all") as SosStatus | "all";
+  const clinicId = searchParams.get("clinicId") ?? "all";
+  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10));
+  const pageSize = 20;
 
   const filters = useMemo(
     () => ({
@@ -77,42 +77,40 @@ export function SosPageClient() {
       page_size: pageSize,
     }),
     [status, clinicId, page]
-  )
+  );
 
-  const { data: alertsData, isLoading: alertsLoading } = useSosAlerts(filters)
-  const { data: summary } = useSosSummary(
-    clinicId !== "all" ? clinicId : undefined
-  )
+  const { data: alertsData, isLoading: alertsLoading } = useSosAlerts(filters);
+  const { data: summary } = useSosSummary(clinicId !== "all" ? clinicId : undefined);
 
-  const { data: clinicsData } = useClinics({ pageSize: 999 })
-  const clinics = clinicsData?.results ?? []
+  const { data: clinicsData } = useClinics({ pageSize: 999 });
+  const clinics = clinicsData?.results ?? [];
 
-  const acknowledgeMutation = useAcknowledgeSosAlert()
-  const resolveMutation = useResolveSosAlert()
+  const acknowledgeMutation = useAcknowledgeSosAlert();
+  const resolveMutation = useResolveSosAlert();
 
-  const alerts = alertsData?.alerts ?? []
-  const total = alertsData?.total ?? 0
-  const totalPages = Math.ceil(total / pageSize)
+  const alerts = alertsData?.alerts ?? [];
+  const total = alertsData?.total ?? 0;
+  const totalPages = Math.ceil(total / pageSize);
 
-  const [acknowledgeTarget, setAcknowledgeTarget] = useState<number | null>(null)
-  const [resolveTarget, setResolveTarget] = useState<number | null>(null)
-  const [resolveReason, setResolveReason] = useState("")
+  const [acknowledgeTarget, setAcknowledgeTarget] = useState<number | null>(null);
+  const [resolveTarget, setResolveTarget] = useState<number | null>(null);
+  const [resolveReason, setResolveReason] = useState("");
 
   const updateParams = useCallback(
     (updates: Record<string, string>) => {
-      const params = new URLSearchParams()
-      const current: Record<string, string> = { status, clinicId, page: String(page) }
-      const merged = { ...current, ...updates }
+      const params = new URLSearchParams();
+      const current: Record<string, string> = { status, clinicId, page: String(page) };
+      const merged = { ...current, ...updates };
 
       Object.entries(merged).forEach(([k, v]) => {
-        if (v && v !== "all" && v !== "1") params.set(k, v)
-      })
+        if (v && v !== "all" && v !== "1") params.set(k, v);
+      });
 
-      const qs = params.toString()
-      router.push(qs ? `${pathname}?${qs}` : pathname)
+      const qs = params.toString();
+      router.push(qs ? `${pathname}?${qs}` : pathname);
     },
     [router, pathname, status, clinicId, page]
-  )
+  );
 
   return (
     <div className="space-y-6">
@@ -125,11 +123,7 @@ export function SosPageClient() {
 
       <div className="grid gap-4 sm:grid-cols-3">
         <Card
-          className={
-            (summary?.active ?? 0) > 0
-              ? "border-destructive/50 bg-destructive/5"
-              : ""
-          }
+          className={(summary?.active ?? 0) > 0 ? "border-destructive/50 bg-destructive/5" : ""}
         >
           <CardHeader className="flex flex-row items-center justify-between pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -160,9 +154,7 @@ export function SosPageClient() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold">
-              {summary?.acknowledged ?? "..."}
-            </p>
+            <p className="text-3xl font-bold">{summary?.acknowledged ?? "..."}</p>
             <p className="mt-0.5 text-xs text-muted-foreground">
               Confirmados, aguardando resolução
             </p>
@@ -176,12 +168,8 @@ export function SosPageClient() {
             <CheckCircle2 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <p className="text-3xl font-bold text-green-600">
-              {summary?.resolvedToday ?? "..."}
-            </p>
-            <p className="mt-0.5 text-xs text-muted-foreground">
-              Encerrados nas últimas 24h
-            </p>
+            <p className="text-3xl font-bold text-green-600">{summary?.resolvedToday ?? "..."}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground">Encerrados nas últimas 24h</p>
           </CardContent>
         </Card>
       </div>
@@ -243,34 +231,24 @@ export function SosPageClient() {
             <TableBody>
               {alertsLoading ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={7}
-                    className="py-10 text-center text-muted-foreground"
-                  >
+                  <TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
                     Carregando...
                   </TableCell>
                 </TableRow>
               ) : alerts.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={7}
-                    className="py-10 text-center text-muted-foreground"
-                  >
+                  <TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
                     Nenhum alerta SOS encontrado.
                   </TableCell>
                 </TableRow>
               ) : (
                 alerts.map((alert) => (
                   <TableRow key={alert.id}>
-                    <TableCell className="font-medium">
-                      {alert.patient_name ?? "—"}
-                    </TableCell>
+                    <TableCell className="font-medium">{alert.patient_name ?? "—"}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {alert.clinic_name ?? "—"}
                     </TableCell>
-                    <TableCell className="text-sm">
-                      {alert.caregiver_name ?? "—"}
-                    </TableCell>
+                    <TableCell className="text-sm">{alert.caregiver_name ?? "—"}</TableCell>
                     <TableCell>
                       <Badge
                         variant={STATUS_VARIANTS[alert.status]}
@@ -290,9 +268,7 @@ export function SosPageClient() {
                       })}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {alert.acknowledged_by_name ?? (
-                        <span className="text-xs">—</span>
-                      )}
+                      {alert.acknowledged_by_name ?? <span className="text-xs">—</span>}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
@@ -313,8 +289,8 @@ export function SosPageClient() {
                             size="sm"
                             className="h-7 px-2 text-xs text-green-600 hover:text-green-600"
                             onClick={() => {
-                              setResolveTarget(alert.id)
-                              setResolveReason("")
+                              setResolveTarget(alert.id);
+                              setResolveReason("");
                             }}
                           >
                             <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -364,7 +340,7 @@ export function SosPageClient() {
       <AlertDialog
         open={!!acknowledgeTarget}
         onOpenChange={(open) => {
-          if (!open) setAcknowledgeTarget(null)
+          if (!open) setAcknowledgeTarget(null);
         }}
       >
         <AlertDialogContent>
@@ -375,15 +351,13 @@ export function SosPageClient() {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={acknowledgeMutation.isPending}>
-              Cancelar
-            </AlertDialogCancel>
+            <AlertDialogCancel disabled={acknowledgeMutation.isPending}>Cancelar</AlertDialogCancel>
             <Button
               onClick={() => {
                 if (acknowledgeTarget) {
                   acknowledgeMutation.mutate(String(acknowledgeTarget), {
                     onSettled: () => setAcknowledgeTarget(null),
-                  })
+                  });
                 }
               }}
               disabled={acknowledgeMutation.isPending}
@@ -398,8 +372,8 @@ export function SosPageClient() {
         open={!!resolveTarget}
         onOpenChange={(open) => {
           if (!open) {
-            setResolveTarget(null)
-            setResolveReason("")
+            setResolveTarget(null);
+            setResolveReason("");
           }
         }}
       >
@@ -424,9 +398,7 @@ export function SosPageClient() {
             />
           </div>
           <AlertDialogFooter>
-            <AlertDialogCancel disabled={resolveMutation.isPending}>
-              Cancelar
-            </AlertDialogCancel>
+            <AlertDialogCancel disabled={resolveMutation.isPending}>Cancelar</AlertDialogCancel>
             <Button
               onClick={() => {
                 if (resolveTarget) {
@@ -434,11 +406,11 @@ export function SosPageClient() {
                     { id: String(resolveTarget), reason: resolveReason || undefined },
                     {
                       onSettled: () => {
-                        setResolveTarget(null)
-                        setResolveReason("")
+                        setResolveTarget(null);
+                        setResolveReason("");
                       },
                     }
-                  )
+                  );
                 }
               }}
               disabled={resolveMutation.isPending}
@@ -449,5 +421,5 @@ export function SosPageClient() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

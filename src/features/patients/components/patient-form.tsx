@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import { useForm, Controller } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2 } from "lucide-react"
-import { patientSchema, type PatientFormValues } from "@/lib/validations/patient"
-import { useClinics } from "@/features/clinics/hooks"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { patientSchema, type PatientFormValues } from "@/lib/validations/patient";
+import { useClinics } from "@/features/clinics/hooks";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface PatientFormProps {
-  defaultValues?: Partial<PatientFormValues>
-  onSubmit: (values: PatientFormValues) => void
-  isPending?: boolean
-  error?: string | null
-  submitLabel?: string
+  defaultValues?: Partial<PatientFormValues>;
+  onSubmit: (values: PatientFormValues) => void;
+  isPending?: boolean;
+  error?: string | null;
+  submitLabel?: string;
 }
 
-const GENDER_LABELS: Record<string, string> = { M: "Masculino", F: "Feminino", O: "Outro" }
-const BLOOD_TYPES = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]
+const GENDER_LABELS: Record<string, string> = { M: "Masculino", F: "Feminino", O: "Outro" };
+const BLOOD_TYPES = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 export function PatientForm({
   defaultValues,
@@ -35,8 +35,8 @@ export function PatientForm({
   error,
   submitLabel = "Salvar",
 }: PatientFormProps) {
-  const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 })
-  const clinics = clinicsData?.results ?? []
+  const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 });
+  const clinics = clinicsData?.results ?? [];
 
   const {
     register,
@@ -61,7 +61,7 @@ export function PatientForm({
       media_id: null,
       ...defaultValues,
     },
-  })
+  });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -79,7 +79,9 @@ export function PatientForm({
         <div className="space-y-1.5">
           <Label htmlFor="birth_date">Data de nascimento *</Label>
           <Input id="birth_date" type="date" {...register("birth_date")} />
-          {errors.birth_date && <p className="text-xs text-destructive">{errors.birth_date.message}</p>}
+          {errors.birth_date && (
+            <p className="text-xs text-destructive">{errors.birth_date.message}</p>
+          )}
         </div>
 
         <div className="space-y-1.5">
@@ -94,7 +96,9 @@ export function PatientForm({
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(GENDER_LABELS).map(([v, l]) => (
-                    <SelectItem key={v} value={v}>{l}</SelectItem>
+                    <SelectItem key={v} value={v}>
+                      {l}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -129,7 +133,9 @@ export function PatientForm({
             render={({ field }) => (
               <Select
                 value={field.value != null ? String(field.value) : "none"}
-                onValueChange={(v) => field.onChange(v === "none" || v === null ? null : parseInt(v as string, 10))}
+                onValueChange={(v) =>
+                  field.onChange(v === "none" || v === null ? null : parseInt(v as string, 10))
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecionar clínica..." />
@@ -137,7 +143,9 @@ export function PatientForm({
                 <SelectContent>
                   <SelectItem value="none">Nenhuma</SelectItem>
                   {clinics.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -161,7 +169,9 @@ export function PatientForm({
                 <SelectContent>
                   <SelectItem value="none">Não informado</SelectItem>
                   {BLOOD_TYPES.map((bt) => (
-                    <SelectItem key={bt} value={bt}>{bt}</SelectItem>
+                    <SelectItem key={bt} value={bt}>
+                      {bt}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -173,19 +183,39 @@ export function PatientForm({
       <div className="space-y-4">
         <div className="space-y-1.5">
           <Label htmlFor="health_conditions">Condições de saúde</Label>
-          <Textarea id="health_conditions" placeholder="Ex: Hipertensão, diabetes..." rows={3} {...register("health_conditions")} />
+          <Textarea
+            id="health_conditions"
+            placeholder="Ex: Hipertensão, diabetes..."
+            rows={3}
+            {...register("health_conditions")}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="allergies">Alergias</Label>
-          <Textarea id="allergies" placeholder="Ex: Penicilina, amendoim..." rows={3} {...register("allergies")} />
+          <Textarea
+            id="allergies"
+            placeholder="Ex: Penicilina, amendoim..."
+            rows={3}
+            {...register("allergies")}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="medications">Medicamentos em uso</Label>
-          <Textarea id="medications" placeholder="Ex: Losartana 50mg, Metformina 500mg..." rows={3} {...register("medications")} />
+          <Textarea
+            id="medications"
+            placeholder="Ex: Losartana 50mg, Metformina 500mg..."
+            rows={3}
+            {...register("medications")}
+          />
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="observations">Observações</Label>
-          <Textarea id="observations" placeholder="Observações gerais..." rows={3} {...register("observations")} />
+          <Textarea
+            id="observations"
+            placeholder="Observações gerais..."
+            rows={3}
+            {...register("observations")}
+          />
         </div>
       </div>
 
@@ -196,5 +226,5 @@ export function PatientForm({
         </Button>
       </div>
     </form>
-  )
+  );
 }

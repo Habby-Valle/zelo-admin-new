@@ -5,4 +5,4 @@ export {
   useSosSummary,
   useAcknowledgeSosAlert,
   useResolveSosAlert,
-} from "./use-sos"
+} from "./use-sos";

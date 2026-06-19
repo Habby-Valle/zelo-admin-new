@@ -1,34 +1,26 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import {
-  Plus,
-  Search,
-  Eye,
-  Clock,
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-} from "lucide-react"
-import { toast } from "sonner"
+import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { Plus, Search, Eye, Clock, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
-import { useShifts, useDeleteShift } from "@/features/shifts/hooks"
-import { useClinics } from "@/features/clinics/hooks"
-import type { ShiftStatus } from "@/features/shifts/types"
-import type { ShiftDetail } from "@/features/shifts/types"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Skeleton } from "@/components/ui/skeleton"
+import { useShifts, useDeleteShift } from "@/features/shifts/hooks";
+import { useClinics } from "@/features/clinics/hooks";
+import type { ShiftStatus } from "@/features/shifts/types";
+import type { ShiftDetail } from "@/features/shifts/types";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -36,13 +28,13 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -52,22 +44,22 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { DataTablePagination } from "@/components/shared/data-table-pagination"
+} from "@/components/ui/alert-dialog";
+import { DataTablePagination } from "@/components/shared/data-table-pagination";
 
 const STATUS_LABELS: Record<ShiftStatus, string> = {
   scheduled: "Agendado",
   in_progress: "Em andamento",
   completed: "Concluído",
   cancelled: "Cancelado",
-}
+};
 
 const STATUS_VARIANTS: Record<ShiftStatus, "default" | "secondary" | "outline" | "destructive"> = {
   scheduled: "outline",
   in_progress: "default",
   completed: "secondary",
   cancelled: "destructive",
-}
+};
 
 function formatDateTime(dateStr: string): string {
   return new Date(dateStr).toLocaleDateString("pt-BR", {
@@ -76,25 +68,25 @@ function formatDateTime(dateStr: string): string {
     year: "numeric",
     hour: "2-digit",
     minute: "2-digit",
-  })
+  });
 }
 
 function formatDuration(start: string, end: string): string {
-  const diffMs = new Date(end).getTime() - new Date(start).getTime()
-  const hours = Math.floor(diffMs / 3600000)
-  const minutes = Math.floor((diffMs % 3600000) / 60000)
-  if (hours > 0) return `${hours}h ${minutes}min`
-  return `${minutes}min`
+  const diffMs = new Date(end).getTime() - new Date(start).getTime();
+  const hours = Math.floor(diffMs / 3600000);
+  const minutes = Math.floor((diffMs % 3600000) / 60000);
+  if (hours > 0) return `${hours}h ${minutes}min`;
+  return `${minutes}min`;
 }
 
 export function ShiftsPageClient() {
-  const router = useRouter()
-  const [search, setSearch] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [clinicFilter, setClinicFilter] = useState("")
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
-  const [deleteId, setDeleteId] = useState<number | null>(null)
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [clinicFilter, setClinicFilter] = useState("");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(20);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const { data, isLoading } = useShifts({
     search,
@@ -102,26 +94,26 @@ export function ShiftsPageClient() {
     clinicId: clinicFilter,
     page,
     pageSize,
-  })
+  });
 
-  const { data: clinicsData } = useClinics({ pageSize: 999 })
-  const deleteShift = useDeleteShift()
+  const { data: clinicsData } = useClinics({ pageSize: 999 });
+  const deleteShift = useDeleteShift();
 
-  const shifts: ShiftDetail[] = data?.shifts ?? []
-  const total = data?.total ?? 0
-  const clinics = clinicsData?.results ?? []
+  const shifts: ShiftDetail[] = data?.shifts ?? [];
+  const total = data?.total ?? 0;
+  const clinics = clinicsData?.results ?? [];
 
   const handleDelete = async () => {
-    if (!deleteId) return
+    if (!deleteId) return;
     try {
-      await deleteShift.mutateAsync(deleteId)
-      toast.success("Turno excluído.")
+      await deleteShift.mutateAsync(deleteId);
+      toast.success("Turno excluído.");
     } catch {
-      toast.error("Erro ao excluir turno.")
+      toast.error("Erro ao excluir turno.");
     } finally {
-      setDeleteId(null)
+      setDeleteId(null);
     }
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -141,22 +133,22 @@ export function ShiftsPageClient() {
       <div className="space-y-4">
         <div className="flex flex-wrap gap-2">
           <div className="relative max-w-xs flex-1">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute top-2.5 left-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Buscar por cuidador..."
               className="pl-8"
               value={search}
               onChange={(e) => {
-                setSearch(e.target.value)
-                setPage(1)
+                setSearch(e.target.value);
+                setPage(1);
               }}
             />
           </div>
           <Select
             value={statusFilter}
             onValueChange={(v) => {
-              if (v) setStatusFilter(v)
-              setPage(1)
+              if (v) setStatusFilter(v);
+              setPage(1);
             }}
           >
             <SelectTrigger className="w-44">
@@ -173,8 +165,8 @@ export function ShiftsPageClient() {
           <Select
             value={clinicFilter || "all"}
             onValueChange={(v) => {
-              setClinicFilter(v === "all" ? "" : v ?? "")
-              setPage(1)
+              setClinicFilter(v === "all" ? "" : (v ?? ""));
+              setPage(1);
             }}
           >
             <SelectTrigger className="w-48">
@@ -218,10 +210,7 @@ export function ShiftsPageClient() {
                 ))
               ) : shifts.length === 0 ? (
                 <TableRow>
-                  <TableCell
-                    colSpan={8}
-                    className="py-10 text-center text-muted-foreground"
-                  >
+                  <TableCell colSpan={8} className="py-10 text-center text-muted-foreground">
                     Nenhum turno encontrado.
                   </TableCell>
                 </TableRow>
@@ -229,10 +218,7 @@ export function ShiftsPageClient() {
                 shifts.map((shift) => (
                   <TableRow key={shift.id}>
                     <TableCell className="font-medium">
-                      <Link
-                        href={`/shifts/${shift.id}`}
-                        className="hover:underline"
-                      >
+                      <Link href={`/shifts/${shift.id}`} className="hover:underline">
                         {shift.caregiver_name}
                       </Link>
                     </TableCell>
@@ -269,7 +255,7 @@ export function ShiftsPageClient() {
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
-                        <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg hover:bg-muted hover:text-foreground transition-colors">
+                        <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-muted hover:text-foreground">
                           <MoreHorizontal className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -304,22 +290,17 @@ export function ShiftsPageClient() {
           total={total}
           onPageChange={setPage}
           onPageSizeChange={(size) => {
-            setPageSize(size)
-            setPage(1)
+            setPageSize(size);
+            setPage(1);
           }}
         />
       </div>
 
-      <AlertDialog
-        open={!!deleteId}
-        onOpenChange={(open) => !open && setDeleteId(null)}
-      >
+      <AlertDialog open={!!deleteId} onOpenChange={(open) => !open && setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir turno?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Esta ação não pode ser desfeita.
-            </AlertDialogDescription>
+            <AlertDialogDescription>Esta ação não pode ser desfeita.</AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
@@ -333,5 +314,5 @@ export function ShiftsPageClient() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

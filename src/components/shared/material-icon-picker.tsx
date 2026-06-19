@@ -1,16 +1,12 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
-import { X, Smile } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
-import { MaterialIcon } from "./material-icon"
+import { useState, useMemo } from "react";
+import { X, Smile } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { MaterialIcon } from "./material-icon";
 
 const ICON_CATEGORIES = [
   {
@@ -19,15 +15,43 @@ const ICON_CATEGORIES = [
   },
   {
     label: "Saúde e Monitoramento",
-    icons: ["medication", "vaccines", "healing", "monitor_heart", "thermostat", "bloodtype", "medical_services", "local_hospital", "health_and_safety", "stethoscope"],
+    icons: [
+      "medication",
+      "vaccines",
+      "healing",
+      "monitor_heart",
+      "thermostat",
+      "bloodtype",
+      "medical_services",
+      "local_hospital",
+      "health_and_safety",
+      "stethoscope",
+    ],
   },
   {
     label: "Alimentação e Hidratação",
-    icons: ["restaurant", "lunch_dining", "local_cafe", "water_drop", "emoji_food_beverage", "food_bank", "nutrition", "blender"],
+    icons: [
+      "restaurant",
+      "lunch_dining",
+      "local_cafe",
+      "water_drop",
+      "emoji_food_beverage",
+      "food_bank",
+      "nutrition",
+      "blender",
+    ],
   },
   {
     label: "Mobilidade e Exercícios",
-    icons: ["directions_walk", "accessibility", "elderly", "sports_gymnastics", "self_improvement", "wheelchair_pickup", "hiking"],
+    icons: [
+      "directions_walk",
+      "accessibility",
+      "elderly",
+      "sports_gymnastics",
+      "self_improvement",
+      "wheelchair_pickup",
+      "hiking",
+    ],
   },
   {
     label: "Sono e Repouso",
@@ -43,42 +67,51 @@ const ICON_CATEGORIES = [
   },
   {
     label: "Geral",
-    icons: ["checklist", "task_alt", "assignment", "fact_check", "playlist_add_check", "note_alt", "pending_actions", "event_available"],
+    icons: [
+      "checklist",
+      "task_alt",
+      "assignment",
+      "fact_check",
+      "playlist_add_check",
+      "note_alt",
+      "pending_actions",
+      "event_available",
+    ],
   },
-]
+];
 
-const ALL_ICONS = ICON_CATEGORIES.flatMap((cat) => cat.icons)
+const ALL_ICONS = ICON_CATEGORIES.flatMap((cat) => cat.icons);
 
 interface MaterialIconPickerProps {
-  value: string
-  onChange: (value: string) => void
+  value: string;
+  onChange: (value: string) => void;
 }
 
 export function MaterialIconPicker({ value, onChange }: MaterialIconPickerProps) {
-  const [open, setOpen] = useState(false)
-  const [search, setSearch] = useState("")
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   const filteredCategories = useMemo(() => {
-    if (!search.trim()) return ICON_CATEGORIES
-    const q = search.trim().toLowerCase()
+    if (!search.trim()) return ICON_CATEGORIES;
+    const q = search.trim().toLowerCase();
     return [
       {
         label: "Resultados",
         icons: ALL_ICONS.filter((icon) => icon.includes(q)),
       },
-    ]
-  }, [search])
+    ];
+  }, [search]);
 
   const handleSelect = (icon: string) => {
-    onChange(icon)
-    setOpen(false)
-    setSearch("")
-  }
+    onChange(icon);
+    setOpen(false);
+    setSearch("");
+  };
 
   const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onChange("")
-  }
+    e.stopPropagation();
+    onChange("");
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -125,9 +158,7 @@ export function MaterialIconPicker({ value, onChange }: MaterialIconPickerProps)
             {filteredCategories.map((cat) =>
               cat.icons.length === 0 ? null : (
                 <div key={cat.label}>
-                  <p className="mb-1.5 text-xs font-medium text-muted-foreground">
-                    {cat.label}
-                  </p>
+                  <p className="mb-1.5 text-xs font-medium text-muted-foreground">{cat.label}</p>
                   <div className="grid grid-cols-8 gap-0.5">
                     {cat.icons.map((icon) => (
                       <button
@@ -166,8 +197,8 @@ export function MaterialIconPicker({ value, onChange }: MaterialIconPickerProps)
                 size="sm"
                 className="h-7 text-xs"
                 onClick={() => {
-                  onChange("")
-                  setOpen(false)
+                  onChange("");
+                  setOpen(false);
                 }}
               >
                 <X className="mr-1 h-3 w-3" />
@@ -178,5 +209,5 @@ export function MaterialIconPicker({ value, onChange }: MaterialIconPickerProps)
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

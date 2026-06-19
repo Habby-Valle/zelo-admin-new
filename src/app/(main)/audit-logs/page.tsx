@@ -1,10 +1,10 @@
-import { Suspense } from "react"
-import { Shield } from "lucide-react"
-import { AuditLogsClient } from "@/features/audit-logs/components"
+import { Suspense } from "react";
+import { Shield } from "lucide-react";
+import { AuditLogsClient } from "@/features/audit-logs/components";
 
 export const metadata = {
   title: "Logs de Auditoria",
-}
+};
 
 export default function AuditLogsPage() {
   return (
@@ -23,5 +23,5 @@ export default function AuditLogsPage() {
         <AuditLogsClient />
       </Suspense>
     </div>
-  )
+  );
 }

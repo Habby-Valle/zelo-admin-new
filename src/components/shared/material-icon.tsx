@@ -1,9 +1,9 @@
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 interface MaterialIconProps {
-  name: string
-  className?: string
-  size?: "sm" | "md" | "lg" | "xl"
+  name: string;
+  className?: string;
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 const SIZE_CLASS = {
@@ -11,13 +11,9 @@ const SIZE_CLASS = {
   md: "text-xl",
   lg: "text-2xl",
   xl: "text-3xl",
-}
+};
 
-export function MaterialIcon({
-  name,
-  className,
-  size = "md",
-}: MaterialIconProps) {
+export function MaterialIcon({ name, className, size = "md" }: MaterialIconProps) {
   return (
     <span
       className={cn("material-icons select-none", SIZE_CLASS[size], className)}
@@ -25,5 +21,5 @@ export function MaterialIcon({
     >
       {name.replace(/-/g, "_")}
     </span>
-  )
+  );
 }

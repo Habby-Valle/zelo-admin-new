@@ -4,4 +4,4 @@ export {
   fetchPatientsGrowthReport,
   fetchSosReport,
   fetchCaregiversReport,
-} from "./report.service"
+} from "./report.service";

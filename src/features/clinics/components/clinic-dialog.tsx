@@ -1,44 +1,35 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { toast } from "sonner"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { useCreateClinic, useUpdateClinic } from "@/features/clinics/hooks"
-import { getPlansApi } from "@/features/clinics/services/clinics.service"
-import type { ClinicFormValues } from "@/lib/validations/clinic"
-import type { Clinic, PlanOption } from "@/features/clinics/types"
-import { ClinicForm } from "./clinic-form"
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useCreateClinic, useUpdateClinic } from "@/features/clinics/hooks";
+import { getPlansApi } from "@/features/clinics/services/clinics.service";
+import type { ClinicFormValues } from "@/lib/validations/clinic";
+import type { Clinic, PlanOption } from "@/features/clinics/types";
+import { ClinicForm } from "./clinic-form";
 
 interface ClinicDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  clinic?: Clinic | null
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  clinic?: Clinic | null;
 }
 
-export function ClinicDialog({
-  open,
-  onOpenChange,
-  clinic,
-}: ClinicDialogProps) {
-  const isEditing = !!clinic
-  const createMutation = useCreateClinic()
-  const updateMutation = useUpdateClinic()
-  const [plans, setPlans] = useState<PlanOption[]>([])
+export function ClinicDialog({ open, onOpenChange, clinic }: ClinicDialogProps) {
+  const isEditing = !!clinic;
+  const createMutation = useCreateClinic();
+  const updateMutation = useUpdateClinic();
+  const [plans, setPlans] = useState<PlanOption[]>([]);
 
   useEffect(() => {
     if (open && !isEditing) {
       getPlansApi({ scope: "clinic" })
         .then(setPlans)
-        .catch(() => {})
+        .catch(() => {});
     }
-  }, [open, isEditing])
+  }, [open, isEditing]);
 
-  const isLoading = createMutation.isPending || updateMutation.isPending
+  const isLoading = createMutation.isPending || updateMutation.isPending;
 
   async function handleSubmit(values: ClinicFormValues) {
     if (isEditing && clinic) {
@@ -46,34 +37,32 @@ export function ClinicDialog({
         { id: clinic.id, values },
         {
           onSuccess: () => {
-            toast.success("Clínica atualizada!")
-            onOpenChange(false)
+            toast.success("Clínica atualizada!");
+            onOpenChange(false);
           },
           onError: (err) => {
-            toast.error(err.message ?? "Erro ao atualizar clínica")
+            toast.error(err.message ?? "Erro ao atualizar clínica");
           },
         }
-      )
+      );
     } else {
       createMutation.mutate(values, {
         onSuccess: () => {
-          toast.success("Clínica criada!")
-          onOpenChange(false)
+          toast.success("Clínica criada!");
+          onOpenChange(false);
         },
         onError: (err) => {
-          toast.error(err.message ?? "Erro ao criar clínica")
+          toast.error(err.message ?? "Erro ao criar clínica");
         },
-      })
+      });
     }
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-xl max-h-[85vh] overflow-y-auto">
+      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Editar clínica" : "Nova clínica"}
-          </DialogTitle>
+          <DialogTitle>{isEditing ? "Editar clínica" : "Nova clínica"}</DialogTitle>
         </DialogHeader>
         <ClinicForm
           isEditing={isEditing}
@@ -104,5 +93,5 @@ export function ClinicDialog({
         />
       </DialogContent>
     </Dialog>
-  )
+  );
 }

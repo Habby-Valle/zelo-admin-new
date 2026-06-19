@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { CreditCard, CheckCircle, XCircle, DollarSign } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { formatCurrency } from "@/lib/format"
+import { CreditCard, CheckCircle, XCircle, DollarSign } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatCurrency } from "@/lib/format";
 
 interface PaymentStatsCardsProps {
   stats: {
-    total: number
-    succeeded: number
-    failed: number
-    totalRevenue: number
-  }
+    total: number;
+    succeeded: number;
+    failed: number;
+    totalRevenue: number;
+  };
 }
 
 export function PaymentStatsCards({ stats }: PaymentStatsCardsProps) {
@@ -23,9 +23,7 @@ export function PaymentStatsCards({ stats }: PaymentStatsCardsProps) {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">{stats.total}</div>
-          <p className="text-xs text-muted-foreground">
-            pagamentos registrados
-          </p>
+          <p className="text-xs text-muted-foreground">pagamentos registrados</p>
         </CardContent>
       </Card>
 
@@ -35,12 +33,8 @@ export function PaymentStatsCards({ stats }: PaymentStatsCardsProps) {
           <CheckCircle className="h-4 w-4 text-green-500" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-green-600">
-            {stats.succeeded}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            pagamentos confirmados
-          </p>
+          <div className="text-2xl font-bold text-green-600">{stats.succeeded}</div>
+          <p className="text-xs text-muted-foreground">pagamentos confirmados</p>
         </CardContent>
       </Card>
 
@@ -61,12 +55,10 @@ export function PaymentStatsCards({ stats }: PaymentStatsCardsProps) {
           <DollarSign className="h-4 w-4 text-primary" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            {formatCurrency(stats.totalRevenue)}
-          </div>
+          <div className="text-2xl font-bold">{formatCurrency(stats.totalRevenue)}</div>
           <p className="text-xs text-muted-foreground">arrecadado</p>
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useMemo } from "react"
-import { CheckSquare, Download } from "lucide-react"
+import { useMemo } from "react";
+import { CheckSquare, Download } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -11,21 +11,21 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { ChecklistsReportData } from "@/features/reports/types"
+} from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { ChecklistsReportData } from "@/features/reports/types";
 
 interface ChecklistsReportProps {
-  data: ChecklistsReportData[]
-  loading: boolean
-  onExport: () => void
+  data: ChecklistsReportData[];
+  loading: boolean;
+  onExport: () => void;
 }
 
 export function ChecklistsReport({ data, loading, onExport }: ChecklistsReportProps) {
-  const totalCompleted = useMemo(() => data.reduce((sum, d) => sum + d.completed, 0), [data])
-  const totalPending = useMemo(() => data.reduce((sum, d) => sum + d.pending, 0), [data])
+  const totalCompleted = useMemo(() => data.reduce((sum, d) => sum + d.completed, 0), [data]);
+  const totalPending = useMemo(() => data.reduce((sum, d) => sum + d.pending, 0), [data]);
 
   const chartData = useMemo(
     () =>
@@ -37,7 +37,7 @@ export function ChecklistsReport({ data, loading, onExport }: ChecklistsReportPr
         }),
       })),
     [data]
-  )
+  );
 
   if (loading) {
     return (
@@ -49,7 +49,7 @@ export function ChecklistsReport({ data, loading, onExport }: ChecklistsReportPr
           <Skeleton className="h-64 w-full" />
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -117,5 +117,5 @@ export function ChecklistsReport({ data, loading, onExport }: ChecklistsReportPr
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

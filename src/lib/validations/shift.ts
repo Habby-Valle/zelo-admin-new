@@ -1,9 +1,8 @@
-import { z } from "zod"
+import { z } from "zod";
 
-export const shiftStatusSchema = z.enum(
-  ["scheduled", "in_progress", "completed", "cancelled"],
-  { message: "Status inválido" }
-)
+export const shiftStatusSchema = z.enum(["scheduled", "in_progress", "completed", "cancelled"], {
+  message: "Status inválido",
+});
 
 export const createShiftSchema = z.object({
   caregiver_id: z.coerce.number().int().positive("Cuidador inválido"),
@@ -11,10 +10,10 @@ export const createShiftSchema = z.object({
   start: z.string().min(1, "Data de início obrigatória"),
   end: z.string().min(1, "Data de fim obrigatória"),
   notes: z.string().max(2000).optional(),
-})
+});
 
-export const updateShiftSchema = createShiftSchema.partial()
+export const updateShiftSchema = createShiftSchema.partial();
 
-export type CreateShiftInput = z.infer<typeof createShiftSchema>
-export type UpdateShiftInput = z.infer<typeof updateShiftSchema>
-export type ShiftStatusValue = z.infer<typeof shiftStatusSchema>
+export type CreateShiftInput = z.infer<typeof createShiftSchema>;
+export type UpdateShiftInput = z.infer<typeof updateShiftSchema>;
+export type ShiftStatusValue = z.infer<typeof shiftStatusSchema>;

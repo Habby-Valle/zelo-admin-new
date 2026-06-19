@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { Calendar } from "lucide-react"
+import { Calendar } from "lucide-react";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { Clinic } from "@/features/clinics/types"
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { Clinic } from "@/features/clinics/types";
 
 const DATE_PRESETS = [
   { label: "Últimos 7 dias", value: "7d" },
@@ -18,63 +18,57 @@ const DATE_PRESETS = [
   { label: "Este mês", value: "month" },
   { label: "Último mês", value: "lastMonth" },
   { label: "Personalizado", value: "custom" },
-]
+];
 
 function getDateRange(preset: string): { from: string; to: string } {
-  const today = new Date()
-  const to = today.toISOString().split("T")[0]
-  let from: Date
+  const today = new Date();
+  const to = today.toISOString().split("T")[0];
+  let from: Date;
 
   switch (preset) {
     case "7d":
-      from = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000)
-      break
+      from = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+      break;
     case "30d":
-      from = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000)
-      break
+      from = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
+      break;
     case "month":
-      from = new Date(today.getFullYear(), today.getMonth(), 1)
-      break
+      from = new Date(today.getFullYear(), today.getMonth(), 1);
+      break;
     case "lastMonth":
-      from = new Date(today.getFullYear(), today.getMonth() - 1, 1)
-      const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0)
+      from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+      const lastMonthEnd = new Date(today.getFullYear(), today.getMonth(), 0);
       return {
         from: from.toISOString().split("T")[0],
         to: lastMonthEnd.toISOString().split("T")[0],
-      }
+      };
     default:
-      from = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000)
+      from = new Date(today.getTime() - 30 * 24 * 60 * 60 * 1000);
   }
 
-  return { from: from.toISOString().split("T")[0], to }
+  return { from: from.toISOString().split("T")[0], to };
 }
 
 interface ReportsFiltersProps {
-  clinics: Clinic[]
-  onFilterChange: (filters: {
-    clinicId: string
-    dateRange: { from: string; to: string }
-  }) => void
+  clinics: Clinic[];
+  onFilterChange: (filters: { clinicId: string; dateRange: { from: string; to: string } }) => void;
 }
 
-export function ReportsFilters({
-  clinics,
-  onFilterChange,
-}: ReportsFiltersProps) {
+export function ReportsFilters({ clinics, onFilterChange }: ReportsFiltersProps) {
   const handleClinicChange = (value: string) => {
-    const dateRange = getDateRange("30d")
+    const dateRange = getDateRange("30d");
     onFilterChange({
       clinicId: value === "all" ? "all" : value,
       dateRange,
-    })
-  }
+    });
+  };
 
   const handlePresetChange = (value: string) => {
     onFilterChange({
       clinicId: "all",
       dateRange: getDateRange(value),
-    })
-  }
+    });
+  };
 
   return (
     <Card>
@@ -121,5 +115,5 @@ export function ReportsFilters({
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -9,9 +9,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Clock } from "lucide-react"
-import type { RecentActivity } from "@/features/dashboard/types"
+} from "@/components/ui/table";
+import { Clock } from "lucide-react";
+import type { RecentActivity } from "@/features/dashboard/types";
 
 const ACTION_LABELS: Record<string, string> = {
   create: "Criação",
@@ -22,7 +22,7 @@ const ACTION_LABELS: Record<string, string> = {
   invite: "Convite",
   activate: "Ativação",
   deactivate: "Desativação",
-}
+};
 
 const ENTITY_LABELS: Record<string, string> = {
   clinic: "Clínica",
@@ -31,10 +31,10 @@ const ENTITY_LABELS: Record<string, string> = {
   checklist: "Checklist",
   shift: "Turno",
   system: "Sistema",
-}
+};
 
 interface RecentActivityTableProps {
-  logs: RecentActivity[]
+  logs: RecentActivity[];
 }
 
 export function RecentActivityTable({ logs }: RecentActivityTableProps) {
@@ -54,9 +54,7 @@ export function RecentActivityTable({ logs }: RecentActivityTableProps) {
       </CardHeader>
       <CardContent>
         {logs.length === 0 ? (
-          <p className="text-sm text-muted-foreground">
-            Nenhuma ação registrada.
-          </p>
+          <p className="text-sm text-muted-foreground">Nenhuma ação registrada.</p>
         ) : (
           <div className="rounded-md border">
             <Table>
@@ -82,19 +80,13 @@ export function RecentActivityTable({ logs }: RecentActivityTableProps) {
                     </TableCell>
                     <TableCell>
                       <div className="text-sm font-medium">{log.user_name}</div>
-                      <div className="text-xs text-muted-foreground">
-                        {log.user_email}
-                      </div>
+                      <div className="text-xs text-muted-foreground">{log.user_email}</div>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="outline">
-                        {ACTION_LABELS[log.action] ?? log.action}
-                      </Badge>
+                      <Badge variant="outline">{ACTION_LABELS[log.action] ?? log.action}</Badge>
                     </TableCell>
                     <TableCell>
-                      <Badge variant="secondary">
-                        {ENTITY_LABELS[log.entity] ?? log.entity}
-                      </Badge>
+                      <Badge variant="secondary">{ENTITY_LABELS[log.entity] ?? log.entity}</Badge>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -104,7 +96,7 @@ export function RecentActivityTable({ logs }: RecentActivityTableProps) {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export function RecentActivityTableSkeleton() {
@@ -121,5 +113,5 @@ export function RecentActivityTableSkeleton() {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useMemo } from "react"
-import { BarChart3, Download } from "lucide-react"
+import { useMemo } from "react";
+import { BarChart3, Download } from "lucide-react";
 import {
   BarChart,
   Bar,
@@ -11,22 +11,22 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { ShiftsReportData } from "@/features/reports/types"
+} from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { ShiftsReportData } from "@/features/reports/types";
 
 interface ShiftsReportProps {
-  data: ShiftsReportData[]
-  loading: boolean
-  onExport: () => void
+  data: ShiftsReportData[];
+  loading: boolean;
+  onExport: () => void;
 }
 
 export function ShiftsReport({ data, loading, onExport }: ShiftsReportProps) {
-  const totalShifts = useMemo(() => data.reduce((sum, d) => sum + d.total, 0), [data])
-  const completedShifts = useMemo(() => data.reduce((sum, d) => sum + d.completed, 0), [data])
-  const cancelledShifts = useMemo(() => data.reduce((sum, d) => sum + d.cancelled, 0), [data])
+  const totalShifts = useMemo(() => data.reduce((sum, d) => sum + d.total, 0), [data]);
+  const completedShifts = useMemo(() => data.reduce((sum, d) => sum + d.completed, 0), [data]);
+  const cancelledShifts = useMemo(() => data.reduce((sum, d) => sum + d.cancelled, 0), [data]);
 
   const chartData = useMemo(
     () =>
@@ -38,7 +38,7 @@ export function ShiftsReport({ data, loading, onExport }: ShiftsReportProps) {
         }),
       })),
     [data]
-  )
+  );
 
   if (loading) {
     return (
@@ -50,7 +50,7 @@ export function ShiftsReport({ data, loading, onExport }: ShiftsReportProps) {
           <Skeleton className="h-64 w-full" />
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -108,5 +108,5 @@ export function ShiftsReport({ data, loading, onExport }: ShiftsReportProps) {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

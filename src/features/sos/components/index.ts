@@ -1,1 +1,1 @@
-export { SosPageClient } from "./sos-page-client"
+export { SosPageClient } from "./sos-page-client";

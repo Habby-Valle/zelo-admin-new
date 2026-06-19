@@ -8,4 +8,4 @@ export {
   useExportPatientData,
   useAnonymizeUser,
   useAnonymizePatient,
-} from "./use-settings"
+} from "./use-settings";

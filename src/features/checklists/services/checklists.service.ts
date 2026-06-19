@@ -1,30 +1,35 @@
-import { apiFetchClient } from "@/lib/api-client"
-import type { PaginatedResponse } from "@/types"
-import type { Checklist, ChecklistDetail, ChecklistItemType, ChecklistFilters } from "@/features/checklists/types"
+import { apiFetchClient } from "@/lib/api-client";
+import type { PaginatedResponse } from "@/types";
+import type {
+  Checklist,
+  ChecklistDetail,
+  ChecklistItemType,
+  ChecklistFilters,
+} from "@/features/checklists/types";
 
 interface ApiChecklist {
-  id: number
-  name: string
-  icon: string | null
-  order: number
-  is_active: boolean
-  clinic_id: number | null
-  clinic_name: string | null
-  created_by_name: string | null
-  items_count: number
-  created_at: string
+  id: number;
+  name: string;
+  icon: string | null;
+  order: number;
+  is_active: boolean;
+  clinic_id: number | null;
+  clinic_name: string | null;
+  created_by_name: string | null;
+  items_count: number;
+  created_at: string;
 }
 
 interface ApiChecklistDetail extends Omit<ApiChecklist, "items_count"> {
   items: {
-    id: number
-    name: string
-    type: string
-    required: boolean
-    has_observation: boolean
-    order: number
-    options: { id: number; label: string; value: string }[]
-  }[]
+    id: number;
+    name: string;
+    type: string;
+    required: boolean;
+    has_observation: boolean;
+    order: number;
+    options: { id: number; label: string; value: string }[];
+  }[];
 }
 
 function mapChecklist(api: ApiChecklist): Checklist {
@@ -39,7 +44,7 @@ function mapChecklist(api: ApiChecklist): Checklist {
     created_by_name: api.created_by_name,
     items_count: api.items_count,
     created_at: api.created_at,
-  }
+  };
 }
 
 function mapChecklistDetail(api: ApiChecklistDetail): ChecklistDetail {
@@ -66,42 +71,51 @@ function mapChecklistDetail(api: ApiChecklistDetail): ChecklistDetail {
         value: opt.value,
       })),
     })),
-  }
+  };
 }
 
-export async function fetchChecklists(params?: ChecklistFilters): Promise<{ checklists: Checklist[]; total: number }> {
-  const searchParams = new URLSearchParams()
-  if (params?.search) searchParams.set("search", params.search)
-  if (params?.clinicId) searchParams.set("clinic_id", params.clinicId)
-  if (params?.isActive) searchParams.set("is_active", params.isActive)
-  if (params?.page) searchParams.set("page", String(params.page))
-  if (params?.pageSize) searchParams.set("page_size", String(params.pageSize))
-  const query = searchParams.toString()
-  const data = await apiFetchClient<PaginatedResponse<ApiChecklist>>(`/checklists/${query ? `?${query}` : ""}`)
-  return { checklists: data.results.map(mapChecklist), total: data.count }
+export async function fetchChecklists(
+  params?: ChecklistFilters
+): Promise<{ checklists: Checklist[]; total: number }> {
+  const searchParams = new URLSearchParams();
+  if (params?.search) searchParams.set("search", params.search);
+  if (params?.clinicId) searchParams.set("clinic_id", params.clinicId);
+  if (params?.isActive) searchParams.set("is_active", params.isActive);
+  if (params?.page) searchParams.set("page", String(params.page));
+  if (params?.pageSize) searchParams.set("page_size", String(params.pageSize));
+  const query = searchParams.toString();
+  const data = await apiFetchClient<PaginatedResponse<ApiChecklist>>(
+    `/checklists/${query ? `?${query}` : ""}`
+  );
+  return { checklists: data.results.map(mapChecklist), total: data.count };
 }
 
 export async function fetchChecklist(id: number): Promise<ChecklistDetail> {
-  const data = await apiFetchClient<ApiChecklistDetail>(`/checklists/${id}/`)
-  return mapChecklistDetail(data)
+  const data = await apiFetchClient<ApiChecklistDetail>(`/checklists/${id}/`);
+  return mapChecklistDetail(data);
 }
 
-export async function createChecklistFetch(data: Record<string, unknown>): Promise<ChecklistDetail> {
+export async function createChecklistFetch(
+  data: Record<string, unknown>
+): Promise<ChecklistDetail> {
   const result = await apiFetchClient<ApiChecklistDetail>("/checklists/", {
     method: "POST",
     body: JSON.stringify(data),
-  })
-  return mapChecklistDetail(result)
+  });
+  return mapChecklistDetail(result);
 }
 
-export async function updateChecklistFetch(id: number, data: Record<string, unknown>): Promise<ChecklistDetail> {
+export async function updateChecklistFetch(
+  id: number,
+  data: Record<string, unknown>
+): Promise<ChecklistDetail> {
   const result = await apiFetchClient<ApiChecklistDetail>(`/checklists/${id}/`, {
     method: "PATCH",
     body: JSON.stringify(data),
-  })
-  return mapChecklistDetail(result)
+  });
+  return mapChecklistDetail(result);
 }
 
 export async function deleteChecklistFetch(id: number): Promise<void> {
-  await apiFetchClient<void>(`/checklists/${id}/`, { method: "DELETE" })
+  await apiFetchClient<void>(`/checklists/${id}/`, { method: "DELETE" });
 }

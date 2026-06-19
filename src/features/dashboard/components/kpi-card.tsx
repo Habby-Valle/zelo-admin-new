@@ -1,31 +1,22 @@
-import type { LucideIcon } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { cn } from "@/lib/utils"
+import type { LucideIcon } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { cn } from "@/lib/utils";
 
 interface KpiCardProps {
-  title: string
-  value: number | string
-  description?: string
-  icon: LucideIcon
-  trend?: "up" | "down" | "neutral"
-  className?: string
+  title: string;
+  value: number | string;
+  description?: string;
+  icon: LucideIcon;
+  trend?: "up" | "down" | "neutral";
+  className?: string;
 }
 
-export function KpiCard({
-  title,
-  value,
-  description,
-  icon: Icon,
-  trend,
-  className,
-}: KpiCardProps) {
+export function KpiCard({ title, value, description, icon: Icon, trend, className }: KpiCardProps) {
   return (
     <Card className={cn("transition-shadow hover:shadow-md", className)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
-          {title}
-        </CardTitle>
+        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
@@ -43,7 +34,7 @@ export function KpiCard({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export function KpiCardSkeleton() {
@@ -58,5 +49,5 @@ export function KpiCardSkeleton() {
         <Skeleton className="mt-1 h-3 w-32" />
       </CardContent>
     </Card>
-  )
+  );
 }

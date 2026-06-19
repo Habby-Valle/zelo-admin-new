@@ -3,4 +3,4 @@ export {
   useSubscriptionStats,
   useGuardianSubscriptions,
   useSubscriptionDetails,
-} from "./use-subscriptions"
+} from "./use-subscriptions";

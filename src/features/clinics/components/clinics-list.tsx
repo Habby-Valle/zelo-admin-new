@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState, useCallback } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { toast } from "sonner"
+import { useState, useCallback } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { toast } from "sonner";
 import {
   MoreHorizontal,
   Pencil,
@@ -14,30 +14,30 @@ import {
   Building2,
   ChevronLeft,
   ChevronRight,
-} from "lucide-react"
+} from "lucide-react";
 
-import { useClinics, useDeactivateClinic, useDeleteClinic } from "@/features/clinics/hooks"
-import type { Clinic, ClinicStatus } from "@/features/clinics/types"
-import { ClinicDialog } from "./clinic-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { formatCnpj } from "@/lib/format"
-import { Input } from "@/components/ui/input"
-import { Skeleton } from "@/components/ui/skeleton"
+import { useClinics, useDeactivateClinic, useDeleteClinic } from "@/features/clinics/hooks";
+import type { Clinic, ClinicStatus } from "@/features/clinics/types";
+import { ClinicDialog } from "./clinic-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { formatCnpj } from "@/lib/format";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   Table,
   TableBody,
@@ -45,7 +45,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -55,7 +55,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 
 const STATUS_MAP: Record<
   ClinicStatus,
@@ -64,60 +64,60 @@ const STATUS_MAP: Record<
   active: { label: "Ativa", variant: "default" },
   inactive: { label: "Inativa", variant: "secondary" },
   suspended: { label: "Suspensa", variant: "destructive" },
-}
+};
 
 export function ClinicsList() {
-  const [search, setSearch] = useState("")
-  const [status, setStatus] = useState<ClinicStatus | "all">("all")
-  const [page, setPage] = useState(1)
-  const pageSize = 10
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState<ClinicStatus | "all">("all");
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
 
-  const { data, isLoading, error } = useClinics({ search, status, page, pageSize })
-  const deactivateMutation = useDeactivateClinic()
-  const deleteMutation = useDeleteClinic()
+  const { data, isLoading, error } = useClinics({ search, status, page, pageSize });
+  const deactivateMutation = useDeactivateClinic();
+  const deleteMutation = useDeleteClinic();
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editClinic, setEditClinic] = useState<Clinic | undefined>()
-  const [deactivateTarget, setDeactivateTarget] = useState<Clinic | null>(null)
-  const [deleteTarget, setDeleteTarget] = useState<Clinic | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editClinic, setEditClinic] = useState<Clinic | undefined>();
+  const [deactivateTarget, setDeactivateTarget] = useState<Clinic | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Clinic | null>(null);
 
   const openCreate = () => {
-    setEditClinic(undefined)
-    setDialogOpen(true)
-  }
+    setEditClinic(undefined);
+    setDialogOpen(true);
+  };
 
   const openEdit = (clinic: Clinic) => {
-    setEditClinic(clinic)
-    setDialogOpen(true)
-  }
+    setEditClinic(clinic);
+    setDialogOpen(true);
+  };
 
   const handleDeactivate = useCallback(() => {
-    if (!deactivateTarget) return
+    if (!deactivateTarget) return;
     deactivateMutation.mutate(deactivateTarget.id, {
       onSuccess: () => {
-        toast.success(`Clínica "${deactivateTarget.name}" desativada.`)
-        setDeactivateTarget(null)
+        toast.success(`Clínica "${deactivateTarget.name}" desativada.`);
+        setDeactivateTarget(null);
       },
       onError: (err) => {
-        toast.error(err.message ?? "Erro ao desativar")
-        setDeactivateTarget(null)
+        toast.error(err.message ?? "Erro ao desativar");
+        setDeactivateTarget(null);
       },
-    })
-  }, [deactivateTarget, deactivateMutation])
+    });
+  }, [deactivateTarget, deactivateMutation]);
 
   const handleDelete = useCallback(() => {
-    if (!deleteTarget) return
+    if (!deleteTarget) return;
     deleteMutation.mutate(deleteTarget.id, {
       onSuccess: () => {
-        toast.success(`Clínica "${deleteTarget.name}" excluída.`)
-        setDeleteTarget(null)
+        toast.success(`Clínica "${deleteTarget.name}" excluída.`);
+        setDeleteTarget(null);
       },
       onError: (err) => {
-        toast.error(err.message ?? "Erro ao excluir")
-        setDeleteTarget(null)
+        toast.error(err.message ?? "Erro ao excluir");
+        setDeleteTarget(null);
       },
-    })
-  }, [deleteTarget, deleteMutation])
+    });
+  }, [deleteTarget, deleteMutation]);
 
   if (error) {
     return (
@@ -129,16 +129,14 @@ export function ClinicsList() {
           </p>
         </div>
         <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-6 text-center">
-          <p className="text-sm text-destructive">
-            Erro ao carregar lista de clínicas.
-          </p>
+          <p className="text-sm text-destructive">Erro ao carregar lista de clínicas.</p>
         </div>
       </div>
-    )
+    );
   }
 
-  const total = data?.count ?? 0
-  const totalPages = Math.ceil(total / pageSize)
+  const total = data?.count ?? 0;
+  const totalPages = Math.ceil(total / pageSize);
 
   return (
     <div className="space-y-6">
@@ -155,13 +153,19 @@ export function ClinicsList() {
           <Input
             value={search}
             onChange={(e) => {
-              setSearch(e.target.value)
-              setPage(1)
+              setSearch(e.target.value);
+              setPage(1);
             }}
             placeholder="Buscar clínica..."
             className="max-w-xs"
           />
-          <Select value={status} onValueChange={(v) => { if (v) setStatus(v as ClinicStatus | "all"); setPage(1) }}>
+          <Select
+            value={status}
+            onValueChange={(v) => {
+              if (v) setStatus(v as ClinicStatus | "all");
+              setPage(1);
+            }}
+          >
             <SelectTrigger className="w-36">
               <SelectValue />
             </SelectTrigger>
@@ -195,11 +199,21 @@ export function ClinicsList() {
             {isLoading ? (
               Array.from({ length: 5 }).map((_, i) => (
                 <TableRow key={i}>
-                  <TableCell><Skeleton className="h-4 w-40" /></TableCell>
-                  <TableCell><Skeleton className="h-4 w-36" /></TableCell>
-                  <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
-                  <TableCell><Skeleton className="h-4 w-24" /></TableCell>
-                  <TableCell><Skeleton className="h-8 w-8 rounded" /></TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-40" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-36" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-5 w-16 rounded-full" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-4 w-24" />
+                  </TableCell>
+                  <TableCell>
+                    <Skeleton className="h-8 w-8 rounded" />
+                  </TableCell>
                 </TableRow>
               ))
             ) : data?.results?.length === 0 ? (
@@ -213,7 +227,7 @@ export function ClinicsList() {
                 const s = STATUS_MAP[clinic.status] ?? {
                   label: clinic.status,
                   variant: "outline" as const,
-                }
+                };
                 return (
                   <TableRow key={clinic.id}>
                     <TableCell className="font-medium">
@@ -238,9 +252,7 @@ export function ClinicsList() {
                         {clinic.name}
                       </Link>
                     </TableCell>
-                    <TableCell className="font-mono text-sm">
-                      {formatCnpj(clinic.cnpj)}
-                    </TableCell>
+                    <TableCell className="font-mono text-sm">{formatCnpj(clinic.cnpj)}</TableCell>
                     <TableCell>
                       <Badge variant={s.variant}>{s.label}</Badge>
                     </TableCell>
@@ -249,7 +261,7 @@ export function ClinicsList() {
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
-                        <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg hover:bg-muted hover:text-foreground transition-colors">
+                        <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-muted hover:text-foreground">
                           <MoreHorizontal className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -258,7 +270,9 @@ export function ClinicsList() {
                             Editar
                           </DropdownMenuItem>
                           <DropdownMenuSeparator />
-                          <DropdownMenuItem onClick={() => window.open(`/clinics/${clinic.id}`, "_blank")}>
+                          <DropdownMenuItem
+                            onClick={() => window.open(`/clinics/${clinic.id}`, "_blank")}
+                          >
                             <LogIn className="mr-2 h-4 w-4" />
                             Ver detalhes
                           </DropdownMenuItem>
@@ -286,7 +300,7 @@ export function ClinicsList() {
                       </DropdownMenu>
                     </TableCell>
                   </TableRow>
-                )
+                );
               })
             )}
           </TableBody>
@@ -323,11 +337,7 @@ export function ClinicsList() {
       )}
 
       {/* Dialog criação/edição */}
-      <ClinicDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        clinic={editClinic}
-      />
+      <ClinicDialog open={dialogOpen} onOpenChange={setDialogOpen} clinic={editClinic} />
 
       {/* Confirm desativar */}
       <AlertDialog
@@ -338,8 +348,8 @@ export function ClinicsList() {
           <AlertDialogHeader>
             <AlertDialogTitle>Desativar clínica?</AlertDialogTitle>
             <AlertDialogDescription>
-              A clínica <strong>{deactivateTarget?.name}</strong> será marcada
-              como inativa. Os dados não serão excluídos.
+              A clínica <strong>{deactivateTarget?.name}</strong> será marcada como inativa. Os
+              dados não serão excluídos.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -347,7 +357,7 @@ export function ClinicsList() {
             <AlertDialogAction
               onClick={handleDeactivate}
               disabled={deactivateMutation.isPending}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
             >
               Desativar
             </AlertDialogAction>
@@ -356,17 +366,13 @@ export function ClinicsList() {
       </AlertDialog>
 
       {/* Confirm excluir */}
-      <AlertDialog
-        open={!!deleteTarget}
-        onOpenChange={(open) => !open && setDeleteTarget(null)}
-      >
+      <AlertDialog open={!!deleteTarget} onOpenChange={(open) => !open && setDeleteTarget(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir clínica?</AlertDialogTitle>
             <AlertDialogDescription>
-              A clínica <strong>{deleteTarget?.name}</strong> será excluída
-              logicamente e não aparecerá mais no sistema. Esta ação não pode
-              ser desfeita pela interface.
+              A clínica <strong>{deleteTarget?.name}</strong> será excluída logicamente e não
+              aparecerá mais no sistema. Esta ação não pode ser desfeita pela interface.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -374,7 +380,7 @@ export function ClinicsList() {
             <AlertDialogAction
               onClick={handleDelete}
               disabled={deleteMutation.isPending}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
             >
               Excluir
             </AlertDialogAction>
@@ -382,5 +388,5 @@ export function ClinicsList() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

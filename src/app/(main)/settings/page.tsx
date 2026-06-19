@@ -1,5 +1,5 @@
-import { Settings } from "lucide-react"
-import { SettingsClient } from "@/features/settings/components"
+import { Settings } from "lucide-react";
+import { SettingsClient } from "@/features/settings/components";
 
 export default function SettingsPage() {
   return (
@@ -9,12 +9,10 @@ export default function SettingsPage() {
           <Settings className="h-6 w-6" />
           Configurações
         </h1>
-        <p className="mt-1 text-muted-foreground">
-          Configure as preferências da plataforma.
-        </p>
+        <p className="mt-1 text-muted-foreground">Configure as preferências da plataforma.</p>
       </div>
 
       <SettingsClient />
     </div>
-  )
+  );
 }

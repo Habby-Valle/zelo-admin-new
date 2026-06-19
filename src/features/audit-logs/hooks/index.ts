@@ -1,1 +1,1 @@
-export { auditLogKeys, useAuditLogs, useAuditLog } from "./use-audit-logs"
+export { auditLogKeys, useAuditLogs, useAuditLog } from "./use-audit-logs";

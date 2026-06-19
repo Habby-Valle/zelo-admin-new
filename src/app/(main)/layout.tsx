@@ -1,13 +1,9 @@
-import { requireSuperAdmin } from "@/lib/auth"
-import { Sidebar } from "@/components/layout/sidebar"
-import { Topbar } from "@/components/layout/topbar"
+import { requireSuperAdmin } from "@/lib/auth";
+import { Sidebar } from "@/components/layout/sidebar";
+import { Topbar } from "@/components/layout/topbar";
 
-export default async function MainLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  await requireSuperAdmin()
+export default async function MainLayout({ children }: { children: React.ReactNode }) {
+  await requireSuperAdmin();
 
   return (
     <div className="flex h-screen">
@@ -19,5 +15,5 @@ export default async function MainLayout({
         <main className="flex-1 overflow-auto p-6">{children}</main>
       </div>
     </div>
-  )
+  );
 }

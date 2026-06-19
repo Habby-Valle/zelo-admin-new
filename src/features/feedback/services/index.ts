@@ -3,4 +3,4 @@ export {
   fetchFeedback,
   updateFeedbackStatusApi,
   softDeleteFeedbackApi,
-} from "./feedback.service"
+} from "./feedback.service";

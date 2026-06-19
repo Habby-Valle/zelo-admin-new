@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { useSearchParams, useRouter, usePathname } from "next/navigation"
-import { Plus, Users, MoreHorizontal, Pencil, Trash2, CheckCircle2, XOctagon } from "lucide-react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { PatientAvatar } from "@/features/patients/components/patient-avatar"
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { Plus, Users, MoreHorizontal, Pencil, Trash2, CheckCircle2, XOctagon } from "lucide-react";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
+import { PatientAvatar } from "@/features/patients/components/patient-avatar";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -21,14 +21,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Card, CardContent } from "@/components/ui/card"
+} from "@/components/ui/table";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -38,59 +38,66 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Skeleton } from "@/components/ui/skeleton"
-import { usePatients, useDeletePatient } from "@/features/patients/hooks"
-import { useClinics } from "@/features/clinics/hooks"
-import { useUsers } from "@/features/users/hooks"
+} from "@/components/ui/alert-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import { usePatients, useDeletePatient } from "@/features/patients/hooks";
+import { useClinics } from "@/features/clinics/hooks";
+import { useUsers } from "@/features/users/hooks";
 
 const GENDER_LABELS: Record<string, string> = {
   M: "Masculino",
   F: "Feminino",
   O: "Outro",
-}
+};
 
 function calculateAge(birthDate: string): number {
-  const today = new Date()
-  const [year, month, day] = birthDate.split("-").map(Number)
-  const birth = new Date(year, month - 1, day)
-  let age = today.getFullYear() - birth.getFullYear()
-  const m = today.getMonth() - birth.getMonth()
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--
-  return age
+  const today = new Date();
+  const [year, month, day] = birthDate.split("-").map(Number);
+  const birth = new Date(year, month - 1, day);
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
 }
 
 export function PatientsPageClient() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const [deleteId, setDeleteId] = useState<string | null>(null)
-  const deletePatient = useDeletePatient()
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const deletePatient = useDeletePatient();
 
-  const search = searchParams.get("search") ?? ""
-  const clinicId = searchParams.get("clinic_id") ?? ""
-  const guardianId = searchParams.get("guardian_id") ?? ""
-  const isActive = searchParams.get("is_active") ?? ""
-  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10))
-  const pageSize = 20
+  const search = searchParams.get("search") ?? "";
+  const clinicId = searchParams.get("clinic_id") ?? "";
+  const guardianId = searchParams.get("guardian_id") ?? "";
+  const isActive = searchParams.get("is_active") ?? "";
+  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10));
+  const pageSize = 20;
 
-  const { data, isLoading } = usePatients({ search, clinicId, guardianId, isActive, page, pageSize })
-  const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 })
-  const { data: guardiansData } = useUsers({ role: "guardian", pageSize: 1000 })
+  const { data, isLoading } = usePatients({
+    search,
+    clinicId,
+    guardianId,
+    isActive,
+    page,
+    pageSize,
+  });
+  const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 });
+  const { data: guardiansData } = useUsers({ role: "guardian", pageSize: 1000 });
 
-  const patients = data?.patients ?? []
-  const total = data?.total ?? 0
-  const totalPages = Math.ceil(total / pageSize)
-  const clinics = clinicsData?.results ?? []
-  const guardians = guardiansData?.users ?? []
+  const patients = data?.patients ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / pageSize);
+  const clinics = clinicsData?.results ?? [];
+  const guardians = guardiansData?.users ?? [];
 
   function updateParams(updates: Record<string, string>) {
-    const current = new URLSearchParams(searchParams.toString())
+    const current = new URLSearchParams(searchParams.toString());
     for (const [k, v] of Object.entries(updates)) {
-      if (v) current.set(k, v)
-      else current.delete(k)
+      if (v) current.set(k, v);
+      else current.delete(k);
     }
-    router.push(`${pathname}?${current.toString()}`)
+    router.push(`${pathname}?${current.toString()}`);
   }
 
   return (
@@ -98,7 +105,9 @@ export function PatientsPageClient() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Pacientes</h1>
-          <p className="mt-1 text-muted-foreground">Visão global de todos os pacientes da plataforma.</p>
+          <p className="mt-1 text-muted-foreground">
+            Visão global de todos os pacientes da plataforma.
+          </p>
         </div>
         <Button onClick={() => router.push("/patients/new")}>
           <Plus className="mr-2 h-4 w-4" />
@@ -123,13 +132,17 @@ export function PatientsPageClient() {
           <SelectContent>
             <SelectItem value="all">Todas as clínicas</SelectItem>
             {clinics.map((c) => (
-              <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>
+              <SelectItem key={c.id} value={c.id}>
+                {c.name}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
         <Select
           value={guardianId || "all"}
-          onValueChange={(v) => updateParams({ guardian_id: v === "all" ? "" : (v ?? ""), page: "" })}
+          onValueChange={(v) =>
+            updateParams({ guardian_id: v === "all" ? "" : (v ?? ""), page: "" })
+          }
         >
           <SelectTrigger className="w-48">
             <SelectValue placeholder="Responsável" />
@@ -137,7 +150,9 @@ export function PatientsPageClient() {
           <SelectContent>
             <SelectItem value="all">Todos os responsáveis</SelectItem>
             {guardians.map((g) => (
-              <SelectItem key={g.id} value={g.id}>{g.name}</SelectItem>
+              <SelectItem key={g.id} value={g.id}>
+                {g.name}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -175,7 +190,9 @@ export function PatientsPageClient() {
                 Array.from({ length: 6 }).map((_, i) => (
                   <TableRow key={i}>
                     {Array.from({ length: 6 }).map((_, j) => (
-                      <TableCell key={j}><Skeleton className="h-4 w-full" /></TableCell>
+                      <TableCell key={j}>
+                        <Skeleton className="h-4 w-full" />
+                      </TableCell>
                     ))}
                     <TableCell></TableCell>
                   </TableRow>
@@ -186,7 +203,11 @@ export function PatientsPageClient() {
                     <div className="flex flex-col items-center gap-2 text-muted-foreground">
                       <Users className="h-8 w-8" />
                       <p>Nenhum paciente encontrado</p>
-                      <Button variant="outline" size="sm" onClick={() => router.push("/patients/new")}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => router.push("/patients/new")}
+                      >
                         Cadastrar primeiro paciente
                       </Button>
                     </div>
@@ -200,7 +221,7 @@ export function PatientsPageClient() {
                         <PatientAvatar name={patient.name} mediaUrl={patient.media?.url} />
                         <button
                           onClick={() => router.push(`/patients/${patient.id}`)}
-                          className="hover:underline text-left"
+                          className="text-left hover:underline"
                         >
                           {patient.name}
                         </button>
@@ -211,7 +232,8 @@ export function PatientsPageClient() {
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {patient.clinic_id ? (
-                        clinics.find((c) => String(c.id) === patient.clinic_id)?.name ?? `#${patient.clinic_id}`
+                        (clinics.find((c) => String(c.id) === patient.clinic_id)?.name ??
+                        `#${patient.clinic_id}`)
                       ) : (
                         <span className="text-muted-foreground/50">—</span>
                       )}
@@ -241,7 +263,9 @@ export function PatientsPageClient() {
                           <MoreHorizontal className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
-                          <DropdownMenuItem onClick={() => router.push(`/patients/${patient.id}/edit`)}>
+                          <DropdownMenuItem
+                            onClick={() => router.push(`/patients/${patient.id}/edit`)}
+                          >
                             <Pencil className="mr-2 h-4 w-4" />
                             Editar
                           </DropdownMenuItem>
@@ -266,13 +290,24 @@ export function PatientsPageClient() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Mostrando {(page - 1) * pageSize + 1} a {Math.min(page * pageSize, total)} de {total} pacientes
+            Mostrando {(page - 1) * pageSize + 1} a {Math.min(page * pageSize, total)} de {total}{" "}
+            pacientes
           </p>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => updateParams({ page: String(page - 1) })} disabled={page <= 1}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => updateParams({ page: String(page - 1) })}
+              disabled={page <= 1}
+            >
               Anterior
             </Button>
-            <Button variant="outline" size="sm" onClick={() => updateParams({ page: String(page + 1) })} disabled={page >= totalPages}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => updateParams({ page: String(page + 1) })}
+              disabled={page >= totalPages}
+            >
               Próxima
             </Button>
           </div>
@@ -283,13 +318,17 @@ export function PatientsPageClient() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir paciente</AlertDialogTitle>
-            <AlertDialogDescription>Tem certeza que deseja excluir este paciente? Esta ação não pode ser desfeita.</AlertDialogDescription>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir este paciente? Esta ação não pode ser desfeita.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               disabled={deletePatient.isPending}
-              onClick={() => deletePatient.mutate(deleteId!, { onSuccess: () => setDeleteId(null) })}
+              onClick={() =>
+                deletePatient.mutate(deleteId!, { onSuccess: () => setDeleteId(null) })
+              }
               className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
             >
               {deletePatient.isPending ? "Excluindo..." : "Excluir"}
@@ -298,5 +337,5 @@ export function PatientsPageClient() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

@@ -1,15 +1,15 @@
-"use client"
+"use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getSosAlertsApi,
   getSosAlertApi,
   acknowledgeSosAlertApi,
   resolveSosAlertApi,
   getSosSummaryApi,
-} from "@/features/sos/services"
-import type { SosFilters } from "@/features/sos/types"
-import { toast } from "sonner"
+} from "@/features/sos/services";
+import type { SosFilters } from "@/features/sos/types";
+import { toast } from "sonner";
 
 export const sosKeys = {
   all: ["sos"] as const,
@@ -18,7 +18,7 @@ export const sosKeys = {
   details: () => [...sosKeys.all, "detail"] as const,
   detail: (id: number) => [...sosKeys.details(), id] as const,
   summary: () => [...sosKeys.all, "summary"] as const,
-}
+};
 
 export function useSosAlerts(params?: SosFilters) {
   return useQuery({
@@ -26,7 +26,7 @@ export function useSosAlerts(params?: SosFilters) {
     queryFn: () => getSosAlertsApi(params),
     staleTime: 60 * 1000,
     retry: 1,
-  })
+  });
 }
 
 export function useSosAlert(id: number) {
@@ -34,43 +34,42 @@ export function useSosAlert(id: number) {
     queryKey: sosKeys.detail(id),
     queryFn: () => getSosAlertApi(id),
     enabled: !!id,
-  })
+  });
 }
 
 export function useSosSummary(clinicId?: string | number) {
   return useQuery({
     queryKey: sosKeys.summary(),
     queryFn: () => getSosSummaryApi(clinicId),
-  })
+  });
 }
 
 export function useAcknowledgeSosAlert() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (id: string) => acknowledgeSosAlertApi(id),
     onSuccess: () => {
-      toast.success("Alerta confirmado.")
-      queryClient.invalidateQueries({ queryKey: sosKeys.all })
+      toast.success("Alerta confirmado.");
+      queryClient.invalidateQueries({ queryKey: sosKeys.all });
     },
     onError: () => {
-      toast.error("Erro ao confirmar alerta.")
+      toast.error("Erro ao confirmar alerta.");
     },
-  })
+  });
 }
 
 export function useResolveSosAlert() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, reason }: { id: string; reason?: string }) =>
-      resolveSosAlertApi(id, reason),
+    mutationFn: ({ id, reason }: { id: string; reason?: string }) => resolveSosAlertApi(id, reason),
     onSuccess: () => {
-      toast.success("Alerta resolvido.")
-      queryClient.invalidateQueries({ queryKey: sosKeys.all })
+      toast.success("Alerta resolvido.");
+      queryClient.invalidateQueries({ queryKey: sosKeys.all });
     },
     onError: () => {
-      toast.error("Erro ao resolver alerta.")
+      toast.error("Erro ao resolver alerta.");
     },
-  })
+  });
 }

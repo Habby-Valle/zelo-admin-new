@@ -1,45 +1,40 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2 } from "lucide-react"
-import { sendInviteSchema, type SendInviteValues } from "@/lib/validations/invite"
-import { useSendInvite } from "@/features/users/hooks"
-import { useClinics } from "@/features/clinics/hooks"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { sendInviteSchema, type SendInviteValues } from "@/lib/validations/invite";
+import { useSendInvite } from "@/features/users/hooks";
+import { useClinics } from "@/features/clinics/hooks";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 const ROLE_LABELS: Record<string, string> = {
   clinic_admin: "Admin de Clínica",
   guardian: "Responsável",
   caregiver: "Cuidador",
   family: "Familiar",
-}
+};
 
 interface InviteDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
-  const sendInvite = useSendInvite()
-  const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 })
-  const clinics = clinicsData?.results ?? []
+  const sendInvite = useSendInvite();
+  const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 });
+  const clinics = clinicsData?.results ?? [];
 
   const {
     register,
@@ -51,13 +46,13 @@ export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
   } = useForm<SendInviteValues>({
     resolver: zodResolver(sendInviteSchema),
     defaultValues: { email: "", role: "clinic_admin", clinic_id: null },
-  })
+  });
 
-  const role = watch("role")
+  const role = watch("role");
 
   useEffect(() => {
-    if (open) reset({ email: "", role: "clinic_admin", clinic_id: null })
-  }, [open, reset])
+    if (open) reset({ email: "", role: "clinic_admin", clinic_id: null });
+  }, [open, reset]);
 
   function onSubmit(values: SendInviteValues) {
     sendInvite.mutate(
@@ -67,15 +62,10 @@ export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
         clinic_id: values.clinic_id ?? null,
       },
       { onSuccess: () => onOpenChange(false) }
-    )
+    );
   }
 
-  const needsClinic = [
-    "clinic_admin",
-    "guardian",
-    "caregiver",
-    "family",
-  ].includes(role)
+  const needsClinic = ["clinic_admin", "guardian", "caregiver", "family"].includes(role);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -93,15 +83,8 @@ export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
 
           <div className="space-y-1.5">
             <Label htmlFor="email">Email *</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="nome@exemplo.com"
-              {...register("email")}
-            />
-            {errors.email && (
-              <p className="text-xs text-destructive">{errors.email.message}</p>
-            )}
+            <Input id="email" type="email" placeholder="nome@exemplo.com" {...register("email")} />
+            {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-1.5">
@@ -125,18 +108,14 @@ export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
                 ))}
               </SelectContent>
             </Select>
-            {errors.role && (
-              <p className="text-xs text-destructive">{errors.role.message}</p>
-            )}
+            {errors.role && <p className="text-xs text-destructive">{errors.role.message}</p>}
           </div>
 
           {needsClinic && (
             <div className="space-y-1.5">
               <Label>Clínica vinculada</Label>
               <Select
-                value={
-                  watch("clinic_id") != null ? String(watch("clinic_id")) : ""
-                }
+                value={watch("clinic_id") != null ? String(watch("clinic_id")) : ""}
                 onValueChange={(v) =>
                   setValue("clinic_id", v ? parseInt(v, 10) : null, {
                     shouldValidate: true,
@@ -167,14 +146,12 @@ export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
               Cancelar
             </Button>
             <Button type="submit" disabled={sendInvite.isPending}>
-              {sendInvite.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
+              {sendInvite.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Enviar convite
             </Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

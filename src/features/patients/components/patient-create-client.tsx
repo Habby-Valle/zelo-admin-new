@@ -1,25 +1,25 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
-import { useCreatePatient } from "@/features/patients/hooks"
-import { PatientForm } from "@/features/patients/components/patient-form"
-import type { PatientFormValues } from "@/lib/validations/patient"
-import { Button } from "@/components/ui/button"
-import { toast } from "sonner"
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { useCreatePatient } from "@/features/patients/hooks";
+import { PatientForm } from "@/features/patients/components/patient-form";
+import type { PatientFormValues } from "@/lib/validations/patient";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export function PatientCreateClient() {
-  const router = useRouter()
-  const createPatient = useCreatePatient()
+  const router = useRouter();
+  const createPatient = useCreatePatient();
 
   function onSubmit(values: PatientFormValues) {
-    const body = { ...values, email: values.email || null, cpf: values.cpf || null }
+    const body = { ...values, email: values.email || null, cpf: values.cpf || null };
     createPatient.mutate(body, {
       onSuccess: (patient) => {
-        toast.success("Paciente criado com sucesso")
-        router.push(`/patients/${patient.id}`)
+        toast.success("Paciente criado com sucesso");
+        router.push(`/patients/${patient.id}`);
       },
-    })
+    });
   }
 
   return (
@@ -41,5 +41,5 @@ export function PatientCreateClient() {
         submitLabel="Cadastrar Paciente"
       />
     </div>
-  )
+  );
 }

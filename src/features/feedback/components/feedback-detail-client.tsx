@@ -1,50 +1,50 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { ArrowLeft, ExternalLink } from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
-import { useFeedback, useUpdateFeedbackStatus } from "@/features/feedback/hooks"
-import { formatDateTime } from "@/lib/format"
+import { useRouter } from "next/navigation";
+import { ArrowLeft, ExternalLink } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { useFeedback, useUpdateFeedbackStatus } from "@/features/feedback/hooks";
+import { formatDateTime } from "@/lib/format";
 
 const TYPE_LABELS: Record<string, string> = {
   bug: "Bug",
   feature: "Melhoria",
   compliment: "Elogio",
   other: "Outro",
-}
+};
 
 const TYPE_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   bug: "destructive",
   feature: "default",
   compliment: "secondary",
   other: "outline",
-}
+};
 
 const STATUS_LABELS: Record<string, string> = {
   received: "Recebido",
   in_review: "Em Análise",
   resolved: "Resolvido",
   closed: "Fechado",
-}
+};
 
 const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   received: "secondary",
   in_review: "outline",
   resolved: "default",
   closed: "outline",
-}
+};
 
 interface FeedbackDetailClientProps {
-  id: number
+  id: number;
 }
 
 export function FeedbackDetailClient({ id }: FeedbackDetailClientProps) {
-  const router = useRouter()
-  const { data: feedback, isLoading } = useFeedback(id)
-  const updateStatus = useUpdateFeedbackStatus()
+  const router = useRouter();
+  const { data: feedback, isLoading } = useFeedback(id);
+  const updateStatus = useUpdateFeedbackStatus();
 
   if (isLoading) {
     return (
@@ -52,7 +52,7 @@ export function FeedbackDetailClient({ id }: FeedbackDetailClientProps) {
         <div className="h-48 animate-pulse rounded-xl bg-muted" />
         <div className="h-32 animate-pulse rounded-xl bg-muted" />
       </div>
-    )
+    );
   }
 
   if (!feedback) {
@@ -62,7 +62,7 @@ export function FeedbackDetailClient({ id }: FeedbackDetailClientProps) {
           Feedback não encontrado.
         </CardContent>
       </Card>
-    )
+    );
   }
 
   const statusActions = [
@@ -70,7 +70,7 @@ export function FeedbackDetailClient({ id }: FeedbackDetailClientProps) {
     { status: "in_review", label: "Marcar como Em Análise" },
     { status: "resolved", label: "Marcar como Resolvido" },
     { status: "closed", label: "Fechar" },
-  ].filter((a) => a.status !== feedback.status)
+  ].filter((a) => a.status !== feedback.status);
 
   return (
     <div className="space-y-6">
@@ -89,10 +89,7 @@ export function FeedbackDetailClient({ id }: FeedbackDetailClientProps) {
               {feedback.subject}
             </CardTitle>
           </div>
-          <Badge
-            variant={STATUS_VARIANTS[feedback.status] ?? "outline"}
-            className="text-sm"
-          >
+          <Badge variant={STATUS_VARIANTS[feedback.status] ?? "outline"} className="text-sm">
             {STATUS_LABELS[feedback.status] ?? feedback.status}
           </Badge>
         </CardHeader>
@@ -104,9 +101,7 @@ export function FeedbackDetailClient({ id }: FeedbackDetailClientProps) {
                 {feedback.user_name ?? <span className="italic">Anônimo</span>}
               </p>
               {feedback.user_email && (
-                <p className="text-sm text-muted-foreground">
-                  {feedback.user_email}
-                </p>
+                <p className="text-sm text-muted-foreground">{feedback.user_email}</p>
               )}
             </div>
             <div>
@@ -193,5 +188,5 @@ export function FeedbackDetailClient({ id }: FeedbackDetailClientProps) {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

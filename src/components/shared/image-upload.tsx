@@ -1,77 +1,71 @@
-"use client"
+"use client";
 
-import { useRef, useState } from "react"
-import Image from "next/image"
-import { toast } from "sonner"
-import { Loader2, Upload, Trash2, ImageIcon } from "lucide-react"
+import { useRef, useState } from "react";
+import Image from "next/image";
+import { toast } from "sonner";
+import { Loader2, Upload, Trash2, ImageIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
-import { uploadMedia } from "@/lib/api/media.service"
+import { Button } from "@/components/ui/button";
+import { uploadMedia } from "@/lib/api/media.service";
 
 interface ImageUploadProps {
-  currentUrl?: string | null
-  onMediaChange: (mediaId: number | null) => void
-  disabled?: boolean
+  currentUrl?: string | null;
+  onMediaChange: (mediaId: number | null) => void;
+  disabled?: boolean;
 }
 
-export function ImageUpload({
-  currentUrl,
-  onMediaChange,
-  disabled,
-}: ImageUploadProps) {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [previewUrl, setPreviewUrl] = useState<string | null>(
-    currentUrl ?? null
-  )
-  const [uploading, setUploading] = useState(false)
-  const [removing, setRemoving] = useState(false)
+export function ImageUpload({ currentUrl, onMediaChange, disabled }: ImageUploadProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(currentUrl ?? null);
+  const [uploading, setUploading] = useState(false);
+  const [removing, setRemoving] = useState(false);
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0]
-    if (!file) return
+    const file = e.target.files?.[0];
+    if (!file) return;
 
     if (file.size > 10 * 1024 * 1024) {
-      toast.error("A imagem deve ter no máximo 10MB")
-      if (fileInputRef.current) fileInputRef.current.value = ""
-      return
+      toast.error("A imagem deve ter no máximo 10MB");
+      if (fileInputRef.current) fileInputRef.current.value = "";
+      return;
     }
 
-    const formData = new FormData()
-    formData.append("file", file)
+    const formData = new FormData();
+    formData.append("file", file);
 
-    setUploading(true)
+    setUploading(true);
     try {
-      const result = await uploadMedia(formData)
+      const result = await uploadMedia(formData);
       if (!result.success) {
-        toast.error(result.error ?? "Erro ao fazer upload")
-        return
+        toast.error(result.error ?? "Erro ao fazer upload");
+        return;
       }
 
-      const media = result.data!
-      setPreviewUrl(media.url ?? null)
-      onMediaChange(Number(media.id))
-      toast.success("Imagem salva com sucesso!")
+      const media = result.data!;
+      setPreviewUrl(media.url ?? null);
+      onMediaChange(Number(media.id));
+      toast.success("Imagem salva com sucesso!");
     } catch {
-      toast.error("Erro ao fazer upload")
+      toast.error("Erro ao fazer upload");
     } finally {
-      setUploading(false)
+      setUploading(false);
     }
 
-    if (fileInputRef.current) fileInputRef.current.value = ""
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   function handleRemove() {
-    setRemoving(true)
+    setRemoving(true);
     try {
-      setPreviewUrl(null)
-      onMediaChange(null)
-      toast.success("Imagem removida.")
+      setPreviewUrl(null);
+      onMediaChange(null);
+      toast.success("Imagem removida.");
     } finally {
-      setRemoving(false)
+      setRemoving(false);
     }
   }
 
-  const isBusy = uploading || removing
+  const isBusy = uploading || removing;
 
   return (
     <div className="flex items-center gap-6">
@@ -126,5 +120,5 @@ export function ImageUpload({
         />
       </div>
     </div>
-  )
+  );
 }

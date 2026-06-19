@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useMemo } from "react"
-import { Users, TrendingUp, Download } from "lucide-react"
+import { useMemo } from "react";
+import { Users, TrendingUp, Download } from "lucide-react";
 import {
   AreaChart,
   Area,
@@ -11,25 +11,21 @@ import {
   Tooltip,
   Legend,
   ResponsiveContainer,
-} from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { PatientsGrowthData } from "@/features/reports/types"
+} from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { PatientsGrowthData } from "@/features/reports/types";
 
 interface PatientsGrowthReportProps {
-  data: PatientsGrowthData[]
-  loading: boolean
-  onExport: () => void
+  data: PatientsGrowthData[];
+  loading: boolean;
+  onExport: () => void;
 }
 
-export function PatientsGrowthReport({
-  data,
-  loading,
-  onExport,
-}: PatientsGrowthReportProps) {
-  const totalPatients = data.length > 0 ? data[data.length - 1].total : 0
-  const newPatients = useMemo(() => data.reduce((sum, d) => sum + d.new, 0), [data])
+export function PatientsGrowthReport({ data, loading, onExport }: PatientsGrowthReportProps) {
+  const totalPatients = data.length > 0 ? data[data.length - 1].total : 0;
+  const newPatients = useMemo(() => data.reduce((sum, d) => sum + d.new, 0), [data]);
 
   if (loading) {
     return (
@@ -41,7 +37,7 @@ export function PatientsGrowthReport({
           <Skeleton className="h-64 w-full" />
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -112,5 +108,5 @@ export function PatientsGrowthReport({
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

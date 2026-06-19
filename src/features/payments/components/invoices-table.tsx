@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
+import { useState, useMemo } from "react";
 import {
   Table,
   TableBody,
@@ -8,45 +8,38 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { ExternalLink, Filter } from "lucide-react"
-import { formatDate, formatCurrency } from "@/lib/format"
-import type { InvoiceRecord } from "@/features/payments/types"
+} from "@/components/ui/select";
+import { ExternalLink, Filter } from "lucide-react";
+import { formatDate, formatCurrency } from "@/lib/format";
+import type { InvoiceRecord } from "@/features/payments/types";
 
 interface InvoicesTableProps {
-  invoices: InvoiceRecord[]
+  invoices: InvoiceRecord[];
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const variants: Record<
-    string,
-    "default" | "secondary" | "destructive" | "outline"
-  > = {
+  const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
     paid: "default",
     open: "secondary",
     void: "outline",
     uncollectible: "destructive",
-  }
+  };
   const labels: Record<string, string> = {
     paid: "Pago",
     open: "Em aberto",
     void: "Anulado",
     uncollectible: "Não cobrável",
-  }
-  return (
-    <Badge variant={variants[status] ?? "outline"}>
-      {labels[status] ?? status}
-    </Badge>
-  )
+  };
+  return <Badge variant={variants[status] ?? "outline"}>{labels[status] ?? status}</Badge>;
 }
 
 function TypeBadge({ type }: { type: string }) {
@@ -54,23 +47,22 @@ function TypeBadge({ type }: { type: string }) {
     <Badge variant={type === "clinic" ? "secondary" : "outline"}>
       {type === "clinic" ? "Clínica" : "Guardião"}
     </Badge>
-  )
+  );
 }
 
 export function InvoicesTable({ invoices }: InvoicesTableProps) {
-  const [search, setSearch] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
+  const [search, setSearch] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const filtered = useMemo(() => {
     return invoices.filter((inv) => {
       const matchesSearch =
         inv.owner_name.toLowerCase().includes(search.toLowerCase()) ||
-        inv.stripe_invoice_id.toLowerCase().includes(search.toLowerCase())
-      const matchesStatus =
-        statusFilter === "all" || inv.status === statusFilter
-      return matchesSearch && matchesStatus
-    })
-  }, [invoices, search, statusFilter])
+        inv.stripe_invoice_id.toLowerCase().includes(search.toLowerCase());
+      const matchesStatus = statusFilter === "all" || inv.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
+  }, [invoices, search, statusFilter]);
 
   return (
     <div className="space-y-4">
@@ -81,10 +73,7 @@ export function InvoicesTable({ invoices }: InvoicesTableProps) {
           onChange={(e) => setSearch(e.target.value)}
           className="max-w-xs"
         />
-        <Select
-          value={statusFilter}
-          onValueChange={(v) => setStatusFilter(v ?? "all")}
-        >
+        <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v ?? "all")}>
           <SelectTrigger className="w-40">
             <Filter className="mr-2 h-4 w-4" />
             <SelectValue placeholder="Status" />
@@ -113,32 +102,23 @@ export function InvoicesTable({ invoices }: InvoicesTableProps) {
           <TableBody>
             {filtered.length === 0 ? (
               <TableRow>
-                <TableCell
-                  colSpan={6}
-                  className="py-8 text-center text-muted-foreground"
-                >
+                <TableCell colSpan={6} className="py-8 text-center text-muted-foreground">
                   Nenhuma fatura encontrada
                 </TableCell>
               </TableRow>
             ) : (
               filtered.map((inv) => (
                 <TableRow key={inv.id}>
-                  <TableCell className="font-medium">
-                    {inv.owner_name}
-                  </TableCell>
+                  <TableCell className="font-medium">{inv.owner_name}</TableCell>
                   <TableCell>
                     <TypeBadge type={inv.owner_type} />
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {formatCurrency(inv.amount)}
-                  </TableCell>
+                  <TableCell className="font-medium">{formatCurrency(inv.amount)}</TableCell>
                   <TableCell>
                     <StatusBadge status={inv.status} />
                   </TableCell>
                   <TableCell>
-                    {inv.paid_at
-                      ? formatDate(inv.paid_at)
-                      : formatDate(inv.created_at)}
+                    {inv.paid_at ? formatDate(inv.paid_at) : formatDate(inv.created_at)}
                   </TableCell>
                   <TableCell className="text-right">
                     {inv.invoice_url ? (
@@ -164,5 +144,5 @@ export function InvoicesTable({ invoices }: InvoicesTableProps) {
         </Table>
       </div>
     </div>
-  )
+  );
 }

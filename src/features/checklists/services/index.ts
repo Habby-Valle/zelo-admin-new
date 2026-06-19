@@ -4,4 +4,4 @@ export {
   createChecklistFetch,
   updateChecklistFetch,
   deleteChecklistFetch,
-} from "./checklists.service"
+} from "./checklists.service";

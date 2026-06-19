@@ -1,1 +1,1 @@
-export { BroadcastClient } from "./broadcast-client"
+export { BroadcastClient } from "./broadcast-client";

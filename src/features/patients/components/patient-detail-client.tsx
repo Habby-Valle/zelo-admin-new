@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Pencil,
@@ -18,14 +18,14 @@ import {
   Plus,
   X,
   Loader2,
-} from "lucide-react"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "lucide-react";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableBody,
@@ -33,7 +33,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -43,7 +43,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import {
   Dialog,
   DialogContent,
@@ -51,14 +51,14 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   usePatient,
   useDeletePatient,
@@ -66,52 +66,57 @@ import {
   useRemoveCaregiver,
   useAddEmergencyContact,
   useRemoveEmergencyContact,
-} from "@/features/patients/hooks"
-import { useUsers } from "@/features/users/hooks"
+} from "@/features/patients/hooks";
+import { useUsers } from "@/features/users/hooks";
 
-const GENDER_LABELS: Record<string, string> = { M: "Masculino", F: "Feminino", O: "Outro" }
+const GENDER_LABELS: Record<string, string> = { M: "Masculino", F: "Feminino", O: "Outro" };
 
 function calculateAge(birthDate: string): number {
-  const today = new Date()
-  const [year, month, day] = birthDate.split("-").map(Number)
-  const birth = new Date(year, month - 1, day)
-  let age = today.getFullYear() - birth.getFullYear()
-  const m = today.getMonth() - birth.getMonth()
-  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--
-  return age
+  const today = new Date();
+  const [year, month, day] = birthDate.split("-").map(Number);
+  const birth = new Date(year, month - 1, day);
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
 }
 
 function formatDate(dateStr: string): string {
-  const [year, month, day] = dateStr.split("-").map(Number)
-  return new Date(year, month - 1, day).toLocaleDateString("pt-BR")
+  const [year, month, day] = dateStr.split("-").map(Number);
+  return new Date(year, month - 1, day).toLocaleDateString("pt-BR");
 }
 
 function getInitials(name: string) {
-  return name.split(" ").map((n: string) => n[0]).join("").toUpperCase().slice(0, 2)
+  return name
+    .split(" ")
+    .map((n: string) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
 }
 
 export function PatientDetailClient({ id }: { id: string }) {
-  const router = useRouter()
-  const { data: patient, isLoading, isError } = usePatient(id)
-  const deletePatient = useDeletePatient()
-  const addCaregiver = useAddCaregiver(id)
-  const removeCaregiver = useRemoveCaregiver(id)
-  const addContact = useAddEmergencyContact(id)
-  const removeContact = useRemoveEmergencyContact(id)
+  const router = useRouter();
+  const { data: patient, isLoading, isError } = usePatient(id);
+  const deletePatient = useDeletePatient();
+  const addCaregiver = useAddCaregiver(id);
+  const removeCaregiver = useRemoveCaregiver(id);
+  const addContact = useAddEmergencyContact(id);
+  const removeContact = useRemoveEmergencyContact(id);
 
-  const [deleteOpen, setDeleteOpen] = useState(false)
-  const [addCaregiverOpen, setAddCaregiverOpen] = useState(false)
-  const [addContactOpen, setAddContactOpen] = useState(false)
-  const [removeAssignmentId, setRemoveAssignmentId] = useState<string | null>(null)
-  const [removeContactId, setRemoveContactId] = useState<string | null>(null)
-  const [selectedCaregiverId, setSelectedCaregiverId] = useState("")
-  const [selectedFamilyId, setSelectedFamilyId] = useState("")
-  const [contactPriority, setContactPriority] = useState("1")
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [addCaregiverOpen, setAddCaregiverOpen] = useState(false);
+  const [addContactOpen, setAddContactOpen] = useState(false);
+  const [removeAssignmentId, setRemoveAssignmentId] = useState<string | null>(null);
+  const [removeContactId, setRemoveContactId] = useState<string | null>(null);
+  const [selectedCaregiverId, setSelectedCaregiverId] = useState("");
+  const [selectedFamilyId, setSelectedFamilyId] = useState("");
+  const [contactPriority, setContactPriority] = useState("1");
 
-  const { data: caregiversData } = useUsers({ role: "caregiver", pageSize: 100 })
-  const { data: familyData } = useUsers({ role: "family", pageSize: 100 })
-  const caregivers = caregiversData?.users ?? []
-  const familyMembers = familyData?.users ?? []
+  const { data: caregiversData } = useUsers({ role: "caregiver", pageSize: 100 });
+  const { data: familyData } = useUsers({ role: "family", pageSize: 100 });
+  const caregivers = caregiversData?.users ?? [];
+  const familyMembers = familyData?.users ?? [];
 
   if (isLoading) {
     return (
@@ -131,7 +136,7 @@ export function PatientDetailClient({ id }: { id: string }) {
         <Skeleton className="h-40 rounded-lg" />
         <Skeleton className="h-40 rounded-lg" />
       </div>
-    )
+    );
   }
 
   if (isError || !patient) {
@@ -140,33 +145,33 @@ export function PatientDetailClient({ id }: { id: string }) {
         <p className="text-muted-foreground">Paciente não encontrado.</p>
         <Button onClick={() => router.push("/patients")}>Voltar</Button>
       </div>
-    )
+    );
   }
 
-  const age = calculateAge(patient.birth_date)
+  const age = calculateAge(patient.birth_date);
 
   function handleAddCaregiver() {
-    if (!selectedCaregiverId) return
+    if (!selectedCaregiverId) return;
     addCaregiver.mutate(Number(selectedCaregiverId), {
       onSuccess: () => {
-        setAddCaregiverOpen(false)
-        setSelectedCaregiverId("")
+        setAddCaregiverOpen(false);
+        setSelectedCaregiverId("");
       },
-    })
+    });
   }
 
   function handleAddContact() {
-    if (!selectedFamilyId) return
+    if (!selectedFamilyId) return;
     addContact.mutate(
       { profileFamilyId: Number(selectedFamilyId), priority: parseInt(contactPriority, 10) || 1 },
       {
         onSuccess: () => {
-          setAddContactOpen(false)
-          setSelectedFamilyId("")
-          setContactPriority("1")
+          setAddContactOpen(false);
+          setSelectedFamilyId("");
+          setContactPriority("1");
         },
       }
-    )
+    );
   }
 
   return (
@@ -203,7 +208,12 @@ export function PatientDetailClient({ id }: { id: string }) {
           <Button variant="outline" size="sm" onClick={() => router.push(`/patients/${id}/edit`)}>
             <Pencil className="mr-2 h-4 w-4" /> Editar
           </Button>
-          <Button variant="outline" size="sm" className="text-destructive hover:text-destructive" onClick={() => setDeleteOpen(true)}>
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-destructive hover:text-destructive"
+            onClick={() => setDeleteOpen(true)}
+          >
             <Trash2 className="mr-2 h-4 w-4" /> Excluir
           </Button>
         </div>
@@ -238,7 +248,9 @@ export function PatientDetailClient({ id }: { id: string }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="font-medium">{patient.clinic_name ?? <span className="text-muted-foreground">—</span>}</p>
+            <p className="font-medium">
+              {patient.clinic_name ?? <span className="text-muted-foreground">—</span>}
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -248,7 +260,9 @@ export function PatientDetailClient({ id }: { id: string }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="font-medium">{patient.guardian_name ?? <span className="text-muted-foreground">—</span>}</p>
+            <p className="font-medium">
+              {patient.guardian_name ?? <span className="text-muted-foreground">—</span>}
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -278,7 +292,10 @@ export function PatientDetailClient({ id }: { id: string }) {
         </CardContent>
       </Card>
 
-      {(patient.health_conditions || patient.allergies || patient.medications || patient.observations) && (
+      {(patient.health_conditions ||
+        patient.allergies ||
+        patient.medications ||
+        patient.observations) && (
         <Card>
           <CardHeader>
             <CardTitle className="text-base">Informações de Saúde</CardTitle>
@@ -341,7 +358,9 @@ export function PatientDetailClient({ id }: { id: string }) {
                 {patient.caregiver_assignments.map((a) => (
                   <TableRow key={a.id}>
                     <TableCell className="font-medium">{a.caregiver_name}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{a.caregiver_specialization ?? "—"}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {a.caregiver_specialization ?? "—"}
+                    </TableCell>
                     <TableCell>
                       <Badge variant={a.is_active ? "secondary" : "outline"}>
                         {a.is_active ? "Ativo" : "Inativo"}
@@ -372,7 +391,8 @@ export function PatientDetailClient({ id }: { id: string }) {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-base">
-              <Phone className="h-4 w-4" /> Contatos de Emergência ({patient.emergency_contacts.length})
+              <Phone className="h-4 w-4" /> Contatos de Emergência (
+              {patient.emergency_contacts.length})
             </CardTitle>
             <Button variant="outline" size="sm" onClick={() => setAddContactOpen(true)}>
               <Plus className="mr-1 h-3 w-3" /> Adicionar
@@ -396,7 +416,9 @@ export function PatientDetailClient({ id }: { id: string }) {
                 {patient.emergency_contacts.map((c) => (
                   <TableRow key={c.id}>
                     <TableCell className="font-medium">{c.profile_family_name}</TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{c.profile_family_phone}</TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {c.profile_family_phone}
+                    </TableCell>
                     <TableCell className="text-sm text-muted-foreground">#{c.priority}</TableCell>
                     <TableCell>
                       <Button
@@ -425,20 +447,29 @@ export function PatientDetailClient({ id }: { id: string }) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Adicionar Cuidador</DialogTitle>
-            <DialogDescription>Selecione um cuidador para vincular a este paciente.</DialogDescription>
+            <DialogDescription>
+              Selecione um cuidador para vincular a este paciente.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-2">
             <Label>Cuidador</Label>
-            <Select value={selectedCaregiverId} onValueChange={(v) => setSelectedCaregiverId(v ?? "")}>
+            <Select
+              value={selectedCaregiverId}
+              onValueChange={(v) => setSelectedCaregiverId(v ?? "")}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Selecionar cuidador..." />
               </SelectTrigger>
               <SelectContent>
                 {caregivers.length === 0 ? (
-                  <SelectItem value="__none__" disabled>Nenhum cuidador cadastrado</SelectItem>
+                  <SelectItem value="__none__" disabled>
+                    Nenhum cuidador cadastrado
+                  </SelectItem>
                 ) : (
                   caregivers.map((c) => (
-                    <SelectItem key={c.id} value={c.id}>{c.name} — {c.email}</SelectItem>
+                    <SelectItem key={c.id} value={c.id}>
+                      {c.name} — {c.email}
+                    </SelectItem>
                   ))
                 )}
               </SelectContent>
@@ -448,8 +479,13 @@ export function PatientDetailClient({ id }: { id: string }) {
             <p className="text-sm text-destructive">{addCaregiver.error.message}</p>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setAddCaregiverOpen(false)}>Cancelar</Button>
-            <Button onClick={handleAddCaregiver} disabled={!selectedCaregiverId || addCaregiver.isPending}>
+            <Button variant="outline" onClick={() => setAddCaregiverOpen(false)}>
+              Cancelar
+            </Button>
+            <Button
+              onClick={handleAddCaregiver}
+              disabled={!selectedCaregiverId || addCaregiver.isPending}
+            >
               {addCaregiver.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Vincular
             </Button>
@@ -461,7 +497,9 @@ export function PatientDetailClient({ id }: { id: string }) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Adicionar Contato de Emergência</DialogTitle>
-            <DialogDescription>Selecione um familiar para adicionar como contato.</DialogDescription>
+            <DialogDescription>
+              Selecione um familiar para adicionar como contato.
+            </DialogDescription>
           </DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2">
@@ -472,10 +510,14 @@ export function PatientDetailClient({ id }: { id: string }) {
                 </SelectTrigger>
                 <SelectContent>
                   {familyMembers.length === 0 ? (
-                    <SelectItem value="__none__" disabled>Nenhum familiar cadastrado</SelectItem>
+                    <SelectItem value="__none__" disabled>
+                      Nenhum familiar cadastrado
+                    </SelectItem>
                   ) : (
                     familyMembers.map((f) => (
-                      <SelectItem key={f.id} value={f.id}>{f.name} — {f.email}</SelectItem>
+                      <SelectItem key={f.id} value={f.id}>
+                        {f.name} — {f.email}
+                      </SelectItem>
                     ))
                   )}
                 </SelectContent>
@@ -483,14 +525,24 @@ export function PatientDetailClient({ id }: { id: string }) {
             </div>
             <div className="space-y-2">
               <Label htmlFor="priority">Prioridade</Label>
-              <Input id="priority" type="number" min={1} max={99} value={contactPriority} onChange={(e) => setContactPriority(e.target.value)} className="w-24" />
+              <Input
+                id="priority"
+                type="number"
+                min={1}
+                max={99}
+                value={contactPriority}
+                onChange={(e) => setContactPriority(e.target.value)}
+                className="w-24"
+              />
             </div>
           </div>
           {addContact.error && (
             <p className="text-sm text-destructive">{addContact.error.message}</p>
           )}
           <DialogFooter>
-            <Button variant="outline" onClick={() => setAddContactOpen(false)}>Cancelar</Button>
+            <Button variant="outline" onClick={() => setAddContactOpen(false)}>
+              Cancelar
+            </Button>
             <Button onClick={handleAddContact} disabled={!selectedFamilyId || addContact.isPending}>
               {addContact.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Adicionar
@@ -503,13 +555,19 @@ export function PatientDetailClient({ id }: { id: string }) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remover cuidador</AlertDialogTitle>
-            <AlertDialogDescription>Tem certeza que deseja desvincular este cuidador do paciente?</AlertDialogDescription>
+            <AlertDialogDescription>
+              Tem certeza que deseja desvincular este cuidador do paciente?
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               disabled={removeCaregiver.isPending}
-              onClick={() => removeCaregiver.mutate(removeAssignmentId!, { onSuccess: () => setRemoveAssignmentId(null) })}
+              onClick={() =>
+                removeCaregiver.mutate(removeAssignmentId!, {
+                  onSuccess: () => setRemoveAssignmentId(null),
+                })
+              }
               className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
             >
               {removeCaregiver.isPending ? "Removendo..." : "Remover"}
@@ -522,13 +580,19 @@ export function PatientDetailClient({ id }: { id: string }) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remover contato</AlertDialogTitle>
-            <AlertDialogDescription>Tem certeza que deseja remover este contato de emergência?</AlertDialogDescription>
+            <AlertDialogDescription>
+              Tem certeza que deseja remover este contato de emergência?
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               disabled={removeContact.isPending}
-              onClick={() => removeContact.mutate(removeContactId!, { onSuccess: () => setRemoveContactId(null) })}
+              onClick={() =>
+                removeContact.mutate(removeContactId!, {
+                  onSuccess: () => setRemoveContactId(null),
+                })
+              }
               className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
             >
               {removeContact.isPending ? "Removendo..." : "Remover"}
@@ -541,13 +605,18 @@ export function PatientDetailClient({ id }: { id: string }) {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir paciente</AlertDialogTitle>
-            <AlertDialogDescription>Tem certeza que deseja excluir <strong>{patient.name}</strong>? Esta ação não pode ser desfeita.</AlertDialogDescription>
+            <AlertDialogDescription>
+              Tem certeza que deseja excluir <strong>{patient.name}</strong>? Esta ação não pode ser
+              desfeita.
+            </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction
               disabled={deletePatient.isPending}
-              onClick={() => deletePatient.mutate(id, { onSuccess: () => router.push("/patients") })}
+              onClick={() =>
+                deletePatient.mutate(id, { onSuccess: () => router.push("/patients") })
+              }
               className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
             >
               {deletePatient.isPending ? "Excluindo..." : "Excluir"}
@@ -556,5 +625,5 @@ export function PatientDetailClient({ id }: { id: string }) {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

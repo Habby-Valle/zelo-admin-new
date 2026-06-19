@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import Link from "next/link"
+import Link from "next/link";
 import {
   Building2,
   Users,
@@ -10,40 +10,36 @@ import {
   Activity,
   AlertTriangle,
   ShieldCheck,
-} from "lucide-react"
+} from "lucide-react";
 
-import { useDashboard } from "@/features/dashboard/hooks"
-import { KpiCard, KpiCardSkeleton } from "@/features/dashboard/components/kpi-card"
+import { useDashboard } from "@/features/dashboard/hooks";
+import { KpiCard, KpiCardSkeleton } from "@/features/dashboard/components/kpi-card";
 import {
   ClinicStatsTable,
   ClinicStatsTableSkeleton,
-} from "@/features/dashboard/components/clinic-stats-table"
+} from "@/features/dashboard/components/clinic-stats-table";
 import {
   RecentActivityTable,
   RecentActivityTableSkeleton,
-} from "@/features/dashboard/components/recent-activity-table"
-import { RevenueForecastCards } from "@/features/dashboard/components/revenue-forecast-cards"
-import { RevenueChart } from "@/features/dashboard/components/revenue-chart"
+} from "@/features/dashboard/components/recent-activity-table";
+import { RevenueForecastCards } from "@/features/dashboard/components/revenue-forecast-cards";
+import { RevenueChart } from "@/features/dashboard/components/revenue-chart";
 
 export function DashboardView() {
-  const { data, isLoading, error } = useDashboard()
-  console.log(error)
+  const { data, isLoading, error } = useDashboard();
+  console.log(error);
   if (error) {
     return (
       <div className="space-y-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-          <p className="mt-1 text-muted-foreground">
-            Visão geral de toda a plataforma Zelo.
-          </p>
+          <p className="mt-1 text-muted-foreground">Visão geral de toda a plataforma Zelo.</p>
         </div>
         <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-6 text-center">
-          <p className="text-sm text-destructive">
-            Erro ao carregar dados do dashboard.
-          </p>
+          <p className="text-sm text-destructive">Erro ao carregar dados do dashboard.</p>
         </div>
       </div>
-    )
+    );
   }
 
   if (isLoading || !data) {
@@ -51,9 +47,7 @@ export function DashboardView() {
       <div className="space-y-8">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-          <p className="mt-1 text-muted-foreground">
-            Visão geral de toda a plataforma Zelo.
-          </p>
+          <p className="mt-1 text-muted-foreground">Visão geral de toda a plataforma Zelo.</p>
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -71,19 +65,17 @@ export function DashboardView() {
         <ClinicStatsTableSkeleton />
         <RecentActivityTableSkeleton />
       </div>
-    )
+    );
   }
 
-  const { kpis, clinicStats, revenue, recentActivity } = data
-  const totalSosOpen = kpis.activeSosAlerts + kpis.acknowledgedSosAlerts
+  const { kpis, clinicStats, revenue, recentActivity } = data;
+  const totalSosOpen = kpis.activeSosAlerts + kpis.acknowledgedSosAlerts;
 
   return (
     <div className="space-y-8">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
-        <p className="mt-1 text-muted-foreground">
-          Visão geral de toda a plataforma Zelo.
-        </p>
+        <p className="mt-1 text-muted-foreground">Visão geral de toda a plataforma Zelo.</p>
       </div>
 
       {kpis.activeSosAlerts > 0 && (
@@ -155,11 +147,7 @@ export function DashboardView() {
           }
           icon={AlertTriangle}
           trend={kpis.activeSosAlerts > 0 ? "down" : "neutral"}
-          className={
-            kpis.activeSosAlerts > 0
-              ? "border-destructive/50 bg-destructive/5"
-              : ""
-          }
+          className={kpis.activeSosAlerts > 0 ? "border-destructive/50 bg-destructive/5" : ""}
         />
       </div>
 
@@ -177,5 +165,5 @@ export function DashboardView() {
 
       <RecentActivityTable logs={recentActivity} />
     </div>
-  )
+  );
 }

@@ -1,21 +1,15 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { z } from "zod"
-import { AlertCircle, CheckCircle2 } from "lucide-react"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { useChangePassword } from "@/features/settings/hooks"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useChangePassword } from "@/features/settings/hooks";
 
 const passwordSchema = z
   .object({
@@ -26,16 +20,16 @@ const passwordSchema = z
   .refine((data) => data.newPassword === data.confirmPassword, {
     message: "As senhas não coincidem",
     path: ["confirmPassword"],
-  })
+  });
 
-type PasswordFormValues = z.infer<typeof passwordSchema>
+type PasswordFormValues = z.infer<typeof passwordSchema>;
 
 export function AccountSettings() {
-  const changePassword = useChangePassword()
+  const changePassword = useChangePassword();
   const [message, setMessage] = useState<{
-    type: "success" | "error"
-    text: string
-  } | null>(null)
+    type: "success" | "error";
+    text: string;
+  } | null>(null);
 
   const {
     register,
@@ -49,19 +43,19 @@ export function AccountSettings() {
       newPassword: "",
       confirmPassword: "",
     },
-  })
+  });
 
   async function onSubmit(values: PasswordFormValues) {
-    setMessage(null)
+    setMessage(null);
     const result = await changePassword.mutateAsync({
       currentPassword: values.currentPassword,
       newPassword: values.newPassword,
-    })
+    });
     if (result.success) {
-      setMessage({ type: "success", text: "Senha alterada com sucesso" })
-      reset()
+      setMessage({ type: "success", text: "Senha alterada com sucesso" });
+      reset();
     } else {
-      setMessage({ type: "error", text: result.error ?? "Erro desconhecido" })
+      setMessage({ type: "error", text: result.error ?? "Erro desconhecido" });
     }
   }
 
@@ -70,9 +64,7 @@ export function AccountSettings() {
       <Card className="max-w-lg">
         <CardHeader>
           <CardTitle>Alterar Senha</CardTitle>
-          <CardDescription>
-            Atualize sua senha de acesso ao sistema Super Admin.
-          </CardDescription>
+          <CardDescription>Atualize sua senha de acesso ao sistema Super Admin.</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -86,9 +78,7 @@ export function AccountSettings() {
                 disabled={changePassword.isPending}
               />
               {errors.currentPassword && (
-                <p className="text-xs text-destructive">
-                  {errors.currentPassword.message}
-                </p>
+                <p className="text-xs text-destructive">{errors.currentPassword.message}</p>
               )}
             </div>
 
@@ -102,9 +92,7 @@ export function AccountSettings() {
                 disabled={changePassword.isPending}
               />
               {errors.newPassword && (
-                <p className="text-xs text-destructive">
-                  {errors.newPassword.message}
-                </p>
+                <p className="text-xs text-destructive">{errors.newPassword.message}</p>
               )}
             </div>
 
@@ -118,9 +106,7 @@ export function AccountSettings() {
                 disabled={changePassword.isPending}
               />
               {errors.confirmPassword && (
-                <p className="text-xs text-destructive">
-                  {errors.confirmPassword.message}
-                </p>
+                <p className="text-xs text-destructive">{errors.confirmPassword.message}</p>
               )}
             </div>
 
@@ -148,5 +134,5 @@ export function AccountSettings() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,31 +1,25 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Eye, EyeOff, ShieldCheck, Loader2 } from "lucide-react"
-import { useState } from "react"
-import Link from "next/link"
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Eye, EyeOff, ShieldCheck, Loader2 } from "lucide-react";
+import { useState } from "react";
+import Link from "next/link";
 
-import { useLogin } from "@/features/auth/hooks"
-import { useAuthStore } from "@/store/authStore"
-import { loginSchema, type LoginSchema } from "@/lib/validations/auth"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { useLogin } from "@/features/auth/hooks";
+import { useAuthStore } from "@/store/authStore";
+import { loginSchema, type LoginSchema } from "@/lib/validations/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface LoginFormProps {
-  redirectTo: string
-  title?: string
-  description?: string
+  redirectTo: string;
+  title?: string;
+  description?: string;
 }
 
 export function LoginForm({
@@ -33,10 +27,10 @@ export function LoginForm({
   title = "Bem-vindo",
   description = "Acesse sua conta para continuar.",
 }: LoginFormProps) {
-  const router = useRouter()
-  const login = useLogin()
-  const { setUser } = useAuthStore()
-  const [showPassword, setShowPassword] = useState(false)
+  const router = useRouter();
+  const login = useLogin();
+  const { setUser } = useAuthStore();
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -44,23 +38,23 @@ export function LoginForm({
     formState: { errors, isSubmitting },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
-  })
+  });
 
   async function onSubmit(data: LoginSchema) {
     login.mutate(
       { email: data.email, password: data.password },
       {
         onSuccess: ({ user }) => {
-          setUser(user)
-          router.push(redirectTo)
-          router.refresh()
+          setUser(user);
+          router.push(redirectTo);
+          router.refresh();
         },
       }
-    )
+    );
   }
 
-  const serverError = login.error?.message
-  const isPending = login.isPending || isSubmitting
+  const serverError = login.error?.message;
+  const isPending = login.isPending || isSubmitting;
 
   return (
     <Card className="w-full max-w-md shadow-lg">
@@ -73,9 +67,7 @@ export function LoginForm({
             <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
               Zelo
             </p>
-            <p className="text-sm leading-none font-semibold">
-              Painel Administrativo
-            </p>
+            <p className="text-sm leading-none font-semibold">Painel Administrativo</p>
           </div>
         </div>
 
@@ -86,11 +78,7 @@ export function LoginForm({
       </CardHeader>
 
       <CardContent>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4"
-          noValidate
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
           {serverError && (
             <Alert variant="destructive">
               <AlertDescription>{serverError}</AlertDescription>
@@ -108,9 +96,7 @@ export function LoginForm({
               aria-invalid={!!errors.email}
               {...register("email")}
             />
-            {errors.email && (
-              <p className="text-xs text-destructive">{errors.email.message}</p>
-            )}
+            {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
           </div>
 
           <div className="space-y-1.5">
@@ -132,17 +118,11 @@ export function LoginForm({
                 className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
                 aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
               >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
             {errors.password && (
-              <p className="text-xs text-destructive">
-                {errors.password.message}
-              </p>
+              <p className="text-xs text-destructive">{errors.password.message}</p>
             )}
           </div>
 
@@ -169,5 +149,5 @@ export function LoginForm({
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

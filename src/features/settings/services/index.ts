@@ -9,4 +9,4 @@ export {
   exportPatientDataFetch,
   anonymizeUserFetch,
   anonymizePatientFetch,
-} from "./settings.service"
+} from "./settings.service";

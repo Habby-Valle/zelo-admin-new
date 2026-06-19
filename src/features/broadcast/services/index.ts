@@ -1,1 +1,1 @@
-export { fetchBroadcasts, createBroadcast } from "./broadcast.service"
+export { fetchBroadcasts, createBroadcast } from "./broadcast.service";

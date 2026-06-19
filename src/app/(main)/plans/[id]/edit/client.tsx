@@ -1,32 +1,32 @@
-"use client"
+"use client";
 
-import { useRouter, notFound } from "next/navigation"
-import { ArrowLeft, Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { PlanForm } from "@/features/plans/components"
-import { usePlan, useUpdatePlan, useBenefits } from "@/features/plans/hooks"
-import type { PlanFormValues } from "@/lib/validations/plan"
+import { useRouter, notFound } from "next/navigation";
+import { ArrowLeft, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { PlanForm } from "@/features/plans/components";
+import { usePlan, useUpdatePlan, useBenefits } from "@/features/plans/hooks";
+import type { PlanFormValues } from "@/lib/validations/plan";
 
 interface EditPlanPageClientProps {
-  id: string
+  id: string;
 }
 
 export default function EditPlanPageClient({ id }: EditPlanPageClientProps) {
-  const router = useRouter()
-  const { data: plan, isLoading, isError } = usePlan(id)
-  const { data: benefits = [] } = useBenefits()
-  const updatePlan = useUpdatePlan()
+  const router = useRouter();
+  const { data: plan, isLoading, isError } = usePlan(id);
+  const { data: benefits = [] } = useBenefits();
+  const updatePlan = useUpdatePlan();
 
   if (isLoading) {
     return (
       <div className="flex h-40 items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
       </div>
-    )
+    );
   }
 
   if (isError || !plan) {
-    notFound()
+    notFound();
   }
 
   const defaultValues: Partial<PlanFormValues> = {
@@ -39,7 +39,7 @@ export default function EditPlanPageClient({ id }: EditPlanPageClientProps) {
       benefit_id: Number(b.benefit_id),
       value: b.value,
     })),
-  }
+  };
 
   async function handleSubmit(values: PlanFormValues) {
     await new Promise<void>((resolve, reject) => {
@@ -47,13 +47,13 @@ export default function EditPlanPageClient({ id }: EditPlanPageClientProps) {
         { id, values },
         {
           onSuccess: () => {
-            router.push(`/plans/${id}`)
-            resolve()
+            router.push(`/plans/${id}`);
+            resolve();
           },
           onError: (err) => reject(err),
         }
-      )
-    })
+      );
+    });
   }
 
   return (
@@ -64,9 +64,7 @@ export default function EditPlanPageClient({ id }: EditPlanPageClientProps) {
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Editar Plano</h1>
-          <p className="text-muted-foreground">
-            Edite as informações do plano.
-          </p>
+          <p className="text-muted-foreground">Edite as informações do plano.</p>
         </div>
       </div>
 
@@ -85,5 +83,5 @@ export default function EditPlanPageClient({ id }: EditPlanPageClientProps) {
         />
       </div>
     </div>
-  )
+  );
 }

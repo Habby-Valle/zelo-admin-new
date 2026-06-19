@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter, notFound } from "next/navigation"
+import { useState } from "react";
+import { useRouter, notFound } from "next/navigation";
 import {
   ArrowLeft,
   Pencil,
@@ -11,12 +11,12 @@ import {
   Loader2,
   Building2,
   CheckCircle2,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
-import { Skeleton } from "@/components/ui/skeleton"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,20 +26,20 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { usePlan, useDeletePlan, useTogglePlanActive } from "@/features/plans/hooks"
-import { formatCurrency } from "@/lib/format"
+} from "@/components/ui/alert-dialog";
+import { usePlan, useDeletePlan, useTogglePlanActive } from "@/features/plans/hooks";
+import { formatCurrency } from "@/lib/format";
 
 interface PlanDetailClientProps {
-  id: string
+  id: string;
 }
 
 export default function PlanDetailClient({ id }: PlanDetailClientProps) {
-  const router = useRouter()
-  const { data: plan, isLoading, isError } = usePlan(id)
-  const deletePlan = useDeletePlan()
-  const toggleActive = useTogglePlanActive()
-  const [deleteOpen, setDeleteOpen] = useState(false)
+  const router = useRouter();
+  const { data: plan, isLoading, isError } = usePlan(id);
+  const deletePlan = useDeletePlan();
+  const toggleActive = useTogglePlanActive();
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -58,11 +58,11 @@ export default function PlanDetailClient({ id }: PlanDetailClientProps) {
         </div>
         <Skeleton className="h-40 rounded-lg" />
       </div>
-    )
+    );
   }
 
   if (isError || !plan) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -80,9 +80,7 @@ export default function PlanDetailClient({ id }: PlanDetailClientProps) {
                 {plan.is_active ? "Ativo" : "Inativo"}
               </Badge>
             </div>
-            {plan.description && (
-              <p className="mt-1 text-muted-foreground">{plan.description}</p>
-            )}
+            {plan.description && <p className="mt-1 text-muted-foreground">{plan.description}</p>}
           </div>
         </div>
 
@@ -90,9 +88,7 @@ export default function PlanDetailClient({ id }: PlanDetailClientProps) {
           <Button
             variant="outline"
             size="sm"
-            onClick={() =>
-              toggleActive.mutate({ id, isActive: !plan.is_active })
-            }
+            onClick={() => toggleActive.mutate({ id, isActive: !plan.is_active })}
             disabled={toggleActive.isPending}
           >
             {toggleActive.isPending ? (
@@ -129,17 +125,13 @@ export default function PlanDetailClient({ id }: PlanDetailClientProps) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-2xl font-bold">
-              {formatCurrency(plan.monthly_price)}
-            </p>
+            <p className="text-2xl font-bold">{formatCurrency(plan.monthly_price)}</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Preço anual
-            </CardTitle>
+            <CardTitle className="text-sm font-medium text-muted-foreground">Preço anual</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-2xl font-bold">
@@ -184,17 +176,12 @@ export default function PlanDetailClient({ id }: PlanDetailClientProps) {
                   <div className="flex items-center justify-between gap-4">
                     <div className="flex items-center gap-2">
                       <CheckCircle2 className="h-4 w-4 shrink-0 text-green-500" />
-                      <span className="text-sm font-medium">
-                        {b.benefit_label}
-                      </span>
+                      <span className="text-sm font-medium">{b.benefit_label}</span>
                       <code className="rounded bg-muted px-1 py-0.5 text-xs text-muted-foreground">
                         {b.benefit_key}
                       </code>
                     </div>
-                    <Badge
-                      variant="outline"
-                      className="shrink-0 font-mono text-xs"
-                    >
+                    <Badge variant="outline" className="shrink-0 font-mono text-xs">
                       {b.value}
                     </Badge>
                   </div>
@@ -207,12 +194,8 @@ export default function PlanDetailClient({ id }: PlanDetailClientProps) {
 
       {/* Meta */}
       <div className="flex items-center gap-6 text-xs text-muted-foreground">
-        <span>
-          Criado em {new Date(plan.created_at).toLocaleDateString("pt-BR")}
-        </span>
-        <span>
-          Atualizado em {new Date(plan.updated_at).toLocaleDateString("pt-BR")}
-        </span>
+        <span>Criado em {new Date(plan.created_at).toLocaleDateString("pt-BR")}</span>
+        <span>Atualizado em {new Date(plan.updated_at).toLocaleDateString("pt-BR")}</span>
       </div>
 
       {/* Delete dialog */}
@@ -221,8 +204,8 @@ export default function PlanDetailClient({ id }: PlanDetailClientProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir plano</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja excluir <strong>{plan.name}</strong>? Esta
-              ação não pode ser desfeita.
+              Tem certeza que deseja excluir <strong>{plan.name}</strong>? Esta ação não pode ser
+              desfeita.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -242,5 +225,5 @@ export default function PlanDetailClient({ id }: PlanDetailClientProps) {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

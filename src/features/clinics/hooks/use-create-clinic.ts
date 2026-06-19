@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useMutation, useQueryClient } from "@tanstack/react-query"
-import { clinicKeys } from "@/lib/query-keys"
-import { createClinicApi } from "@/features/clinics/services/clinics.service"
-import type { ClinicFormValues } from "@/lib/validations/clinic"
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { clinicKeys } from "@/lib/query-keys";
+import { createClinicApi } from "@/features/clinics/services/clinics.service";
+import type { ClinicFormValues } from "@/lib/validations/clinic";
 
 export function useCreateClinic() {
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (values: ClinicFormValues) =>
@@ -21,7 +21,7 @@ export function useCreateClinic() {
         plan_id: values.plan_id ?? undefined,
       }),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: clinicKeys.lists() })
+      queryClient.invalidateQueries({ queryKey: clinicKeys.lists() });
     },
-  })
+  });
 }

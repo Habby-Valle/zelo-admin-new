@@ -1,24 +1,21 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
-import { useClinicPayments, useClinicPaymentStats } from "@/features/payments/hooks"
-import { ClinicPaymentsTable } from "./clinic-payments-table"
-import { ClinicPaymentStatsCards } from "./clinic-payment-stats-cards"
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { useClinicPayments, useClinicPaymentStats } from "@/features/payments/hooks";
+import { ClinicPaymentsTable } from "./clinic-payments-table";
+import { ClinicPaymentStatsCards } from "./clinic-payment-stats-cards";
 
 interface ClinicPaymentsPageClientProps {
-  clinicId: number
+  clinicId: number;
 }
 
-export function ClinicPaymentsPageClient({
-  clinicId,
-}: ClinicPaymentsPageClientProps) {
-  const router = useRouter()
-  const { data: paymentsData, isLoading: paymentsLoading } = useClinicPayments(
-    clinicId,
-    { page_size: 100 }
-  )
-  const { data: stats } = useClinicPaymentStats(clinicId)
+export function ClinicPaymentsPageClient({ clinicId }: ClinicPaymentsPageClientProps) {
+  const router = useRouter();
+  const { data: paymentsData, isLoading: paymentsLoading } = useClinicPayments(clinicId, {
+    page_size: 100,
+  });
+  const { data: stats } = useClinicPaymentStats(clinicId);
 
   if (paymentsLoading) {
     return (
@@ -30,13 +27,13 @@ export function ClinicPaymentsPageClient({
         </div>
         <div className="h-64 animate-pulse rounded-xl bg-muted" />
       </div>
-    )
+    );
   }
 
   const clinicName =
     paymentsData?.payments && paymentsData.payments.length > 0
       ? paymentsData.payments[0].clinic_name
-      : "Clínica"
+      : "Clínica";
 
   return (
     <>
@@ -63,5 +60,5 @@ export function ClinicPaymentsPageClient({
 
       <ClinicPaymentsTable payments={paymentsData?.payments ?? []} />
     </>
-  )
+  );
 }

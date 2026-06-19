@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Calendar,
@@ -12,11 +12,11 @@ import {
   Zap,
   History,
   ExternalLink,
-} from "lucide-react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Separator } from "@/components/ui/separator"
+} from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Dialog,
   DialogContent,
@@ -24,32 +24,32 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { formatDate, formatCurrency } from "@/lib/format"
-import { fetchSubscriptionDetails } from "@/features/subscriptions/services"
-import type { SubscriptionDetails } from "@/features/subscriptions/types"
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { formatDate, formatCurrency } from "@/lib/format";
+import { fetchSubscriptionDetails } from "@/features/subscriptions/services";
+import type { SubscriptionDetails } from "@/features/subscriptions/types";
 
 interface HistoryEvent {
-  id: string
-  action: string
-  metadata: Record<string, unknown>
-  created_at: string
+  id: string;
+  action: string;
+  metadata: Record<string, unknown>;
+  created_at: string;
 }
 
 interface PlanOption {
-  id: string
-  name: string
-  monthly_price: number
-  yearly_price: number | null
+  id: string;
+  name: string;
+  monthly_price: number;
+  yearly_price: number | null;
 }
 
 function formatBillingCycle(cycle: string) {
@@ -57,21 +57,18 @@ function formatBillingCycle(cycle: string) {
     monthly: "Mensal",
     quarterly: "Trimestral",
     annual: "Anual",
-  }
-  return map[cycle] ?? cycle
+  };
+  return map[cycle] ?? cycle;
 }
 
 function StatusBadge({ status }: { status: string }) {
-  const variants: Record<
-    string,
-    "default" | "secondary" | "destructive" | "outline"
-  > = {
+  const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
     active: "default",
     trial: "secondary",
     free: "outline",
     expired: "destructive",
     cancelled: "outline",
-  }
+  };
 
   const labels: Record<string, string> = {
     active: "Ativo",
@@ -79,109 +76,104 @@ function StatusBadge({ status }: { status: string }) {
     free: "Gratuito",
     expired: "Expirado",
     cancelled: "Cancelado",
-  }
+  };
 
-  return (
-    <Badge variant={variants[status] ?? "outline"}>
-      {labels[status] ?? status}
-    </Badge>
-  )
+  return <Badge variant={variants[status] ?? "outline"}>{labels[status] ?? status}</Badge>;
 }
 
 function formatDateOrDash(dateStr: string | null) {
-  if (!dateStr) return "-"
-  return formatDate(dateStr)
+  if (!dateStr) return "-";
+  return formatDate(dateStr);
 }
 
 interface SubscriptionDetailViewProps {
-  id: string
+  id: string;
 }
 
 export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
-  const router = useRouter()
-  const [subscription, setSubscription] =
-    useState<SubscriptionDetails | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [clinicName, setClinicName] = useState<string>("")
-  const [showActivateDialog, setShowActivateDialog] = useState(false)
-  const [activating, setActivating] = useState(false)
-  const [availablePlans, setAvailablePlans] = useState<PlanOption[]>([])
-  const [selectedPlanId, setSelectedPlanId] = useState("")
-  const [selectedBillingCycle, setSelectedBillingCycle] = useState("monthly")
-  const [showExtendDialog, setShowExtendDialog] = useState(false)
-  const [showDatesDialog, setShowDatesDialog] = useState(false)
-  const [extendDays, setExtendDays] = useState("14")
-  const [newStartsAt, setNewStartsAt] = useState("")
-  const [newExpiresAt, setNewExpiresAt] = useState("")
-  const [saving, setSaving] = useState(false)
-  const [history, setHistory] = useState<HistoryEvent[]>([])
-  const [showHistory, setShowHistory] = useState(false)
-  const [showChangePlanDialog, setShowChangePlanDialog] = useState(false)
-  const [changingPlan, setChangingPlan] = useState(false)
-  const [newPlanId, setNewPlanId] = useState("")
-  const [newBillingCycle, setNewBillingCycle] = useState("monthly")
+  const router = useRouter();
+  const [subscription, setSubscription] = useState<SubscriptionDetails | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [clinicName, setClinicName] = useState<string>("");
+  const [showActivateDialog, setShowActivateDialog] = useState(false);
+  const [activating, setActivating] = useState(false);
+  const [availablePlans, setAvailablePlans] = useState<PlanOption[]>([]);
+  const [selectedPlanId, setSelectedPlanId] = useState("");
+  const [selectedBillingCycle, setSelectedBillingCycle] = useState("monthly");
+  const [showExtendDialog, setShowExtendDialog] = useState(false);
+  const [showDatesDialog, setShowDatesDialog] = useState(false);
+  const [extendDays, setExtendDays] = useState("14");
+  const [newStartsAt, setNewStartsAt] = useState("");
+  const [newExpiresAt, setNewExpiresAt] = useState("");
+  const [saving, setSaving] = useState(false);
+  const [history, setHistory] = useState<HistoryEvent[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
+  const [showChangePlanDialog, setShowChangePlanDialog] = useState(false);
+  const [changingPlan, setChangingPlan] = useState(false);
+  const [newPlanId, setNewPlanId] = useState("");
+  const [newBillingCycle, setNewBillingCycle] = useState("monthly");
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const data = await fetchSubscriptionDetails(id)
-        setSubscription(data)
-        setClinicName(data.clinicName)
+        const data = await fetchSubscriptionDetails(id);
+        setSubscription(data);
+        setClinicName(data.clinicName);
       } catch {
-        setSubscription(null)
+        setSubscription(null);
         try {
-          const clinicRes = await fetch(`/api/proxy/clinics/${id}/`)
+          const clinicRes = await fetch(`/api/proxy/clinics/${id}/`);
           if (clinicRes.ok) {
-            const clinicData = await clinicRes.json()
-            setClinicName(clinicData.name || `Clínica #${id}`)
+            const clinicData = await clinicRes.json();
+            setClinicName(clinicData.name || `Clínica #${id}`);
           } else {
-            setClinicName(`Clínica #${id}`)
+            setClinicName(`Clínica #${id}`);
           }
         } catch {
-          setClinicName(`Clínica #${id}`)
+          setClinicName(`Clínica #${id}`);
         }
       }
-      setLoading(false)
+      setLoading(false);
     }
 
     if (id) {
-      fetchData()
+      fetchData();
     }
-  }, [id])
+  }, [id]);
 
   useEffect(() => {
     if (showHistory && subscription?.id) {
-      fetch(`/api/proxy/audit-logs/?content_type=clinicplan&object_id=${subscription.id}&page_size=20`)
+      fetch(
+        `/api/proxy/audit-logs/?content_type=clinicplan&object_id=${subscription.id}&page_size=20`
+      )
         .then((res) => res.json())
         .then((data) => {
-          const results = (data.results ?? []).map(
-            (log: Record<string, unknown>) => ({
-              id: String(log.id),
-              action: String(log.action ?? ""),
-              metadata: (log.changes as Record<string, unknown>) ?? {},
-              created_at: String(log.created_at ?? ""),
-            })
-          )
-          setHistory(results)
+          const results = (data.results ?? []).map((log: Record<string, unknown>) => ({
+            id: String(log.id),
+            action: String(log.action ?? ""),
+            metadata: (log.changes as Record<string, unknown>) ?? {},
+            created_at: String(log.created_at ?? ""),
+          }));
+          setHistory(results);
         })
-        .catch(() => setHistory([]))
+        .catch(() => setHistory([]));
     }
-  }, [showHistory, subscription?.id])
+  }, [showHistory, subscription?.id]);
 
   useEffect(() => {
     if (showActivateDialog || showChangePlanDialog) {
       fetch("/api/proxy/plans/?is_active=true&page_size=100")
         .then((res) => res.json())
         .then((data) => {
-          setAvailablePlans(data.results || [])
-        })
+          setAvailablePlans(data.results || []);
+        });
     }
-  }, [showActivateDialog, showChangePlanDialog])
+  }, [showActivateDialog, showChangePlanDialog]);
 
   async function handleActivate() {
-    if (!selectedPlanId) return
+    if (!selectedPlanId) return;
 
-    setActivating(true)
+    setActivating(true);
     try {
       const response = await fetch("/api/proxy/subscriptions/activate/", {
         method: "POST",
@@ -191,21 +183,21 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
           planId: selectedPlanId,
           billingCycle: selectedBillingCycle,
         }),
-      })
+      });
 
-      const result = await response.json()
+      const result = await response.json();
       if (result.success) {
-        setShowActivateDialog(false)
-        router.refresh()
+        setShowActivateDialog(false);
+        router.refresh();
       }
     } finally {
-      setActivating(false)
+      setActivating(false);
     }
   }
 
   async function handleExtend() {
-    if (!subscription) return
-    setSaving(true)
+    if (!subscription) return;
+    setSaving(true);
     try {
       const response = await fetch(`/api/proxy/subscriptions/${id}/`, {
         method: "PATCH",
@@ -214,20 +206,20 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
           action: "extend",
           days: parseInt(extendDays) || 14,
         }),
-      })
-      const result = await response.json()
+      });
+      const result = await response.json();
       if (result.success) {
-        setShowExtendDialog(false)
-        router.refresh()
+        setShowExtendDialog(false);
+        router.refresh();
       }
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
   }
 
   async function handleUpdateDates() {
-    if (!subscription || !newStartsAt || !newExpiresAt) return
-    setSaving(true)
+    if (!subscription || !newStartsAt || !newExpiresAt) return;
+    setSaving(true);
     try {
       const response = await fetch(`/api/proxy/subscriptions/${id}/`, {
         method: "PATCH",
@@ -237,21 +229,21 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
           starts_at: newStartsAt,
           expires_at: newExpiresAt,
         }),
-      })
-      const result = await response.json()
+      });
+      const result = await response.json();
       if (result.success) {
-        setShowDatesDialog(false)
-        router.refresh()
+        setShowDatesDialog(false);
+        router.refresh();
       }
     } finally {
-      setSaving(false)
+      setSaving(false);
     }
   }
 
   async function handleChangePlan() {
-    if (!subscription || !newPlanId) return
+    if (!subscription || !newPlanId) return;
 
-    setChangingPlan(true)
+    setChangingPlan(true);
     try {
       const response = await fetch("/api/proxy/subscriptions/change-plan/", {
         method: "POST",
@@ -261,37 +253,35 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
           newPlanId,
           billingCycle: newBillingCycle,
         }),
-      })
-      const result = await response.json()
+      });
+      const result = await response.json();
       if (result.success) {
-        setShowChangePlanDialog(false)
-        setNewPlanId("")
-        router.refresh()
+        setShowChangePlanDialog(false);
+        setNewPlanId("");
+        router.refresh();
       }
     } finally {
-      setChangingPlan(false)
+      setChangingPlan(false);
     }
   }
 
-  const canExtend = subscription?.status === "trial"
+  const canExtend = subscription?.status === "trial";
   const canUpdateDates =
     subscription?.status === "trial" ||
     subscription?.status === "active" ||
-    subscription?.status === "free"
+    subscription?.status === "free";
 
-  const canActivate =
-    subscription?.status === "expired" || subscription?.status === "cancelled"
+  const canActivate = subscription?.status === "expired" || subscription?.status === "cancelled";
 
-  const canAssign = true
+  const canAssign = true;
 
   const daysRemaining =
-    subscription &&
-    (subscription.status === "active" || subscription.status === "trial")
+    subscription && (subscription.status === "active" || subscription.status === "trial")
       ? Math.ceil(
           (new Date(subscription.expiresAt).getTime() - new Date().getTime()) /
             (1000 * 60 * 60 * 24)
         )
-      : null
+      : null;
 
   if (loading) {
     return (
@@ -302,7 +292,7 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
           <div className="h-48 animate-pulse rounded bg-muted" />
         </div>
       </div>
-    )
+    );
   }
 
   if (!subscription) {
@@ -310,18 +300,12 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
       <div className="space-y-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => router.push("/subscriptions")}
-            >
+            <Button variant="ghost" size="sm" onClick={() => router.push("/subscriptions")}>
               <ArrowLeft className="mr-2 h-4 w-4" />
               Voltar
             </Button>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight">
-                Detalhes da Assinatura
-              </h1>
+              <h1 className="text-2xl font-bold tracking-tight">Detalhes da Assinatura</h1>
               <p className="text-muted-foreground">
                 {clinicName || `Clínica #${id}`} — Sem assinatura ativa
               </p>
@@ -343,8 +327,8 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
           </CardHeader>
           <CardContent>
             <p className="text-muted-foreground">
-              Esta clínica ainda não possui nenhum plano atribuído. Use o botão
-              acima para atribuir um plano gratuitamente.
+              Esta clínica ainda não possui nenhum plano atribuído. Use o botão acima para atribuir
+              um plano gratuitamente.
             </p>
           </CardContent>
         </Card>
@@ -354,17 +338,14 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
             <DialogHeader>
               <DialogTitle>Atribuir Plano</DialogTitle>
               <DialogDescription>
-                Atribuir plano manualmente para{" "}
-                {clinicName || `Clínica #${id}`}. Isso não requer pagamento.
+                Atribuir plano manualmente para {clinicName || `Clínica #${id}`}. Isso não requer
+                pagamento.
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
               <div className="space-y-2">
                 <Label>Plano</Label>
-                <Select
-                  value={selectedPlanId}
-                  onValueChange={(v) => setSelectedPlanId(v ?? "")}
-                >
+                <Select value={selectedPlanId} onValueChange={(v) => setSelectedPlanId(v ?? "")}>
                   <SelectTrigger>
                     <SelectValue placeholder="Selecione um plano" />
                   </SelectTrigger>
@@ -395,41 +376,29 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
               </div>
             </div>
             <DialogFooter>
-              <Button
-                variant="outline"
-                onClick={() => setShowActivateDialog(false)}
-              >
+              <Button variant="outline" onClick={() => setShowActivateDialog(false)}>
                 Cancelar
               </Button>
-              <Button
-                onClick={handleActivate}
-                disabled={!selectedPlanId || activating}
-              >
+              <Button onClick={handleActivate} disabled={!selectedPlanId || activating}>
                 {activating ? "Atribuindo..." : "Atribuir"}
               </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
       </div>
-    )
+    );
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/subscriptions")}
-          >
+          <Button variant="ghost" size="sm" onClick={() => router.push("/subscriptions")}>
             <ArrowLeft className="mr-2 h-4 w-4" />
             Voltar
           </Button>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight">
-              Detalhes da Assinatura
-            </h1>
+            <h1 className="text-2xl font-bold tracking-tight">Detalhes da Assinatura</h1>
             <p className="text-muted-foreground">
               Assinatura da clínica {subscription?.clinicName}
             </p>
@@ -445,9 +414,9 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
           <Button
             variant="outline"
             onClick={() => {
-              setNewStartsAt(subscription?.startedAt?.slice(0, 10) || "")
-              setNewExpiresAt(subscription?.expiresAt?.slice(0, 10) || "")
-              setShowDatesDialog(true)
+              setNewStartsAt(subscription?.startedAt?.slice(0, 10) || "");
+              setNewExpiresAt(subscription?.expiresAt?.slice(0, 10) || "");
+              setShowDatesDialog(true);
             }}
           >
             <Calendar className="mr-2 h-4 w-4" />
@@ -541,27 +510,19 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-muted-foreground">Início</p>
-                <p className="font-medium">
-                  {formatDateOrDash(subscription.startedAt)}
-                </p>
+                <p className="font-medium">{formatDateOrDash(subscription.startedAt)}</p>
               </div>
               {subscription.status !== "free" && (
                 <div>
                   <p className="text-sm text-muted-foreground">Expira em</p>
-                  <p className="font-medium">
-                    {formatDateOrDash(subscription.expiresAt)}
-                  </p>
+                  <p className="font-medium">{formatDateOrDash(subscription.expiresAt)}</p>
                 </div>
               )}
             </div>
             {subscription.trialEndsAt && (
               <div>
-                <p className="text-sm text-muted-foreground">
-                  Trial termina em
-                </p>
-                <p className="font-medium">
-                  {formatDateOrDash(subscription.trialEndsAt)}
-                </p>
+                <p className="text-sm text-muted-foreground">Trial termina em</p>
+                <p className="font-medium">{formatDateOrDash(subscription.trialEndsAt)}</p>
               </div>
             )}
           </CardContent>
@@ -631,21 +592,15 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
               </div>
               <div>
                 <p className="text-muted-foreground">Status Stripe</p>
-                <p className="font-medium capitalize">
-                  {subscription.stripeStatus ?? "—"}
-                </p>
+                <p className="font-medium capitalize">{subscription.stripeStatus ?? "—"}</p>
               </div>
               <div>
                 <p className="text-muted-foreground">Início do período</p>
-                <p className="font-medium">
-                  {formatDateOrDash(subscription.currentPeriodStart)}
-                </p>
+                <p className="font-medium">{formatDateOrDash(subscription.currentPeriodStart)}</p>
               </div>
               <div>
                 <p className="text-muted-foreground">Fim do período</p>
-                <p className="font-medium">
-                  {formatDateOrDash(subscription.currentPeriodEnd)}
-                </p>
+                <p className="font-medium">{formatDateOrDash(subscription.currentPeriodEnd)}</p>
               </div>
             </div>
           </CardContent>
@@ -675,9 +630,7 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
       <Dialog open={showActivateDialog} onOpenChange={setShowActivateDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>
-              {canActivate ? "Ativar Assinatura" : "Atribuir Plano"}
-            </DialogTitle>
+            <DialogTitle>{canActivate ? "Ativar Assinatura" : "Atribuir Plano"}</DialogTitle>
             <DialogDescription>
               {canActivate
                 ? `Ativar assinatura manualmente para ${subscription?.clinicName}. Isso não requer pagamento.`
@@ -718,16 +671,10 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowActivateDialog(false)}
-            >
+            <Button variant="outline" onClick={() => setShowActivateDialog(false)}>
               Cancelar
             </Button>
-            <Button
-              onClick={handleActivate}
-              disabled={!selectedPlanId || activating}
-            >
+            <Button onClick={handleActivate} disabled={!selectedPlanId || activating}>
               {activating ? "Ativando..." : canActivate ? "Ativar" : "Atribuir"}
             </Button>
           </DialogFooter>
@@ -739,9 +686,7 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Estender Trial</DialogTitle>
-            <DialogDescription>
-              Adicionar dias ao período de Trial da clínica.
-            </DialogDescription>
+            <DialogDescription>Adicionar dias ao período de Trial da clínica.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -752,16 +697,11 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
                 onChange={(e) => setExtendDays(e.target.value)}
                 placeholder="14"
               />
-              <p className="text-xs text-muted-foreground">
-                Dias atuais: {daysRemaining ?? "N/A"}
-              </p>
+              <p className="text-xs text-muted-foreground">Dias atuais: {daysRemaining ?? "N/A"}</p>
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowExtendDialog(false)}
-            >
+            <Button variant="outline" onClick={() => setShowExtendDialog(false)}>
               Cancelar
             </Button>
             <Button onClick={handleExtend} disabled={saving}>
@@ -776,9 +716,7 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Alterar Datas</DialogTitle>
-            <DialogDescription>
-              Alterar data de início e expiração da assinatura.
-            </DialogDescription>
+            <DialogDescription>Alterar data de início e expiração da assinatura.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -802,10 +740,7 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
             <Button variant="outline" onClick={() => setShowDatesDialog(false)}>
               Cancelar
             </Button>
-            <Button
-              onClick={handleUpdateDates}
-              disabled={saving || !newStartsAt || !newExpiresAt}
-            >
+            <Button onClick={handleUpdateDates} disabled={saving || !newStartsAt || !newExpiresAt}>
               {saving ? "Salvando..." : "Salvar"}
             </Button>
           </DialogFooter>
@@ -813,16 +748,12 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
       </Dialog>
 
       {/* Dialog para mudar de plano */}
-      <Dialog
-        open={showChangePlanDialog}
-        onOpenChange={setShowChangePlanDialog}
-      >
+      <Dialog open={showChangePlanDialog} onOpenChange={setShowChangePlanDialog}>
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Mudar de Plano</DialogTitle>
             <DialogDescription>
-              Alterar o plano da clínica. O cálculo pró-rata será aplicado
-              automaticamente.
+              Alterar o plano da clínica. O cálculo pró-rata será aplicado automaticamente.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
@@ -861,16 +792,10 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setShowChangePlanDialog(false)}
-            >
+            <Button variant="outline" onClick={() => setShowChangePlanDialog(false)}>
               Cancelar
             </Button>
-            <Button
-              onClick={handleChangePlan}
-              disabled={!newPlanId || changingPlan}
-            >
+            <Button onClick={handleChangePlan} disabled={!newPlanId || changingPlan}>
               {changingPlan ? "Alterando..." : "Confirmar"}
             </Button>
           </DialogFooter>
@@ -918,5 +843,5 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

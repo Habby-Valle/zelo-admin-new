@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ShiftForm } from "@/features/shifts/components"
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ShiftForm } from "@/features/shifts/components";
 
 export default function NewShiftPage() {
-  const router = useRouter()
+  const router = useRouter();
 
   return (
     <div className="space-y-6">
@@ -16,12 +16,10 @@ export default function NewShiftPage() {
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Novo Turno</h1>
-          <p className="mt-1 text-muted-foreground">
-            Crie um novo turno de cuidado.
-          </p>
+          <p className="mt-1 text-muted-foreground">Crie um novo turno de cuidado.</p>
         </div>
       </div>
       <ShiftForm />
     </div>
-  )
+  );
 }

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useSearchParams, useRouter, usePathname } from "next/navigation"
+import { useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import {
   Plus,
   Mail,
@@ -11,17 +11,17 @@ import {
   Users,
   CheckCircle2,
   XOctagon,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -29,15 +29,15 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Card, CardContent } from "@/components/ui/card"
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+} from "@/components/ui/table";
+import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -47,12 +47,12 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Skeleton } from "@/components/ui/skeleton"
-import { InviteDialog } from "./invite-dialog"
-import { useInvites, useCancelInvite } from "@/features/users/hooks"
-import { useUsers } from "@/features/users/hooks"
-import type { InviteStatus } from "@/features/users/types"
+} from "@/components/ui/alert-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import { InviteDialog } from "./invite-dialog";
+import { useInvites, useCancelInvite } from "@/features/users/hooks";
+import { useUsers } from "@/features/users/hooks";
+import type { InviteStatus } from "@/features/users/types";
 
 const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
@@ -60,65 +60,62 @@ const ROLE_LABELS: Record<string, string> = {
   guardian: "Responsável",
   caregiver: "Cuidador",
   family: "Familiar",
-}
+};
 
-const STATUS_VARIANTS: Record<
-  InviteStatus,
-  "default" | "secondary" | "destructive" | "outline"
-> = {
+const STATUS_VARIANTS: Record<InviteStatus, "default" | "secondary" | "destructive" | "outline"> = {
   pending: "default",
   accepted: "secondary",
   expired: "outline",
   cancelled: "destructive",
-}
+};
 
 const STATUS_LABELS: Record<InviteStatus, string> = {
   pending: "Pendente",
   accepted: "Aceito",
   expired: "Expirado",
   cancelled: "Cancelado",
-}
+};
 
 export function UsersPageClient() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [cancelId, setCancelId] = useState<string | null>(null)
-  const cancelInvite = useCancelInvite()
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [cancelId, setCancelId] = useState<string | null>(null);
+  const cancelInvite = useCancelInvite();
 
-  const tab = searchParams.get("tab") ?? "users"
-  const search = searchParams.get("search") ?? ""
-  const role = searchParams.get("role") ?? ""
-  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10))
-  const status = searchParams.get("status") ?? ""
-  const isActive = searchParams.get("is_active") ?? ""
-  const pageSize = 20
+  const tab = searchParams.get("tab") ?? "users";
+  const search = searchParams.get("search") ?? "";
+  const role = searchParams.get("role") ?? "";
+  const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10));
+  const status = searchParams.get("status") ?? "";
+  const isActive = searchParams.get("is_active") ?? "";
+  const pageSize = 20;
 
-  const invitesQuery = useInvites({ search, status, role, page, pageSize })
-  const usersQuery = useUsers({ search, role, isActive, page, pageSize })
+  const invitesQuery = useInvites({ search, status, role, page, pageSize });
+  const usersQuery = useUsers({ search, role, isActive, page, pageSize });
 
-  const invites = invitesQuery.data?.invites ?? []
-  const invitesTotal = invitesQuery.data?.total ?? 0
-  const invitesTotalPages = Math.ceil(invitesTotal / pageSize)
+  const invites = invitesQuery.data?.invites ?? [];
+  const invitesTotal = invitesQuery.data?.total ?? 0;
+  const invitesTotalPages = Math.ceil(invitesTotal / pageSize);
 
-  const users = usersQuery.data?.users ?? []
-  const usersTotal = usersQuery.data?.total ?? 0
-  const usersTotalPages = Math.ceil(usersTotal / pageSize)
+  const users = usersQuery.data?.users ?? [];
+  const usersTotal = usersQuery.data?.total ?? 0;
+  const usersTotalPages = Math.ceil(usersTotal / pageSize);
 
   function updateParams(updates: Record<string, string>) {
-    const current = new URLSearchParams(searchParams.toString())
+    const current = new URLSearchParams(searchParams.toString());
     for (const [k, v] of Object.entries(updates)) {
-      if (v) current.set(k, v)
-      else current.delete(k)
+      if (v) current.set(k, v);
+      else current.delete(k);
     }
-    router.push(`${pathname}?${current.toString()}`)
+    router.push(`${pathname}?${current.toString()}`);
   }
 
   function onTabChange(value: string) {
-    const params = new URLSearchParams()
-    params.set("tab", value)
-    router.push(`${pathname}?${params.toString()}`)
+    const params = new URLSearchParams();
+    params.set("tab", value);
+    router.push(`${pathname}?${params.toString()}`);
   }
 
   return (
@@ -126,9 +123,7 @@ export function UsersPageClient() {
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Usuários</h1>
-          <p className="mt-1 text-muted-foreground">
-            Gerencie usuários e convites da plataforma.
-          </p>
+          <p className="mt-1 text-muted-foreground">Gerencie usuários e convites da plataforma.</p>
         </div>
         {tab === "invites" && (
           <Button onClick={() => setDialogOpen(true)}>
@@ -156,16 +151,14 @@ export function UsersPageClient() {
             <Input
               placeholder="Buscar por nome ou email..."
               value={search}
-              onChange={(e) =>
-                updateParams({ search: e.target.value, page: "" })
-              }
+              onChange={(e) => updateParams({ search: e.target.value, page: "" })}
               className="max-w-xs"
             />
             <Select
               value={role || "all"}
               onValueChange={(v) => {
-                const val = v ?? ""
-                updateParams({ role: val === "all" ? "" : val, page: "" })
+                const val = v ?? "";
+                updateParams({ role: val === "all" ? "" : val, page: "" });
               }}
             >
               <SelectTrigger className="w-44">
@@ -182,8 +175,8 @@ export function UsersPageClient() {
             <Select
               value={isActive || "all"}
               onValueChange={(v) => {
-                const val = v ?? ""
-                updateParams({ is_active: val === "all" ? "" : val, page: "" })
+                const val = v ?? "";
+                updateParams({ is_active: val === "all" ? "" : val, page: "" });
               }}
             >
               <SelectTrigger className="w-36">
@@ -246,19 +239,13 @@ export function UsersPageClient() {
                         <TableCell className="font-medium">
                           <span
                             className="cursor-pointer hover:underline"
-                            onClick={() =>
-                              router.push(`/users/${user.id}`)
-                            }
+                            onClick={() => router.push(`/users/${user.id}`)}
                           >
                             {user.name}
                           </span>
                         </TableCell>
-                        <TableCell className="text-muted-foreground">
-                          {user.email}
-                        </TableCell>
-                        <TableCell>
-                          {ROLE_LABELS[user.role] ?? user.role}
-                        </TableCell>
+                        <TableCell className="text-muted-foreground">{user.email}</TableCell>
+                        <TableCell>{ROLE_LABELS[user.role] ?? user.role}</TableCell>
                         <TableCell>
                           {user.is_active ? (
                             <Badge variant="secondary" className="gap-1">
@@ -273,8 +260,7 @@ export function UsersPageClient() {
                           )}
                         </TableCell>
                         <TableCell>
-                          {user.role === "caregiver" &&
-                          user.verification_status ? (
+                          {user.role === "caregiver" && user.verification_status ? (
                             <Badge
                               variant={
                                 user.verification_status === "approved"
@@ -295,9 +281,7 @@ export function UsersPageClient() {
                           )}
                         </TableCell>
                         <TableCell className="text-sm text-muted-foreground">
-                          {new Date(user.created_at).toLocaleDateString(
-                            "pt-BR"
-                          )}
+                          {new Date(user.created_at).toLocaleDateString("pt-BR")}
                         </TableCell>
                       </TableRow>
                     ))
@@ -310,8 +294,8 @@ export function UsersPageClient() {
           {usersTotalPages > 1 && (
             <div className="flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                Mostrando {(page - 1) * pageSize + 1} a{" "}
-                {Math.min(page * pageSize, usersTotal)} de {usersTotal} usuários
+                Mostrando {(page - 1) * pageSize + 1} a {Math.min(page * pageSize, usersTotal)} de{" "}
+                {usersTotal} usuários
               </p>
               <div className="flex gap-2">
                 <Button
@@ -341,16 +325,14 @@ export function UsersPageClient() {
             <Input
               placeholder="Buscar por email..."
               value={search}
-              onChange={(e) =>
-                updateParams({ search: e.target.value, page: "" })
-              }
+              onChange={(e) => updateParams({ search: e.target.value, page: "" })}
               className="max-w-xs"
             />
             <Select
               value={status || "all"}
               onValueChange={(v) => {
-                const val = v ?? ""
-                updateParams({ status: val === "all" ? "" : val, page: "" })
+                const val = v ?? "";
+                updateParams({ status: val === "all" ? "" : val, page: "" });
               }}
             >
               <SelectTrigger className="w-36">
@@ -367,8 +349,8 @@ export function UsersPageClient() {
             <Select
               value={role || "all"}
               onValueChange={(v) => {
-                const val = v ?? ""
-                updateParams({ role: val === "all" ? "" : val, page: "" })
+                const val = v ?? "";
+                updateParams({ role: val === "all" ? "" : val, page: "" });
               }}
             >
               <SelectTrigger className="w-44">
@@ -425,11 +407,7 @@ export function UsersPageClient() {
                         <div className="flex flex-col items-center gap-2 text-muted-foreground">
                           <Mail className="h-8 w-8" />
                           <p>Nenhum convite encontrado</p>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => setDialogOpen(true)}
-                          >
+                          <Button variant="outline" size="sm" onClick={() => setDialogOpen(true)}>
                             Enviar primeiro convite
                           </Button>
                         </div>
@@ -438,21 +416,15 @@ export function UsersPageClient() {
                   ) : (
                     invites.map((invite) => (
                       <TableRow key={invite.id}>
-                        <TableCell className="font-medium">
-                          {invite.email}
-                        </TableCell>
-                        <TableCell>
-                          {ROLE_LABELS[invite.role] ?? invite.role}
-                        </TableCell>
+                        <TableCell className="font-medium">{invite.email}</TableCell>
+                        <TableCell>{ROLE_LABELS[invite.role] ?? invite.role}</TableCell>
                         <TableCell>
                           <Badge variant={STATUS_VARIANTS[invite.status]}>
                             {STATUS_LABELS[invite.status]}
                           </Badge>
                         </TableCell>
                         <TableCell className="text-sm text-muted-foreground">
-                          {new Date(invite.created_at).toLocaleDateString(
-                            "pt-BR"
-                          )}
+                          {new Date(invite.created_at).toLocaleDateString("pt-BR")}
                         </TableCell>
                         <TableCell className="text-sm text-muted-foreground">
                           <div className="flex items-center gap-1">
@@ -460,15 +432,13 @@ export function UsersPageClient() {
                               invite.status === "pending" && (
                                 <Clock className="h-3 w-3 text-destructive" />
                               )}
-                            {new Date(invite.expires_at).toLocaleDateString(
-                              "pt-BR"
-                            )}
+                            {new Date(invite.expires_at).toLocaleDateString("pt-BR")}
                           </div>
                         </TableCell>
                         <TableCell>
                           {invite.status === "pending" && (
                             <DropdownMenu>
-                              <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg hover:bg-muted hover:text-foreground transition-colors">
+                              <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-muted hover:text-foreground">
                                 <MoreHorizontal className="h-4 w-4" />
                               </DropdownMenuTrigger>
                               <DropdownMenuContent align="end">
@@ -494,9 +464,8 @@ export function UsersPageClient() {
           {invitesTotalPages > 1 && (
             <div className="flex items-center justify-between">
               <p className="text-sm text-muted-foreground">
-                Mostrando {(page - 1) * pageSize + 1} a{" "}
-                {Math.min(page * pageSize, invitesTotal)} de {invitesTotal}{" "}
-                convites
+                Mostrando {(page - 1) * pageSize + 1} a {Math.min(page * pageSize, invitesTotal)} de{" "}
+                {invitesTotal} convites
               </p>
               <div className="flex gap-2">
                 <Button
@@ -528,8 +497,8 @@ export function UsersPageClient() {
           <AlertDialogHeader>
             <AlertDialogTitle>Cancelar convite</AlertDialogTitle>
             <AlertDialogDescription>
-              O usuário convidado não poderá mais usar este link para criar a
-              conta. Você poderá enviar um novo convite depois.
+              O usuário convidado não poderá mais usar este link para criar a conta. Você poderá
+              enviar um novo convite depois.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -549,5 +518,5 @@ export function UsersPageClient() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

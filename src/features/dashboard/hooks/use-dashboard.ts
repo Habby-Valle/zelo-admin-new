@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { useQuery } from "@tanstack/react-query"
-import { getDashboardApi } from "@/features/dashboard/services/dashboard.service"
+import { useQuery } from "@tanstack/react-query";
+import { getDashboardApi } from "@/features/dashboard/services/dashboard.service";
 
 export function useDashboard() {
   return useQuery({
@@ -9,5 +9,5 @@ export function useDashboard() {
     queryFn: getDashboardApi,
     staleTime: 60 * 1000,
     retry: 1,
-  })
+  });
 }

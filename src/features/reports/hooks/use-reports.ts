@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query";
 import {
   fetchShiftsReport,
   fetchChecklistsReport,
   fetchPatientsGrowthReport,
   fetchSosReport,
   fetchCaregiversReport,
-} from "@/features/reports/services"
-import type { ReportFilters } from "@/features/reports/types"
+} from "@/features/reports/services";
+import type { ReportFilters } from "@/features/reports/types";
 
 export const reportKeys = {
   all: ["reports"] as const,
@@ -17,14 +17,14 @@ export const reportKeys = {
   patientsGrowth: (params: object) => [...reportKeys.all, "patients-growth", params] as const,
   sos: (params: object) => [...reportKeys.all, "sos", params] as const,
   caregivers: (params: object) => [...reportKeys.all, "caregivers", params] as const,
-}
+};
 
 export function useShiftsReport(filters: ReportFilters) {
   return useQuery({
     queryKey: reportKeys.shifts(filters),
     queryFn: () => fetchShiftsReport(filters.dateRange, filters.clinicId),
     enabled: !!filters.dateRange.from && !!filters.dateRange.to,
-  })
+  });
 }
 
 export function useChecklistsReport(filters: ReportFilters) {
@@ -32,7 +32,7 @@ export function useChecklistsReport(filters: ReportFilters) {
     queryKey: reportKeys.checklists(filters),
     queryFn: () => fetchChecklistsReport(filters.dateRange, filters.clinicId),
     enabled: !!filters.dateRange.from && !!filters.dateRange.to,
-  })
+  });
 }
 
 export function usePatientsGrowthReport(filters: ReportFilters, months: number = 6) {
@@ -40,7 +40,7 @@ export function usePatientsGrowthReport(filters: ReportFilters, months: number =
     queryKey: reportKeys.patientsGrowth({ ...filters, months }),
     queryFn: () => fetchPatientsGrowthReport(months, filters.clinicId),
     enabled: !!filters.dateRange.from && !!filters.dateRange.to,
-  })
+  });
 }
 
 export function useSosReport(filters: ReportFilters) {
@@ -48,7 +48,7 @@ export function useSosReport(filters: ReportFilters) {
     queryKey: reportKeys.sos(filters),
     queryFn: () => fetchSosReport(filters.dateRange, filters.clinicId),
     enabled: !!filters.dateRange.from && !!filters.dateRange.to,
-  })
+  });
 }
 
 export function useCaregiversReport(filters: ReportFilters) {
@@ -56,5 +56,5 @@ export function useCaregiversReport(filters: ReportFilters) {
     queryKey: reportKeys.caregivers(filters),
     queryFn: () => fetchCaregiversReport(filters.dateRange, filters.clinicId),
     enabled: !!filters.dateRange.from && !!filters.dateRange.to,
-  })
+  });
 }

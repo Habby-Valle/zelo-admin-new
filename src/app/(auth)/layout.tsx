@@ -1,19 +1,15 @@
-import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
-import { decodeJwt, isTokenExpired } from "@/lib/jwt"
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
+import { decodeJwt, isTokenExpired } from "@/lib/jwt";
 
-export default async function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const cookieStore = await cookies()
-  const accessToken = cookieStore.get("ze_access")?.value
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("ze_access")?.value;
 
   if (accessToken) {
-    const payload = decodeJwt(accessToken)
+    const payload = decodeJwt(accessToken);
     if (payload && !isTokenExpired(payload) && payload.role === "super_admin") {
-      redirect("/dashboard")
+      redirect("/dashboard");
     }
   }
 
@@ -21,5 +17,5 @@ export default async function AuthLayout({
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       {children}
     </div>
-  )
+  );
 }

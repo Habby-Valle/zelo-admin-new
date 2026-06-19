@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useInvoices } from "@/features/payments/hooks"
-import { InvoicesTable } from "./invoices-table"
-import { PaymentStatsCards } from "./payment-stats-cards"
+import { useInvoices } from "@/features/payments/hooks";
+import { InvoicesTable } from "./invoices-table";
+import { PaymentStatsCards } from "./payment-stats-cards";
 
 export function PaymentsPageClient() {
-  const { data, isLoading } = useInvoices({ page_size: 100 })
+  const { data, isLoading } = useInvoices({ page_size: 100 });
 
   if (isLoading) {
     return (
@@ -17,11 +17,11 @@ export function PaymentsPageClient() {
         </div>
         <div className="h-96 animate-pulse rounded-xl bg-muted" />
       </div>
-    )
+    );
   }
 
-  const invoices = data?.invoices ?? []
-  const paid = invoices.filter((i) => i.status === "paid").length
+  const invoices = data?.invoices ?? [];
+  const paid = invoices.filter((i) => i.status === "paid").length;
 
   return (
     <>
@@ -35,5 +35,5 @@ export function PaymentsPageClient() {
       />
       <InvoicesTable invoices={invoices} />
     </>
-  )
+  );
 }

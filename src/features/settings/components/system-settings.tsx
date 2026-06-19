@@ -1,101 +1,83 @@
-"use client"
+"use client";
 
-import { useState, useEffect } from "react"
-import { toast } from "sonner"
-import {
-  AlertTriangle,
-  Globe,
-  Mail,
-  MapPin,
-  Phone,
-  Save,
-  ToggleLeft,
-  Loader2,
-} from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import { Switch } from "@/components/ui/switch"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { useSystemSettings, useSaveSystemSettings } from "@/features/settings/hooks"
-import { ImageUpload } from "@/components/shared/image-upload"
+import { useState, useEffect } from "react";
+import { toast } from "sonner";
+import { AlertTriangle, Globe, Mail, MapPin, Phone, Save, ToggleLeft, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSystemSettings, useSaveSystemSettings } from "@/features/settings/hooks";
+import { ImageUpload } from "@/components/shared/image-upload";
 
 function toISOStringLocal(dateStr: string): string {
-  if (!dateStr) return ""
-  const date = new Date(dateStr)
-  const offset = date.getTimezoneOffset() * 60000
-  return new Date(date.getTime() - offset).toISOString()
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  const offset = date.getTimezoneOffset() * 60000;
+  return new Date(date.getTime() - offset).toISOString();
 }
 
 export function SystemSettingsTab() {
-  const { data: settings, isLoading } = useSystemSettings()
-  const saveMutation = useSaveSystemSettings()
+  const { data: settings, isLoading } = useSystemSettings();
+  const saveMutation = useSaveSystemSettings();
 
-  const [maintenanceMode, setMaintenanceMode] = useState(false)
-  const [message, setMessage] = useState("")
-  const [plannedEnd, setPlannedEnd] = useState("")
-  const [plansEnabled, setPlansEnabled] = useState(false)
-  const [feedbackVisible, setFeedbackVisible] = useState(true)
-  const [appName, setAppName] = useState("")
-  const [appUrl, setAppUrl] = useState("")
-  const [appSiteUrl, setAppSiteUrl] = useState("")
-  const [appStoreUrl, setAppStoreUrl] = useState("")
-  const [playStoreUrl, setPlayStoreUrl] = useState("")
-  const [supportEmail, setSupportEmail] = useState("")
-  const [supportPhone, setSupportPhone] = useState("")
-  const [supportWhatsapp, setSupportWhatsapp] = useState("")
-  const [adminLogoUrl, setAdminLogoUrl] = useState("")
-  const [logoMediaId, setLogoMediaId] = useState<number | null>(null)
-  const [cnpj, setCnpj] = useState("")
-  const [address, setAddress] = useState("")
+  const [maintenanceMode, setMaintenanceMode] = useState(false);
+  const [message, setMessage] = useState("");
+  const [plannedEnd, setPlannedEnd] = useState("");
+  const [plansEnabled, setPlansEnabled] = useState(false);
+  const [feedbackVisible, setFeedbackVisible] = useState(true);
+  const [appName, setAppName] = useState("");
+  const [appUrl, setAppUrl] = useState("");
+  const [appSiteUrl, setAppSiteUrl] = useState("");
+  const [appStoreUrl, setAppStoreUrl] = useState("");
+  const [playStoreUrl, setPlayStoreUrl] = useState("");
+  const [supportEmail, setSupportEmail] = useState("");
+  const [supportPhone, setSupportPhone] = useState("");
+  const [supportWhatsapp, setSupportWhatsapp] = useState("");
+  const [adminLogoUrl, setAdminLogoUrl] = useState("");
+  const [logoMediaId, setLogoMediaId] = useState<number | null>(null);
+  const [cnpj, setCnpj] = useState("");
+  const [address, setAddress] = useState("");
 
   useEffect(() => {
     if (settings) {
-      setMaintenanceMode(settings.maintenance_mode)
-      setMessage(settings.maintenance_message)
+      setMaintenanceMode(settings.maintenance_mode);
+      setMessage(settings.maintenance_message);
       setPlannedEnd(
         settings.maintenance_planned_end
           ? new Date(settings.maintenance_planned_end).toISOString().slice(0, 16)
           : ""
-      )
-      setPlansEnabled(settings.plans_enabled)
-      setFeedbackVisible(settings.feedback_visible)
-      setAppName(settings.app_name)
-      setAppUrl(settings.app_url)
-      setAppSiteUrl(settings.app_site_url)
-      setAppStoreUrl(settings.app_store_url)
-      setPlayStoreUrl(settings.play_store_url)
-      setSupportEmail(settings.support_email)
-      setSupportPhone(settings.support_phone)
-      setSupportWhatsapp(settings.support_whatsapp)
-      setAdminLogoUrl(settings.admin_logo_url)
-      setCnpj(settings.cnpj)
-      setAddress(settings.address)
+      );
+      setPlansEnabled(settings.plans_enabled);
+      setFeedbackVisible(settings.feedback_visible);
+      setAppName(settings.app_name);
+      setAppUrl(settings.app_url);
+      setAppSiteUrl(settings.app_site_url);
+      setAppStoreUrl(settings.app_store_url);
+      setPlayStoreUrl(settings.play_store_url);
+      setSupportEmail(settings.support_email);
+      setSupportPhone(settings.support_phone);
+      setSupportWhatsapp(settings.support_whatsapp);
+      setAdminLogoUrl(settings.admin_logo_url);
+      setCnpj(settings.cnpj);
+      setAddress(settings.address);
     }
-  }, [settings])
+  }, [settings]);
 
-  const handleSaveFlags = async (
-    newPlansEnabled: boolean,
-    newFeedbackVisible: boolean
-  ) => {
+  const handleSaveFlags = async (newPlansEnabled: boolean, newFeedbackVisible: boolean) => {
     try {
       await saveMutation.mutateAsync({
         ...settings,
         plans_enabled: newPlansEnabled,
         feedback_visible: newFeedbackVisible,
-      })
-      toast.success("Configuração salva")
+      });
+      toast.success("Configuração salva");
     } catch {
-      toast.error("Erro ao salvar")
+      toast.error("Erro ao salvar");
     }
-  }
+  };
 
   const handleSave = async () => {
     try {
@@ -103,9 +85,7 @@ export function SystemSettingsTab() {
         ...settings,
         maintenance_mode: maintenanceMode,
         maintenance_message: message,
-        maintenance_planned_end: plannedEnd
-          ? toISOStringLocal(plannedEnd)
-          : null,
+        maintenance_planned_end: plannedEnd ? toISOStringLocal(plannedEnd) : null,
         plans_enabled: plansEnabled,
         feedback_visible: feedbackVisible,
         app_name: appName,
@@ -120,19 +100,19 @@ export function SystemSettingsTab() {
         admin_logo_media_id: logoMediaId,
         cnpj,
         address,
-      })
-      toast.success("Configurações salvas com sucesso")
+      });
+      toast.success("Configurações salvas com sucesso");
     } catch {
-      toast.error("Erro ao salvar configurações")
+      toast.error("Erro ao salvar configurações");
     }
-  }
+  };
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
       </div>
-    )
+    );
   }
 
   return (
@@ -144,8 +124,8 @@ export function SystemSettingsTab() {
             Modo Manutenção
           </CardTitle>
           <CardDescription>
-            Quando ativado, os painéis das clínicas e o app mobile exibirão uma
-            página de manutenção. O Super Admin continuará tendo acesso normal.
+            Quando ativado, os painéis das clínicas e o app mobile exibirão uma página de
+            manutenção. O Super Admin continuará tendo acesso normal.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -153,15 +133,10 @@ export function SystemSettingsTab() {
             <div className="space-y-1">
               <Label>Status</Label>
               <p className="text-sm text-muted-foreground">
-                {maintenanceMode
-                  ? "Sistema em manutenção"
-                  : "Sistema operacional"}
+                {maintenanceMode ? "Sistema em manutenção" : "Sistema operacional"}
               </p>
             </div>
-            <Switch
-              checked={maintenanceMode}
-              onCheckedChange={setMaintenanceMode}
-            />
+            <Switch checked={maintenanceMode} onCheckedChange={setMaintenanceMode} />
           </div>
 
           <div className="space-y-2">
@@ -197,8 +172,7 @@ export function SystemSettingsTab() {
             Funcionalidades
           </CardTitle>
           <CardDescription>
-            Controle a disponibilidade de funcionalidades para os admins de
-            clínica.
+            Controle a disponibilidade de funcionalidades para os admins de clínica.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -215,8 +189,8 @@ export function SystemSettingsTab() {
               checked={plansEnabled}
               disabled={saveMutation.isPending}
               onCheckedChange={(val) => {
-                setPlansEnabled(val)
-                handleSaveFlags(val, feedbackVisible)
+                setPlansEnabled(val);
+                handleSaveFlags(val, feedbackVisible);
               }}
             />
           </div>
@@ -234,8 +208,8 @@ export function SystemSettingsTab() {
               checked={feedbackVisible}
               disabled={saveMutation.isPending}
               onCheckedChange={(val) => {
-                setFeedbackVisible(val)
-                handleSaveFlags(plansEnabled, val)
+                setFeedbackVisible(val);
+                handleSaveFlags(plansEnabled, val);
               }}
             />
           </div>
@@ -248,9 +222,7 @@ export function SystemSettingsTab() {
             <Globe className="h-5 w-5" />
             Informações do Sistema
           </CardTitle>
-          <CardDescription>
-            Configure as informações públicas do sistema.
-          </CardDescription>
+          <CardDescription>Configure as informações públicas do sistema.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2">
@@ -287,10 +259,7 @@ export function SystemSettingsTab() {
 
           <div className="space-y-2">
             <Label>Logo Admin</Label>
-            <ImageUpload
-              currentUrl={adminLogoUrl}
-              onMediaChange={(id) => setLogoMediaId(id)}
-            />
+            <ImageUpload currentUrl={adminLogoUrl} onMediaChange={(id) => setLogoMediaId(id)} />
             <div className="mt-2">
               <Input
                 id="adminLogoUrl"
@@ -328,9 +297,7 @@ export function SystemSettingsTab() {
             <Phone className="h-5 w-5" />
             Contato
           </CardTitle>
-          <CardDescription>
-            Informações de contato para suporte.
-          </CardDescription>
+          <CardDescription>Informações de contato para suporte.</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2">
@@ -404,5 +371,5 @@ export function SystemSettingsTab() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

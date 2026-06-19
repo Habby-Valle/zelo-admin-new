@@ -1,37 +1,28 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { UserPlus, Loader2, Eye, EyeOff } from "lucide-react"
+import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { UserPlus, Loader2, Eye, EyeOff } from "lucide-react";
 
-import {
-  acceptInvitationSchema,
-  type AcceptInvitationSchema,
-} from "@/lib/validations/auth"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { acceptInvitation } from "@/app/(auth)/accept-invitation/actions"
+import { acceptInvitationSchema, type AcceptInvitationSchema } from "@/lib/validations/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { acceptInvitation } from "@/app/(auth)/accept-invitation/actions";
 
 export function AcceptInvitationForm() {
-  const router = useRouter()
-  const searchParams = useSearchParams()
-  const token = searchParams.get("token")
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
 
-  const [showPassword, setShowPassword] = useState(false)
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [serverError, setServerError] = useState<string | null>(null)
-  const [isSuccess, setIsSuccess] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const {
     register,
@@ -39,27 +30,27 @@ export function AcceptInvitationForm() {
     formState: { errors, isSubmitting },
   } = useForm<AcceptInvitationSchema>({
     resolver: zodResolver(acceptInvitationSchema),
-  })
+  });
 
   async function onSubmit(data: AcceptInvitationSchema) {
-    setServerError(null)
+    setServerError(null);
 
     if (!token) {
-      setServerError("Link inválido ou expirado. Solicite um novo convite.")
-      return
+      setServerError("Link inválido ou expirado. Solicite um novo convite.");
+      return;
     }
 
     const result = await acceptInvitation(token, {
       password: data.password,
       confirmPassword: data.confirmPassword,
-    })
+    });
 
     if (!result.success) {
-      setServerError(result.error ?? "Erro desconhecido")
-      return
+      setServerError(result.error ?? "Erro desconhecido");
+      return;
     }
 
-    setIsSuccess(true)
+    setIsSuccess(true);
   }
 
   if (isSuccess) {
@@ -74,26 +65,20 @@ export function AcceptInvitationForm() {
               <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
                 Zelo
               </p>
-              <p className="text-sm leading-none font-semibold">
-                Painel Administrativo
-              </p>
+              <p className="text-sm leading-none font-semibold">Painel Administrativo</p>
             </div>
           </div>
 
           <div>
             <CardTitle className="text-2xl">Bem-vindo!</CardTitle>
-            <CardDescription className="mt-1">
-              Sua conta foi ativada com sucesso.
-            </CardDescription>
+            <CardDescription className="mt-1">Sua conta foi ativada com sucesso.</CardDescription>
           </div>
         </CardHeader>
 
         <CardContent>
           <div className="space-y-4">
             <Alert className="border-green-200 bg-green-50 text-green-800 dark:border-green-800 dark:bg-green-950 dark:text-green-200">
-              <AlertDescription>
-                Você já pode fazer login com sua senha.
-              </AlertDescription>
+              <AlertDescription>Você já pode fazer login com sua senha.</AlertDescription>
             </Alert>
 
             <Button onClick={() => router.push("/login")} className="w-full">
@@ -102,7 +87,7 @@ export function AcceptInvitationForm() {
           </div>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   if (!token) {
@@ -117,9 +102,7 @@ export function AcceptInvitationForm() {
               <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
                 Zelo
               </p>
-              <p className="text-sm leading-none font-semibold">
-                Painel Administrativo
-              </p>
+              <p className="text-sm leading-none font-semibold">Painel Administrativo</p>
             </div>
           </div>
 
@@ -137,7 +120,7 @@ export function AcceptInvitationForm() {
           </Button>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -151,9 +134,7 @@ export function AcceptInvitationForm() {
             <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
               Zelo
             </p>
-            <p className="text-sm leading-none font-semibold">
-              Painel Administrativo
-            </p>
+            <p className="text-sm leading-none font-semibold">Painel Administrativo</p>
           </div>
         </div>
 
@@ -166,11 +147,7 @@ export function AcceptInvitationForm() {
       </CardHeader>
 
       <CardContent>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4"
-          noValidate
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
           {serverError && (
             <Alert variant="destructive">
               <AlertDescription>{serverError}</AlertDescription>
@@ -196,17 +173,11 @@ export function AcceptInvitationForm() {
                 className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
                 aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}
               >
-                {showPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
             {errors.password && (
-              <p className="text-xs text-destructive">
-                {errors.password.message}
-              </p>
+              <p className="text-xs text-destructive">{errors.password.message}</p>
             )}
           </div>
 
@@ -227,21 +198,13 @@ export function AcceptInvitationForm() {
                 type="button"
                 onClick={() => setShowConfirmPassword((prev) => !prev)}
                 className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-muted-foreground transition-colors hover:text-foreground"
-                aria-label={
-                  showConfirmPassword ? "Ocultar senha" : "Mostrar senha"
-                }
+                aria-label={showConfirmPassword ? "Ocultar senha" : "Mostrar senha"}
               >
-                {showConfirmPassword ? (
-                  <EyeOff className="h-4 w-4" />
-                ) : (
-                  <Eye className="h-4 w-4" />
-                )}
+                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
               </button>
             </div>
             {errors.confirmPassword && (
-              <p className="text-xs text-destructive">
-                {errors.confirmPassword.message}
-              </p>
+              <p className="text-xs text-destructive">{errors.confirmPassword.message}</p>
             )}
           </div>
 
@@ -258,5 +221,5 @@ export function AcceptInvitationForm() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

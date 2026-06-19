@@ -1,10 +1,10 @@
-"use server"
+"use server";
 
 export async function acceptInvitation(
   token: string,
   data: { password: string; confirmPassword: string }
 ): Promise<{ success: boolean; error?: string }> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000"
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
   try {
     const res = await fetch(`${baseUrl}/api/invites/accept/${token}`, {
@@ -15,19 +15,19 @@ export async function acceptInvitation(
         name: "Usuário",
         phone: "",
       }),
-    })
+    });
 
-    const result = await res.json()
+    const result = await res.json();
 
     if (!res.ok) {
       return {
         success: false,
         error: result.error ?? "Erro ao aceitar convite",
-      }
+      };
     }
 
-    return { success: true }
+    return { success: true };
   } catch {
-    return { success: false, error: "Erro ao aceitar convite" }
+    return { success: false, error: "Erro ao aceitar convite" };
   }
 }

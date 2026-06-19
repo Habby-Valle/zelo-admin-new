@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import {
   LineChart,
@@ -8,16 +8,16 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from "recharts"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+} from "recharts";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 interface ForecastData {
-  month: string
-  revenue: number
+  month: string;
+  revenue: number;
 }
 
 interface RevenueChartProps {
-  forecast: ForecastData[]
+  forecast: ForecastData[];
 }
 
 function formatCurrency(value: number): string {
@@ -26,7 +26,7 @@ function formatCurrency(value: number): string {
     currency: "BRL",
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(value)
+  }).format(value);
 }
 
 export function RevenueChart({ forecast }: RevenueChartProps) {
@@ -38,17 +38,9 @@ export function RevenueChart({ forecast }: RevenueChartProps) {
       <CardContent>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={forecast}
-              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-            >
+            <LineChart data={forecast} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
-              <XAxis
-                dataKey="month"
-                tick={{ fontSize: 12 }}
-                tickLine={false}
-                axisLine={false}
-              />
+              <XAxis dataKey="month" tick={{ fontSize: 12 }} tickLine={false} axisLine={false} />
               <YAxis
                 tickFormatter={(value) => `R$${value / 1000}k`}
                 tick={{ fontSize: 12 }}
@@ -56,10 +48,7 @@ export function RevenueChart({ forecast }: RevenueChartProps) {
                 axisLine={false}
               />
               <Tooltip
-                formatter={(value) => [
-                  formatCurrency(Number(value)),
-                  "Receita",
-                ]}
+                formatter={(value) => [formatCurrency(Number(value)), "Receita"]}
                 contentStyle={{
                   backgroundColor: "var(--card)",
                   border: "1px solid var(--border)",
@@ -80,5 +69,5 @@ export function RevenueChart({ forecast }: RevenueChartProps) {
         </div>
       </CardContent>
     </Card>
-  )
+  );
 }

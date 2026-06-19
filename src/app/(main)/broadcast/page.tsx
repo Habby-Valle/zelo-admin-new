@@ -1,9 +1,9 @@
-import { Megaphone } from "lucide-react"
-import { BroadcastClient } from "@/features/broadcast/components"
+import { Megaphone } from "lucide-react";
+import { BroadcastClient } from "@/features/broadcast/components";
 
 export const metadata = {
   title: "Notificações Broadcast",
-}
+};
 
 export default function BroadcastPage() {
   return (
@@ -20,5 +20,5 @@ export default function BroadcastPage() {
 
       <BroadcastClient />
     </div>
-  )
+  );
 }

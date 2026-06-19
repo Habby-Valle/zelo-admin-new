@@ -1,50 +1,42 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Plus, Trash2 } from "lucide-react"
-import { toast } from "sonner"
-import {
-  DndContext,
-  closestCenter,
-  DragEndEvent,
-} from "@dnd-kit/core"
-import {
-  SortableContext,
-  verticalListSortingStrategy,
-  arrayMove,
-} from "@dnd-kit/sortable"
+import { useState } from "react";
+import { Plus, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 
-import { useCreateChecklist, useUpdateChecklist } from "@/features/checklists/hooks"
-import { useClinics } from "@/features/clinics/hooks"
-import type { ChecklistDetail } from "@/features/checklists/types"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
+import { useCreateChecklist, useUpdateChecklist } from "@/features/checklists/hooks";
+import { useClinics } from "@/features/clinics/hooks";
+import type { ChecklistDetail } from "@/features/checklists/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
-import { MaterialIconPicker } from "@/components/shared/material-icon-picker"
-import { SortableItem } from "./sortable-item"
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { MaterialIconPicker } from "@/components/shared/material-icon-picker";
+import { SortableItem } from "./sortable-item";
 
 interface ChecklistFormProps {
-  checklist?: ChecklistDetail
-  onSuccess: () => void
+  checklist?: ChecklistDetail;
+  onSuccess: () => void;
 }
 
 interface ItemFormState {
-  id?: string
-  name: string
-  type: "text" | "boolean" | "select" | "number"
-  required: boolean
-  has_observation: boolean
-  options: { id?: string; label: string; value: string }[]
-  order: number
+  id?: string;
+  name: string;
+  type: "text" | "boolean" | "select" | "number";
+  required: boolean;
+  has_observation: boolean;
+  options: { id?: string; label: string; value: string }[];
+  order: number;
 }
 
 function createEmptyItem(order: number): ItemFormState {
@@ -55,7 +47,7 @@ function createEmptyItem(order: number): ItemFormState {
     has_observation: false,
     options: [],
     order,
-  }
+  };
 }
 
 const ITEM_TYPES = [
@@ -63,19 +55,21 @@ const ITEM_TYPES = [
   { value: "boolean" as const, label: "Sim/Não" },
   { value: "select" as const, label: "Seleção" },
   { value: "number" as const, label: "Número" },
-]
+];
 
 export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
-  const { data: clinicsData } = useClinics({ pageSize: 999 })
-  const clinics = clinicsData?.results ?? []
+  const { data: clinicsData } = useClinics({ pageSize: 999 });
+  const clinics = clinicsData?.results ?? [];
 
-  const createChecklist = useCreateChecklist()
-  const updateChecklist = useUpdateChecklist(checklist?.id ?? 0)
+  const createChecklist = useCreateChecklist();
+  const updateChecklist = useUpdateChecklist(checklist?.id ?? 0);
 
-  const [name, setName] = useState(checklist?.name ?? "")
-  const [icon, setIcon] = useState(checklist?.icon ?? "")
-  const [clinicId, setClinicId] = useState<string>(checklist?.clinic_id ? String(checklist.clinic_id) : "")
-  const [isActive, setIsActive] = useState(checklist?.is_active ?? true)
+  const [name, setName] = useState(checklist?.name ?? "");
+  const [icon, setIcon] = useState(checklist?.icon ?? "");
+  const [clinicId, setClinicId] = useState<string>(
+    checklist?.clinic_id ? String(checklist.clinic_id) : ""
+  );
+  const [isActive, setIsActive] = useState(checklist?.is_active ?? true);
   const [items, setItems] = useState<ItemFormState[]>(() => {
     if (checklist?.items?.length) {
       return checklist.items.map((item) => ({
@@ -90,38 +84,36 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
           value: opt.value,
         })),
         order: item.order,
-      }))
+      }));
     }
-    return [createEmptyItem(0)]
-  })
+    return [createEmptyItem(0)];
+  });
 
   const addItem = () => {
-    setItems((prev) => [...prev, createEmptyItem(prev.length)])
-  }
+    setItems((prev) => [...prev, createEmptyItem(prev.length)]);
+  };
 
   const removeItem = (index: number) => {
-    setItems((prev) => prev.filter((_, i) => i !== index))
-  }
+    setItems((prev) => prev.filter((_, i) => i !== index));
+  };
 
   const updateItem = (index: number, updates: Partial<ItemFormState>) => {
-    setItems((prev) =>
-      prev.map((item, i) => (i === index ? { ...item, ...updates } : item))
-    )
-  }
+    setItems((prev) => prev.map((item, i) => (i === index ? { ...item, ...updates } : item)));
+  };
 
   const addOption = (itemIndex: number) => {
-    const item = items[itemIndex]
-    if (item.type !== "select") return
+    const item = items[itemIndex];
+    if (item.type !== "select") return;
     updateItem(itemIndex, {
       options: [...item.options, { label: "", value: "" }],
-    })
-  }
+    });
+  };
 
   const removeOption = (itemIndex: number, optIndex: number) => {
     updateItem(itemIndex, {
       options: items[itemIndex].options.filter((_, i) => i !== optIndex),
-    })
-  }
+    });
+  };
 
   const updateOption = (
     itemIndex: number,
@@ -132,27 +124,27 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
       options: items[itemIndex].options.map((opt, i) =>
         i === optIndex ? { ...opt, ...updates } : opt
       ),
-    })
-  }
+    });
+  };
 
   const handleDragEnd = (event: DragEndEvent) => {
-    const { active, over } = event
+    const { active, over } = event;
     if (over && active.id !== over.id) {
-      const oldIndex = Number(active.id)
-      const newIndex = Number(over.id)
-      setItems((prev) => arrayMove(prev, oldIndex, newIndex))
+      const oldIndex = Number(active.id);
+      const newIndex = Number(over.id);
+      setItems((prev) => arrayMove(prev, oldIndex, newIndex));
     }
-  }
+  };
 
   const handleSubmit = async () => {
     if (!name.trim()) {
-      toast.error("Nome é obrigatório")
-      return
+      toast.error("Nome é obrigatório");
+      return;
     }
-    const validItems = items.filter((i) => i.name.trim())
+    const validItems = items.filter((i) => i.name.trim());
     if (validItems.length === 0) {
-      toast.error("Adicione pelo menos 1 item com nome")
-      return
+      toast.error("Adicione pelo menos 1 item com nome");
+      return;
     }
 
     const body: Record<string, unknown> = {
@@ -177,24 +169,24 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
                 }))
             : [],
       })),
-    }
-    if (clinicId) body.clinic_id = Number(clinicId)
+    };
+    if (clinicId) body.clinic_id = Number(clinicId);
 
     try {
       if (checklist?.id) {
-        await updateChecklist.mutateAsync(body)
-        toast.success("Template atualizado!")
+        await updateChecklist.mutateAsync(body);
+        toast.success("Template atualizado!");
       } else {
-        await createChecklist.mutateAsync(body)
-        toast.success("Template criado!")
+        await createChecklist.mutateAsync(body);
+        toast.success("Template criado!");
       }
-      onSuccess()
+      onSuccess();
     } catch {
-      toast.error("Erro ao salvar template")
+      toast.error("Erro ao salvar template");
     }
-  }
+  };
 
-  const isPending = createChecklist.isPending || updateChecklist.isPending
+  const isPending = createChecklist.isPending || updateChecklist.isPending;
 
   return (
     <div className="space-y-6">
@@ -219,7 +211,7 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
           <Label>Clínica</Label>
           <Select
             value={clinicId || "none"}
-            onValueChange={(v) => setClinicId(v === "none" ? "" : v ?? "")}
+            onValueChange={(v) => setClinicId(v === "none" ? "" : (v ?? ""))}
           >
             <SelectTrigger>
               <SelectValue placeholder="Global (sem clínica)" />
@@ -268,9 +260,7 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
                     <Input
                       className="flex-1"
                       value={item.name}
-                      onChange={(e) =>
-                        updateItem(index, { name: e.target.value })
-                      }
+                      onChange={(e) => updateItem(index, { name: e.target.value })}
                       placeholder={`Item ${index + 1}`}
                     />
                     <Select
@@ -278,8 +268,7 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
                       onValueChange={(v) =>
                         updateItem(index, {
                           type: v as ItemFormState["type"],
-                          options:
-                            v === "select" ? [{ label: "", value: "" }] : [],
+                          options: v === "select" ? [{ label: "", value: "" }] : [],
                         })
                       }
                     >
@@ -305,14 +294,12 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
                     </Button>
                   </div>
 
-                  <div className="flex items-center gap-4 mt-3">
+                  <div className="mt-3 flex items-center gap-4">
                     <div className="flex items-center gap-2">
                       <Checkbox
                         id={`required-${index}`}
                         checked={item.required}
-                        onCheckedChange={(v) =>
-                          updateItem(index, { required: v === true })
-                        }
+                        onCheckedChange={(v) => updateItem(index, { required: v === true })}
                       />
                       <Label
                         htmlFor={`required-${index}`}
@@ -325,9 +312,7 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
                       <Checkbox
                         id={`obs-${index}`}
                         checked={item.has_observation}
-                        onCheckedChange={(v) =>
-                          updateItem(index, { has_observation: v === true })
-                        }
+                        onCheckedChange={(v) => updateItem(index, { has_observation: v === true })}
                       />
                       <Label
                         htmlFor={`obs-${index}`}
@@ -339,11 +324,9 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
                   </div>
 
                   {item.type === "select" && (
-                    <div className="space-y-2 pl-4 mt-3">
+                    <div className="mt-3 space-y-2 pl-4">
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">
-                          Opções de seleção
-                        </span>
+                        <span className="text-xs text-muted-foreground">Opções de seleção</span>
                         <Button
                           type="button"
                           variant="ghost"
@@ -395,12 +378,12 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
                   )}
 
                   {item.type === "boolean" && (
-                    <Badge variant="outline" className="text-xs mt-3">
+                    <Badge variant="outline" className="mt-3 text-xs">
                       Sim / Não
                     </Badge>
                   )}
                   {item.type === "number" && (
-                    <Badge variant="outline" className="text-xs mt-3">
+                    <Badge variant="outline" className="mt-3 text-xs">
                       123
                     </Badge>
                   )}
@@ -416,13 +399,9 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
           Cancelar
         </Button>
         <Button onClick={handleSubmit} disabled={isPending}>
-          {isPending
-            ? "Salvando..."
-            : checklist?.id
-              ? "Salvar"
-              : "Criar template"}
+          {isPending ? "Salvando..." : checklist?.id ? "Salvar" : "Criar template"}
         </Button>
       </div>
     </div>
-  )
+  );
 }

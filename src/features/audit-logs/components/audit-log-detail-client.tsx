@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
-import { useAuditLog } from "@/features/audit-logs/hooks"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Skeleton } from "@/components/ui/skeleton"
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { useAuditLog } from "@/features/audit-logs/hooks";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -14,7 +14,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 
 const ACTION_COLORS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   create: "default",
@@ -28,7 +28,7 @@ const ACTION_COLORS: Record<string, "default" | "secondary" | "destructive" | "o
   payment_failed: "destructive",
   subscription_activated: "secondary",
   subscription_cancelled: "secondary",
-}
+};
 
 const ACTION_LABELS: Record<string, string> = {
   create: "Criação",
@@ -42,7 +42,7 @@ const ACTION_LABELS: Record<string, string> = {
   payment_failed: "Falha Pagamento",
   subscription_activated: "Ativação",
   subscription_cancelled: "Cancelamento",
-}
+};
 
 function formatDateTime(dateString: string): string {
   return new Date(dateString).toLocaleString("pt-BR", {
@@ -52,16 +52,16 @@ function formatDateTime(dateString: string): string {
     hour: "2-digit",
     minute: "2-digit",
     second: "2-digit",
-  })
+  });
 }
 
 interface AuditLogDetailClientProps {
-  id: string
+  id: string;
 }
 
 export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
-  const router = useRouter()
-  const { data: log, isLoading } = useAuditLog(id)
+  const router = useRouter();
+  const { data: log, isLoading } = useAuditLog(id);
 
   if (isLoading) {
     return (
@@ -81,7 +81,7 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
         </div>
         <Skeleton className="h-64 w-full" />
       </div>
-    )
+    );
   }
 
   if (!log) {
@@ -89,13 +89,13 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
       <div className="py-10 text-center text-muted-foreground">
         Log de auditoria não encontrado.
       </div>
-    )
+    );
   }
 
-  const changes = log.changes as Record<string, unknown> | null
-  const isCreate = changes && "created" in changes && !("before" in changes)
-  const isDelete = changes && "deleted" in changes && !("after" in changes)
-  const hasDiff = changes && "before" in changes && "after" in changes
+  const changes = log.changes as Record<string, unknown> | null;
+  const isCreate = changes && "created" in changes && !("before" in changes);
+  const isDelete = changes && "deleted" in changes && !("after" in changes);
+  const hasDiff = changes && "before" in changes && "after" in changes;
 
   return (
     <div className="space-y-6">
@@ -107,10 +107,7 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
       </div>
 
       <div className="flex items-center gap-3">
-        <Badge
-          variant={ACTION_COLORS[log.action] ?? "outline"}
-          className="px-3 py-1 text-sm"
-        >
+        <Badge variant={ACTION_COLORS[log.action] ?? "outline"} className="px-3 py-1 text-sm">
           {ACTION_LABELS[log.action] ?? log.action}
         </Badge>
         <span className="text-muted-foreground">{log.description}</span>
@@ -139,9 +136,7 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">IP</span>
-              <span className="font-mono font-medium">
-                {log.ip_address ?? "—"}
-              </span>
+              <span className="font-mono font-medium">{log.ip_address ?? "—"}</span>
             </div>
           </CardContent>
         </Card>
@@ -153,9 +148,7 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
           <CardContent className="space-y-3 text-sm">
             <div className="flex justify-between">
               <span className="text-muted-foreground">Tipo</span>
-              <span className="font-medium">
-                {log.content_type_name ?? "—"}
-              </span>
+              <span className="font-medium">{log.content_type_name ?? "—"}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-muted-foreground">ID</span>
@@ -170,9 +163,7 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
           <CardTitle className="text-sm">Alterações</CardTitle>
         </CardHeader>
         <CardContent>
-          {isCreate &&
-          changes?.created &&
-          typeof changes.created === "object" ? (
+          {isCreate && changes?.created && typeof changes.created === "object" ? (
             <div className="rounded-md border">
               <Table>
                 <TableHeader>
@@ -182,22 +173,20 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {Object.entries(
-                    changes.created as Record<string, unknown>
-                  ).map(([key, value]) => (
-                    <TableRow key={key}>
-                      <TableCell className="font-medium">{key}</TableCell>
-                      <TableCell className="font-mono text-xs">
-                        {value === null ? "—" : String(value)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {Object.entries(changes.created as Record<string, unknown>).map(
+                    ([key, value]) => (
+                      <TableRow key={key}>
+                        <TableCell className="font-medium">{key}</TableCell>
+                        <TableCell className="font-mono text-xs">
+                          {value === null ? "—" : String(value)}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )}
                 </TableBody>
               </Table>
             </div>
-          ) : isDelete &&
-            changes?.deleted &&
-            typeof changes.deleted === "object" ? (
+          ) : isDelete && changes?.deleted && typeof changes.deleted === "object" ? (
             <div className="rounded-md border">
               <Table>
                 <TableHeader>
@@ -207,16 +196,16 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {Object.entries(
-                    changes.deleted as Record<string, unknown>
-                  ).map(([key, value]) => (
-                    <TableRow key={key}>
-                      <TableCell className="font-medium">{key}</TableCell>
-                      <TableCell className="font-mono text-xs">
-                        {value === null ? "—" : String(value)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {Object.entries(changes.deleted as Record<string, unknown>).map(
+                    ([key, value]) => (
+                      <TableRow key={key}>
+                        <TableCell className="font-medium">{key}</TableCell>
+                        <TableCell className="font-mono text-xs">
+                          {value === null ? "—" : String(value)}
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )}
                 </TableBody>
               </Table>
             </div>
@@ -238,24 +227,14 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
                     <TableRow key={field}>
                       <TableCell className="font-medium">{field}</TableCell>
                       <TableCell className="font-mono text-xs">
-                        {(changes.before as Record<string, unknown>)[field] ===
-                        null
+                        {(changes.before as Record<string, unknown>)[field] === null
                           ? "—"
-                          : String(
-                              (changes.before as Record<string, unknown>)[
-                                field
-                              ] ?? "—"
-                            )}
+                          : String((changes.before as Record<string, unknown>)[field] ?? "—")}
                       </TableCell>
                       <TableCell className="font-mono text-xs">
-                        {(changes.after as Record<string, unknown>)[field] ===
-                        null
+                        {(changes.after as Record<string, unknown>)[field] === null
                           ? "—"
-                          : String(
-                              (changes.after as Record<string, unknown>)[
-                                field
-                              ] ?? "—"
-                            )}
+                          : String((changes.after as Record<string, unknown>)[field] ?? "—")}
                       </TableCell>
                     </TableRow>
                   ))}
@@ -263,12 +242,10 @@ export function AuditLogDetailClient({ id }: AuditLogDetailClientProps) {
               </Table>
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">
-              Sem alterações registradas.
-            </p>
+            <p className="text-sm text-muted-foreground">Sem alterações registradas.</p>
           )}
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

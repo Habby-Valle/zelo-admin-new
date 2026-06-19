@@ -1,4 +1,4 @@
-import { z } from "zod"
+import { z } from "zod";
 
 export const patientSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres"),
@@ -15,6 +15,6 @@ export const patientSchema = z.object({
   observations: z.string().optional(),
   media_id: z.number().int().positive().nullable().optional(),
   caregiver_ids: z.array(z.string()).optional().default([]),
-})
+});
 
-export type PatientFormValues = z.infer<typeof patientSchema>
+export type PatientFormValues = z.infer<typeof patientSchema>;

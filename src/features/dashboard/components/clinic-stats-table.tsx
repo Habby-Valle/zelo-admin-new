@@ -1,5 +1,5 @@
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -7,12 +7,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Skeleton } from "@/components/ui/skeleton"
-import type { ClinicStat } from "@/features/dashboard/types"
+} from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
+import type { ClinicStat } from "@/features/dashboard/types";
 
 interface ClinicStatsTableProps {
-  clinics: ClinicStat[]
+  clinics: ClinicStat[];
 }
 
 const STATUS_LABEL: Record<
@@ -22,7 +22,7 @@ const STATUS_LABEL: Record<
   active: { label: "Ativa", variant: "default" },
   inactive: { label: "Inativa", variant: "secondary" },
   suspended: { label: "Suspensa", variant: "destructive" },
-}
+};
 
 export function ClinicStatsTable({ clinics }: ClinicStatsTableProps) {
   if (!clinics.length) {
@@ -37,7 +37,7 @@ export function ClinicStatsTable({ clinics }: ClinicStatsTableProps) {
           </p>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -60,27 +60,23 @@ export function ClinicStatsTable({ clinics }: ClinicStatsTableProps) {
               const status = STATUS_LABEL[clinic.status] ?? {
                 label: clinic.status,
                 variant: "outline" as const,
-              }
+              };
               return (
                 <TableRow key={clinic.id}>
                   <TableCell className="font-medium">{clinic.name}</TableCell>
                   <TableCell>
                     <Badge variant={status.variant}>{status.label}</Badge>
                   </TableCell>
-                  <TableCell className="text-right">
-                    {clinic.patientCount}
-                  </TableCell>
-                  <TableCell className="text-right">
-                    {clinic.caregiverCount}
-                  </TableCell>
+                  <TableCell className="text-right">{clinic.patientCount}</TableCell>
+                  <TableCell className="text-right">{clinic.caregiverCount}</TableCell>
                 </TableRow>
-              )
+              );
             })}
           </TableBody>
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }
 
 export function ClinicStatsTableSkeleton() {
@@ -119,5 +115,5 @@ export function ClinicStatsTableSkeleton() {
         </Table>
       </CardContent>
     </Card>
-  )
+  );
 }

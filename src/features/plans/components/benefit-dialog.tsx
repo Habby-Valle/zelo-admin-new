@@ -1,38 +1,29 @@
-"use client"
+"use client";
 
-import { useEffect } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { Loader2 } from "lucide-react"
-import { benefitSchema, type BenefitFormValues } from "@/lib/validations/plan"
-import type { PlanBenefit } from "@/features/plans/types"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog"
-import { useCreateBenefit, useUpdateBenefit } from "@/features/plans/hooks"
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
+import { benefitSchema, type BenefitFormValues } from "@/lib/validations/plan";
+import type { PlanBenefit } from "@/features/plans/types";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useCreateBenefit, useUpdateBenefit } from "@/features/plans/hooks";
 
 interface BenefitDialogProps {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  benefit?: PlanBenefit | null
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  benefit?: PlanBenefit | null;
 }
 
-export function BenefitDialog({
-  open,
-  onOpenChange,
-  benefit,
-}: BenefitDialogProps) {
-  const isEditing = !!benefit
-  const createBenefit = useCreateBenefit()
-  const updateBenefit = useUpdateBenefit()
-  const isPending = createBenefit.isPending || updateBenefit.isPending
+export function BenefitDialog({ open, onOpenChange, benefit }: BenefitDialogProps) {
+  const isEditing = !!benefit;
+  const createBenefit = useCreateBenefit();
+  const updateBenefit = useUpdateBenefit();
+  const isPending = createBenefit.isPending || updateBenefit.isPending;
 
   const {
     register,
@@ -42,7 +33,7 @@ export function BenefitDialog({
   } = useForm<BenefitFormValues>({
     resolver: zodResolver(benefitSchema),
     defaultValues: { key: "", label: "", description: "" },
-  })
+  });
 
   useEffect(() => {
     if (open) {
@@ -50,32 +41,30 @@ export function BenefitDialog({
         key: benefit?.key ?? "",
         label: benefit?.label ?? "",
         description: benefit?.description ?? "",
-      })
+      });
     }
-  }, [open, benefit, reset])
+  }, [open, benefit, reset]);
 
   function onSubmit(values: BenefitFormValues) {
     if (isEditing && benefit) {
       updateBenefit.mutate(
         { id: benefit.id, data: values },
         { onSuccess: () => onOpenChange(false) }
-      )
+      );
     } else {
       createBenefit.mutate(values, {
         onSuccess: () => onOpenChange(false),
-      })
+      });
     }
   }
 
-  const mutationError = createBenefit.error || updateBenefit.error
+  const mutationError = createBenefit.error || updateBenefit.error;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>
-            {isEditing ? "Editar benefício" : "Novo benefício"}
-          </DialogTitle>
+          <DialogTitle>{isEditing ? "Editar benefício" : "Novo benefício"}</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -87,7 +76,12 @@ export function BenefitDialog({
 
           <div className="space-y-1.5">
             <Label htmlFor="key">Chave *</Label>
-            <Input id="key" placeholder="ex: consultas_ilimitadas" {...register("key")} disabled={isEditing} />
+            <Input
+              id="key"
+              placeholder="ex: consultas_ilimitadas"
+              {...register("key")}
+              disabled={isEditing}
+            />
             {errors.key && <p className="text-xs text-destructive">{errors.key.message}</p>}
             <p className="text-xs text-muted-foreground">
               Identificador único. Apenas letras minúsculas, números e _.
@@ -102,12 +96,24 @@ export function BenefitDialog({
 
           <div className="space-y-1.5">
             <Label htmlFor="description">Descrição</Label>
-            <Textarea id="description" placeholder="Detalhe o benefício..." rows={2} {...register("description")} />
-            {errors.description && <p className="text-xs text-destructive">{errors.description.message}</p>}
+            <Textarea
+              id="description"
+              placeholder="Detalhe o benefício..."
+              rows={2}
+              {...register("description")}
+            />
+            {errors.description && (
+              <p className="text-xs text-destructive">{errors.description.message}</p>
+            )}
           </div>
 
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={isPending}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+              disabled={isPending}
+            >
               Cancelar
             </Button>
             <Button type="submit" disabled={isPending}>
@@ -118,5 +124,5 @@ export function BenefitDialog({
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

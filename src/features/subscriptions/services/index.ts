@@ -3,4 +3,4 @@ export {
   fetchSubscriptionStats,
   fetchGuardianSubscriptions,
   fetchSubscriptionDetails,
-} from "./subscriptions.service"
+} from "./subscriptions.service";

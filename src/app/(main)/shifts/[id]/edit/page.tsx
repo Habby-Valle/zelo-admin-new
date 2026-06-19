@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import { use } from "react"
-import { useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ShiftForm, useShift } from "@/features/shifts"
-import { Skeleton } from "@/components/ui/skeleton"
+import { use } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ShiftForm, useShift } from "@/features/shifts";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface EditShiftPageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export default function EditShiftPage({ params }: EditShiftPageProps) {
-  const { id } = use(params)
-  const router = useRouter()
-  const { data: shift, isLoading } = useShift(Number(id))
+  const { id } = use(params);
+  const router = useRouter();
+  const { data: shift, isLoading } = useShift(Number(id));
 
   return (
     <div className="space-y-6">
@@ -24,9 +24,7 @@ export default function EditShiftPage({ params }: EditShiftPageProps) {
         </Button>
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Editar Turno</h1>
-          <p className="mt-1 text-muted-foreground">
-            Altere os dados do turno.
-          </p>
+          <p className="mt-1 text-muted-foreground">Altere os dados do turno.</p>
         </div>
       </div>
 
@@ -42,5 +40,5 @@ export default function EditShiftPage({ params }: EditShiftPageProps) {
         <p className="text-muted-foreground">Turno não encontrado.</p>
       )}
     </div>
-  )
+  );
 }

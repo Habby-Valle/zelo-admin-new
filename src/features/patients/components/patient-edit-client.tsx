@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { useRouter } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
-import { usePatient, useUpdatePatient } from "@/features/patients/hooks"
-import { PatientForm } from "@/features/patients/components/patient-form"
-import type { PatientFormValues } from "@/lib/validations/patient"
-import { Button } from "@/components/ui/button"
-import { Skeleton } from "@/components/ui/skeleton"
-import { toast } from "sonner"
+import { useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import { usePatient, useUpdatePatient } from "@/features/patients/hooks";
+import { PatientForm } from "@/features/patients/components/patient-form";
+import type { PatientFormValues } from "@/lib/validations/patient";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 export function PatientEditClient({ id }: { id: string }) {
-  const router = useRouter()
-  const { data: patient, isLoading, isError } = usePatient(id)
-  const updatePatient = useUpdatePatient()
+  const router = useRouter();
+  const { data: patient, isLoading, isError } = usePatient(id);
+  const updatePatient = useUpdatePatient();
 
   if (isLoading) {
     return (
@@ -23,7 +23,7 @@ export function PatientEditClient({ id }: { id: string }) {
         </div>
         <Skeleton className="h-96 rounded-lg" />
       </div>
-    )
+    );
   }
 
   if (isError || !patient) {
@@ -32,20 +32,20 @@ export function PatientEditClient({ id }: { id: string }) {
         <p className="text-muted-foreground">Paciente não encontrado.</p>
         <Button onClick={() => router.push("/patients")}>Voltar</Button>
       </div>
-    )
+    );
   }
 
   function onSubmit(values: PatientFormValues) {
-    const body = { ...values, email: values.email || null, cpf: values.cpf || null }
+    const body = { ...values, email: values.email || null, cpf: values.cpf || null };
     updatePatient.mutate(
       { id, data: body },
       {
         onSuccess: () => {
-          toast.success("Paciente atualizado com sucesso")
-          router.push(`/patients/${id}`)
+          toast.success("Paciente atualizado com sucesso");
+          router.push(`/patients/${id}`);
         },
       }
-    )
+    );
   }
 
   const defaultValues: Partial<PatientFormValues> = {
@@ -62,7 +62,7 @@ export function PatientEditClient({ id }: { id: string }) {
     medications: patient.medications,
     observations: patient.observations,
     media_id: patient.media_id,
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -84,5 +84,5 @@ export function PatientEditClient({ id }: { id: string }) {
         submitLabel="Salvar alterações"
       />
     </div>
-  )
+  );
 }

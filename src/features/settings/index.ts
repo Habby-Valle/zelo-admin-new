@@ -1,4 +1,11 @@
-export type { SystemSettings, LgpdConfig, RetentionPolicy, EncryptionStatus, UserSearchResult, PatientSearchResult } from "./types"
+export type {
+  SystemSettings,
+  LgpdConfig,
+  RetentionPolicy,
+  EncryptionStatus,
+  UserSearchResult,
+  PatientSearchResult,
+} from "./types";
 export {
   fetchSystemSettings,
   saveSystemSettings,
@@ -9,7 +16,7 @@ export {
   exportPatientDataFetch,
   anonymizeUserFetch,
   anonymizePatientFetch,
-} from "./services"
+} from "./services";
 export {
   useSystemSettings,
   useSaveSystemSettings,
@@ -20,5 +27,5 @@ export {
   useExportPatientData,
   useAnonymizeUser,
   useAnonymizePatient,
-} from "./hooks"
-export { SettingsClient } from "./components"
+} from "./hooks";
+export { SettingsClient } from "./components";

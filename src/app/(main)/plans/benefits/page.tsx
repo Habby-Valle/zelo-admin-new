@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { ArrowLeft, Plus, Pencil, Trash2, Tag } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Plus, Pencil, Trash2, Tag } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -11,8 +11,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Card, CardContent } from "@/components/ui/card"
+} from "@/components/ui/table";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,36 +22,36 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Skeleton } from "@/components/ui/skeleton"
-import { BenefitDialog } from "@/features/plans/components"
-import { useBenefits, useDeleteBenefit } from "@/features/plans/hooks"
-import type { PlanBenefit } from "@/features/plans/types"
+} from "@/components/ui/alert-dialog";
+import { Skeleton } from "@/components/ui/skeleton";
+import { BenefitDialog } from "@/features/plans/components";
+import { useBenefits, useDeleteBenefit } from "@/features/plans/hooks";
+import type { PlanBenefit } from "@/features/plans/types";
 
 export default function BenefitsPage() {
-  const router = useRouter()
-  const { data: benefits = [], isLoading } = useBenefits()
-  const deleteBenefit = useDeleteBenefit()
+  const router = useRouter();
+  const { data: benefits = [], isLoading } = useBenefits();
+  const deleteBenefit = useDeleteBenefit();
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editing, setEditing] = useState<PlanBenefit | null>(null)
-  const [deleteId, setDeleteId] = useState<string | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editing, setEditing] = useState<PlanBenefit | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   function openCreate() {
-    setEditing(null)
-    setDialogOpen(true)
+    setEditing(null);
+    setDialogOpen(true);
   }
 
   function openEdit(benefit: PlanBenefit) {
-    setEditing(benefit)
-    setDialogOpen(true)
+    setEditing(benefit);
+    setDialogOpen(true);
   }
 
   function handleDelete() {
-    if (!deleteId) return
+    if (!deleteId) return;
     deleteBenefit.mutate(deleteId, {
       onSuccess: () => setDeleteId(null),
-    })
+    });
   }
 
   return (
@@ -115,17 +115,11 @@ export default function BenefitsPage() {
                 benefits.map((benefit) => (
                   <TableRow key={benefit.id}>
                     <TableCell>
-                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm">
-                        {benefit.key}
-                      </code>
+                      <code className="rounded bg-muted px-1.5 py-0.5 text-sm">{benefit.key}</code>
                     </TableCell>
-                    <TableCell className="font-medium">
-                      {benefit.label}
-                    </TableCell>
+                    <TableCell className="font-medium">{benefit.label}</TableCell>
                     <TableCell className="max-w-xs text-sm text-muted-foreground">
-                      <span className="line-clamp-2">
-                        {benefit.description || "—"}
-                      </span>
+                      <span className="line-clamp-2">{benefit.description || "—"}</span>
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
@@ -155,19 +149,15 @@ export default function BenefitsPage() {
         </CardContent>
       </Card>
 
-      <BenefitDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        benefit={editing}
-      />
+      <BenefitDialog open={dialogOpen} onOpenChange={setDialogOpen} benefit={editing} />
 
       <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir benefício</AlertDialogTitle>
             <AlertDialogDescription>
-              Tem certeza que deseja excluir este benefício? Planos que o
-              utilizam perderão essa associação.
+              Tem certeza que deseja excluir este benefício? Planos que o utilizam perderão essa
+              associação.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -183,5 +173,5 @@ export default function BenefitsPage() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

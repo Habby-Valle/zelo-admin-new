@@ -1,30 +1,24 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Loader2, Megaphone, Send, Users } from "lucide-react"
-import { toast } from "sonner"
-import { useBroadcasts, useCreateBroadcast } from "@/features/broadcast/hooks"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import { useState } from "react";
+import { Loader2, Megaphone, Send, Users } from "lucide-react";
+import { toast } from "sonner";
+import { useBroadcasts, useCreateBroadcast } from "@/features/broadcast/hooks";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Skeleton } from "@/components/ui/skeleton"
-import { formatDateTime } from "@/lib/format"
+} from "@/components/ui/select";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
+import { formatDateTime } from "@/lib/format";
 
 const ROLE_LABELS: Record<string, string> = {
   all: "Todos (Cuidadores, Familiares, Emerg., Admins)",
@@ -32,51 +26,51 @@ const ROLE_LABELS: Record<string, string> = {
   family: "Familiares",
   emergency_contact: "Contatos de Emerg.",
   clinic_admin: "Admins de Clínica",
-}
+};
 
 const STATUS_COLORS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   pending: "outline",
   sending: "secondary",
   sent: "default",
   failed: "destructive",
-}
+};
 
 const STATUS_LABELS: Record<string, string> = {
   pending: "Pendente",
   sending: "Enviando",
   sent: "Enviado",
   failed: "Falhou",
-}
+};
 
 export function BroadcastClient() {
-  const [title, setTitle] = useState("")
-  const [message, setMessage] = useState("")
-  const [targetRole, setTargetRole] = useState<string>("all")
+  const [title, setTitle] = useState("");
+  const [message, setMessage] = useState("");
+  const [targetRole, setTargetRole] = useState<string>("all");
 
-  const { data: notifications, isLoading } = useBroadcasts()
-  const createBroadcast = useCreateBroadcast()
+  const { data: notifications, isLoading } = useBroadcasts();
+  const createBroadcast = useCreateBroadcast();
 
   const handleSend = async () => {
     if (!title.trim() || !message.trim()) {
-      toast.error("Preencha o título e a mensagem")
-      return
+      toast.error("Preencha o título e a mensagem");
+      return;
     }
 
     createBroadcast.mutate(
       { title: title.trim(), message: message.trim(), target_role: targetRole },
       {
         onSuccess: (result) => {
-          const recipientCount = result?.recipient_count ?? 0
-          toast.success(`Notificação criada para ${recipientCount} destinatários`)
-          setTitle("")
-          setMessage("")
+          const recipientCount = result?.recipient_count ?? 0;
+          toast.success(`Notificação criada para ${recipientCount} destinatários`);
+          setTitle("");
+          setMessage("");
         },
         onError: (err) => {
-          toast.error(err instanceof Error ? err.message : "Erro ao enviar notificação")
+          toast.error(err instanceof Error ? err.message : "Erro ao enviar notificação");
         },
       }
-    )
-  }
+    );
+  };
 
   return (
     <div className="space-y-6">
@@ -126,9 +120,7 @@ export function BroadcastClient() {
                 <SelectItem value="clinic_admin">Admins de Clínica</SelectItem>
                 <SelectItem value="caregiver">Cuidadores</SelectItem>
                 <SelectItem value="family">Familiares</SelectItem>
-                <SelectItem value="emergency_contact">
-                  Contatos de Emerg.
-                </SelectItem>
+                <SelectItem value="emergency_contact">Contatos de Emerg.</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -143,8 +135,7 @@ export function BroadcastClient() {
           </Button>
 
           <p className="text-xs text-muted-foreground">
-            Configure a variável RESEND_API_KEY no .env.local para ativar o
-            envio real de emails.
+            Configure a variável RESEND_API_KEY no .env.local para ativar o envio real de emails.
           </p>
         </CardContent>
       </Card>
@@ -170,10 +161,7 @@ export function BroadcastClient() {
           ) : (
             <div className="space-y-3">
               {notifications.map((n) => (
-                <div
-                  key={n.id}
-                  className="flex items-center justify-between rounded-lg border p-4"
-                >
+                <div key={n.id} className="flex items-center justify-between rounded-lg border p-4">
                   <div className="space-y-1">
                     <p className="font-medium">{n.title}</p>
                     <p className="line-clamp-2 text-sm text-muted-foreground">
@@ -205,5 +193,5 @@ export function BroadcastClient() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-import { MessageSquare } from "lucide-react"
-import { FeedbackDetailClient } from "@/features/feedback/components"
+import { MessageSquare } from "lucide-react";
+import { FeedbackDetailClient } from "@/features/feedback/components";
 
 export const metadata = {
   title: "Detalhes do Feedback",
-}
+};
 
 interface FeedbackDetailPageProps {
-  params: Promise<{ id: string }>
+  params: Promise<{ id: string }>;
 }
 
 export default async function FeedbackDetailPage({ params }: FeedbackDetailPageProps) {
-  const { id } = await params
+  const { id } = await params;
 
   return (
     <div className="space-y-6">
@@ -23,5 +23,5 @@ export default async function FeedbackDetailPage({ params }: FeedbackDetailPageP
 
       <FeedbackDetailClient id={Number(id)} />
     </div>
-  )
+  );
 }

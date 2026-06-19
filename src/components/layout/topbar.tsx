@@ -1,14 +1,14 @@
-"use client"
+"use client";
 
-import { useTransition } from "react"
-import { useTheme } from "next-themes"
-import { Sun, Moon, Monitor, LogOut, ChevronDown } from "lucide-react"
-import { useRouter } from "next/navigation"
+import { useTransition } from "react";
+import { useTheme } from "next-themes";
+import { Sun, Moon, Monitor, LogOut, ChevronDown } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-import { useCurrentUser } from "@/hooks/use-current-user"
-import { useAuthStore } from "@/store/authStore"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Button } from "@/components/ui/button"
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { useAuthStore } from "@/store/authStore";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,8 +20,8 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-} from "@/components/ui/dropdown-menu"
-import { MobileSidebar } from "./mobile-sidebar"
+} from "@/components/ui/dropdown-menu";
+import { MobileSidebar } from "./mobile-sidebar";
 
 function getInitials(name: string) {
   return name
@@ -29,26 +29,26 @@ function getInitials(name: string) {
     .slice(0, 2)
     .map((n) => n[0])
     .join("")
-    .toUpperCase()
+    .toUpperCase();
 }
 
 export function Topbar() {
-  const { user, hasHydrated } = useCurrentUser()
-  const { setTheme } = useTheme()
-  const router = useRouter()
-  const [isPending, startTransition] = useTransition()
+  const { user, hasHydrated } = useCurrentUser();
+  const { setTheme } = useTheme();
+  const router = useRouter();
+  const [isPending, startTransition] = useTransition();
 
   function handleLogout() {
     startTransition(async () => {
-      useAuthStore.getState().clear()
-      await fetch("/api/auth/logout", { method: "POST" })
-      router.push("/login")
-    })
+      useAuthStore.getState().clear();
+      await fetch("/api/auth/logout", { method: "POST" });
+      router.push("/login");
+    });
   }
 
-  const displayName = hasHydrated ? (user?.name ?? "Super Admin") : ""
-  const displayEmail = hasHydrated ? (user?.email ?? "") : ""
-  const initials = displayName ? getInitials(displayName) : "SA"
+  const displayName = hasHydrated ? (user?.name ?? "Super Admin") : "";
+  const displayEmail = hasHydrated ? (user?.email ?? "") : "";
+  const initials = displayName ? getInitials(displayName) : "SA";
 
   return (
     <header className="flex h-16 w-full items-center justify-between border-b bg-card px-4 md:px-6">
@@ -57,15 +57,10 @@ export function Topbar() {
       <div className="ml-auto flex items-center gap-2">
         <DropdownMenu>
           <DropdownMenuTrigger
-            render={
-              <Button variant="ghost" className="flex items-center gap-2 px-2" />
-            }
+            render={<Button variant="ghost" className="flex items-center gap-2 px-2" />}
           >
             <Avatar>
-              <AvatarImage
-                src={user?.avatar_url ?? undefined}
-                alt={displayName}
-              />
+              <AvatarImage src={user?.avatar_url ?? undefined} alt={displayName} />
               <AvatarFallback className="bg-primary text-xs font-bold text-primary-foreground">
                 {initials}
               </AvatarFallback>
@@ -122,5 +117,5 @@ export function Topbar() {
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }

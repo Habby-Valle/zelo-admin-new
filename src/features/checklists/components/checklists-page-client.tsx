@@ -1,26 +1,26 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { ListChecks, Pencil, Plus, Trash2, MoreHorizontal } from "lucide-react"
-import { toast } from "sonner"
+import { useState } from "react";
+import Link from "next/link";
+import { ListChecks, Pencil, Plus, Trash2, MoreHorizontal } from "lucide-react";
+import { toast } from "sonner";
 
-import { useChecklists, useDeleteChecklist, useChecklist } from "@/features/checklists/hooks"
-import { useClinics } from "@/features/clinics/hooks"
-import type { Checklist, ChecklistDetail } from "@/features/checklists/types"
-import { ChecklistDialog } from "./checklist-dialog"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { MaterialIcon } from "@/components/shared/material-icon"
-import { Input } from "@/components/ui/input"
-import { Skeleton } from "@/components/ui/skeleton"
+import { useChecklists, useDeleteChecklist, useChecklist } from "@/features/checklists/hooks";
+import { useClinics } from "@/features/clinics/hooks";
+import type { Checklist, ChecklistDetail } from "@/features/checklists/types";
+import { ChecklistDialog } from "./checklist-dialog";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { MaterialIcon } from "@/components/shared/material-icon";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -28,14 +28,14 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -45,91 +45,98 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { DataTablePagination } from "@/components/shared/data-table-pagination"
+} from "@/components/ui/alert-dialog";
+import { DataTablePagination } from "@/components/shared/data-table-pagination";
 
 function EditChecklistDialog({
   id,
   open,
   onOpenChange,
 }: {
-  id: number
-  open: boolean
-  onOpenChange: (v: boolean) => void
+  id: number;
+  open: boolean;
+  onOpenChange: (v: boolean) => void;
 }) {
-  const { data: checklist } = useChecklist(id)
+  const { data: checklist } = useChecklist(id);
   return (
     <ChecklistDialog
       open={open}
       onOpenChange={onOpenChange}
       checklist={checklist as ChecklistDetail | undefined}
     />
-  )
+  );
 }
 
 export function ChecklistsPageClient() {
-  const [search, setSearch] = useState("")
-  const [isActive, setIsActive] = useState("all")
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(10)
+  const [search, setSearch] = useState("");
+  const [isActive, setIsActive] = useState("all");
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
 
   const { data, isLoading } = useChecklists({
     search,
     isActive: isActive === "all" ? "" : isActive,
     page,
     pageSize,
-  })
+  });
 
-  const deleteChecklist = useDeleteChecklist()
-  const checklists = data?.checklists ?? []
-  const total = data?.total ?? 0
+  const deleteChecklist = useDeleteChecklist();
+  const checklists = data?.checklists ?? [];
+  const total = data?.total ?? 0;
 
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editId, setEditId] = useState<number | null>(null)
-  const [deleteTarget, setDeleteTarget] = useState<Checklist | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Checklist | null>(null);
 
   const openCreate = () => {
-    setEditId(null)
-    setDialogOpen(true)
-  }
+    setEditId(null);
+    setDialogOpen(true);
+  };
 
   const openEdit = (cl: Checklist) => {
-    setEditId(cl.id)
-    setDialogOpen(true)
-  }
+    setEditId(cl.id);
+    setDialogOpen(true);
+  };
 
   const handleDelete = () => {
-    if (!deleteTarget) return
+    if (!deleteTarget) return;
     deleteChecklist.mutate(deleteTarget.id, {
       onSuccess: () => {
-        toast.success("Template excluído com sucesso.")
-        setDeleteTarget(null)
+        toast.success("Template excluído com sucesso.");
+        setDeleteTarget(null);
       },
       onError: () => {
-        toast.error("Erro ao excluir template.")
-        setDeleteTarget(null)
+        toast.error("Erro ao excluir template.");
+        setDeleteTarget(null);
       },
-    })
-  }
+    });
+  };
 
   return (
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Checklists</h1>
-        <p className="mt-1 text-muted-foreground">
-          Gerencie templates de checklists por clínica.
-        </p>
+        <p className="mt-1 text-muted-foreground">Gerencie templates de checklists por clínica.</p>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-1 gap-2">
           <Input
             value={search}
-            onChange={(e) => { setSearch(e.target.value); setPage(1) }}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
             placeholder="Buscar template..."
             className="max-w-xs"
           />
-          <Select value={isActive} onValueChange={(v) => { if (v) setIsActive(v); setPage(1) }}>
+          <Select
+            value={isActive}
+            onValueChange={(v) => {
+              if (v) setIsActive(v);
+              setPage(1);
+            }}
+          >
             <SelectTrigger className="w-40">
               <SelectValue />
             </SelectTrigger>
@@ -160,12 +167,24 @@ export function ChecklistsPageClient() {
               <TableBody>
                 {Array.from({ length: 5 }).map((_, i) => (
                   <TableRow key={i}>
-                    <TableCell><Skeleton className="h-4 w-40" /></TableCell>
-                    <TableCell><Skeleton className="h-5 w-16 rounded-full" /></TableCell>
-                    <TableCell><Skeleton className="h-4 w-24" /></TableCell>
-                    <TableCell><Skeleton className="h-5 w-8 rounded-full" /></TableCell>
-                    <TableCell><Skeleton className="h-4 w-24" /></TableCell>
-                    <TableCell><Skeleton className="h-8 w-8 rounded" /></TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-40" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-5 w-16 rounded-full" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-24" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-5 w-8 rounded-full" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-24" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-8 w-8 rounded" />
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -196,7 +215,10 @@ export function ChecklistsPageClient() {
                 checklists.map((cl) => (
                   <TableRow key={cl.id}>
                     <TableCell className="font-medium">
-                      <Link href={`/checklists/${cl.id}`} className="hover:underline flex items-center gap-2">
+                      <Link
+                        href={`/checklists/${cl.id}`}
+                        className="flex items-center gap-2 hover:underline"
+                      >
                         {cl.icon ? (
                           <MaterialIcon name={cl.icon} size="md" />
                         ) : (
@@ -227,7 +249,7 @@ export function ChecklistsPageClient() {
                     </TableCell>
                     <TableCell>
                       <DropdownMenu>
-                        <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg hover:bg-muted hover:text-foreground transition-colors">
+                        <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-muted hover:text-foreground">
                           <MoreHorizontal className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end">
@@ -259,31 +281,37 @@ export function ChecklistsPageClient() {
         pageSize={pageSize}
         total={total}
         onPageChange={setPage}
-        onPageSizeChange={(size) => { setPageSize(size); setPage(1) }}
+        onPageSizeChange={(size) => {
+          setPageSize(size);
+          setPage(1);
+        }}
       />
 
-      {!editId && (
-        <ChecklistDialog open={dialogOpen} onOpenChange={setDialogOpen} />
-      )}
+      {!editId && <ChecklistDialog open={dialogOpen} onOpenChange={setDialogOpen} />}
 
       {editId && (
         <EditChecklistDialog
           id={editId}
           open={dialogOpen}
-          onOpenChange={(v) => { setDialogOpen(v); if (!v) setEditId(null) }}
+          onOpenChange={(v) => {
+            setDialogOpen(v);
+            if (!v) setEditId(null);
+          }}
         />
       )}
 
       <AlertDialog
         open={!!deleteTarget}
-        onOpenChange={(open) => { if (!open) setDeleteTarget(null) }}
+        onOpenChange={(open) => {
+          if (!open) setDeleteTarget(null);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Excluir template?</AlertDialogTitle>
             <AlertDialogDescription>
-              O template <strong>{deleteTarget?.name}</strong> será excluído
-              permanentemente. Esta ação não pode ser desfeita.
+              O template <strong>{deleteTarget?.name}</strong> será excluído permanentemente. Esta
+              ação não pode ser desfeita.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -299,5 +327,5 @@ export function ChecklistsPageClient() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

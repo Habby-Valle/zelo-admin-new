@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import { useCallback, useMemo } from "react"
-import { useRouter, usePathname, useSearchParams } from "next/navigation"
-import { Download, Shield } from "lucide-react"
-import { useAuditLogs } from "@/features/audit-logs/hooks"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Skeleton } from "@/components/ui/skeleton"
+import { useCallback, useMemo } from "react";
+import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { Download, Shield } from "lucide-react";
+import { useAuditLogs } from "@/features/audit-logs/hooks";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Skeleton } from "@/components/ui/skeleton";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -22,9 +22,9 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { formatDateTime } from "@/lib/format"
+} from "@/components/ui/table";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatDateTime } from "@/lib/format";
 
 const ACTION_COLORS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   create: "default",
@@ -38,7 +38,7 @@ const ACTION_COLORS: Record<string, "default" | "secondary" | "destructive" | "o
   payment_failed: "destructive",
   subscription_activated: "secondary",
   subscription_cancelled: "secondary",
-}
+};
 
 const ACTION_LABELS: Record<string, string> = {
   create: "Criação",
@@ -52,12 +52,12 @@ const ACTION_LABELS: Record<string, string> = {
   payment_failed: "Falha Pagamento",
   subscription_activated: "Ativação",
   subscription_cancelled: "Cancelamento",
-}
+};
 
 export function AuditLogsClient() {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   const filters = useMemo(
     () => ({
@@ -70,63 +70,56 @@ export function AuditLogsClient() {
       page_size: 20,
     }),
     [searchParams]
-  )
+  );
 
-  const { data, isLoading } = useAuditLogs(filters)
+  const { data, isLoading } = useAuditLogs(filters);
 
-  const logs = data?.logs ?? []
-  const total = data?.total ?? 0
-  const totalPages = Math.ceil(total / 20)
+  const logs = data?.logs ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.ceil(total / 20);
 
   const updateParams = useCallback(
     (updates: Record<string, string>) => {
-      const params = new URLSearchParams()
-      const current: Record<string, string> = {}
-      if (filters.action) current.action = filters.action
-      if (filters.content_type) current.content_type = filters.content_type
-      if (filters.search) current.search = filters.search
-      if (filters.date_from) current.date_from = filters.date_from
-      if (filters.date_to) current.date_to = filters.date_to
-      current.page = String(filters.page)
+      const params = new URLSearchParams();
+      const current: Record<string, string> = {};
+      if (filters.action) current.action = filters.action;
+      if (filters.content_type) current.content_type = filters.content_type;
+      if (filters.search) current.search = filters.search;
+      if (filters.date_from) current.date_from = filters.date_from;
+      if (filters.date_to) current.date_to = filters.date_to;
+      current.page = String(filters.page);
 
-      const merged = { ...current, ...updates }
+      const merged = { ...current, ...updates };
 
       Object.entries(merged).forEach(([k, v]) => {
         if (v && v !== "all" && v !== "1" && k !== "page") {
-          params.set(k, v)
+          params.set(k, v);
         } else if (k === "page" && v !== "1") {
-          params.set(k, v)
+          params.set(k, v);
         }
-      })
+      });
 
-      const qs = params.toString()
-      router.push(qs ? `${pathname}?${qs}` : pathname)
+      const qs = params.toString();
+      router.push(qs ? `${pathname}?${qs}` : pathname);
     },
     [router, pathname, filters]
-  )
+  );
 
   const handleExport = async () => {
-    const qs = new URLSearchParams()
-    if (filters.action) qs.set("action", filters.action)
-    if (filters.content_type) qs.set("content_type", filters.content_type)
-    if (filters.search) qs.set("search", filters.search)
-    if (filters.date_from) qs.set("date_from", filters.date_from)
-    if (filters.date_to) qs.set("date_to", filters.date_to)
-    qs.set("page", "1")
-    qs.set("page_size", "10000")
+    const qs = new URLSearchParams();
+    if (filters.action) qs.set("action", filters.action);
+    if (filters.content_type) qs.set("content_type", filters.content_type);
+    if (filters.search) qs.set("search", filters.search);
+    if (filters.date_from) qs.set("date_from", filters.date_from);
+    if (filters.date_to) qs.set("date_to", filters.date_to);
+    qs.set("page", "1");
+    qs.set("page_size", "10000");
 
-    const res = await fetch(`/api/proxy/audit-logs/?${qs}`)
-    const data = await res.json()
-    const allLogs = data?.logs ?? []
+    const res = await fetch(`/api/proxy/audit-logs/?${qs}`);
+    const data = await res.json();
+    const allLogs = data?.logs ?? [];
 
-    const headers = [
-      "Data/Hora",
-      "Usuário",
-      "Email",
-      "Ação",
-      "Entidade",
-      "Descrição",
-    ]
+    const headers = ["Data/Hora", "Usuário", "Email", "Ação", "Entidade", "Descrição"];
     const rows = allLogs.map((log: Record<string, string>) => [
       formatDateTime(log.created_at),
       log.user_name ?? "—",
@@ -134,21 +127,21 @@ export function AuditLogsClient() {
       ACTION_LABELS[log.action] ?? log.action,
       log.content_type_name ?? "—",
       log.description,
-    ])
+    ]);
 
-    const escape = (v: string) => `"${v.replace(/"/g, '""')}"`
+    const escape = (v: string) => `"${v.replace(/"/g, '""')}"`;
     const csv = [
       headers.map(escape).join(","),
       ...rows.map((r: string[]) => r.map(escape).join(",")),
-    ].join("\n")
+    ].join("\n");
 
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" })
-    const link = document.createElement("a")
-    link.href = URL.createObjectURL(blob)
-    link.download = `audit-logs-${new Date().toISOString().split("T")[0]}.csv`
-    link.click()
-    URL.revokeObjectURL(link.href)
-  }
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = `audit-logs-${new Date().toISOString().split("T")[0]}.csv`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  };
 
   return (
     <div className="space-y-6">
@@ -225,9 +218,7 @@ export function AuditLogsClient() {
             <Input
               placeholder="Buscar descrição..."
               value={filters.search ?? ""}
-              onChange={(e) =>
-                updateParams({ search: e.target.value, page: "1" })
-              }
+              onChange={(e) => updateParams({ search: e.target.value, page: "1" })}
               className="w-48"
             />
 
@@ -235,18 +226,14 @@ export function AuditLogsClient() {
               <Input
                 type="date"
                 value={filters.date_from ?? ""}
-                onChange={(e) =>
-                  updateParams({ date_from: e.target.value, page: "1" })
-                }
+                onChange={(e) => updateParams({ date_from: e.target.value, page: "1" })}
                 className="w-36"
               />
               <span className="text-muted-foreground">até</span>
               <Input
                 type="date"
                 value={filters.date_to ?? ""}
-                onChange={(e) =>
-                  updateParams({ date_to: e.target.value, page: "1" })
-                }
+                onChange={(e) => updateParams({ date_to: e.target.value, page: "1" })}
                 className="w-36"
               />
             </div>
@@ -267,19 +254,13 @@ export function AuditLogsClient() {
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell
-                      colSpan={6}
-                      className="py-10 text-center text-muted-foreground"
-                    >
+                    <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
                       Carregando...
                     </TableCell>
                   </TableRow>
                 ) : logs.length === 0 ? (
                   <TableRow>
-                    <TableCell
-                      colSpan={6}
-                      className="py-10 text-center text-muted-foreground"
-                    >
+                    <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
                       Nenhum log encontrado para os filtros selecionados.
                     </TableCell>
                   </TableRow>
@@ -293,9 +274,7 @@ export function AuditLogsClient() {
                         <div>
                           <p className="font-medium">{log.user_name ?? "—"}</p>
                           {log.user_email && (
-                            <p className="text-xs text-muted-foreground">
-                              {log.user_email}
-                            </p>
+                            <p className="text-xs text-muted-foreground">{log.user_email}</p>
                           )}
                         </div>
                       </TableCell>
@@ -305,15 +284,17 @@ export function AuditLogsClient() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <Badge variant="secondary">
-                          {log.content_type_name ?? log.object_id}
-                        </Badge>
+                        <Badge variant="secondary">{log.content_type_name ?? log.object_id}</Badge>
                       </TableCell>
                       <TableCell className="max-w-xs truncate text-sm text-muted-foreground">
                         {log.description}
                       </TableCell>
                       <TableCell>
-                        <Button variant="ghost" size="sm" onClick={() => router.push(`/audit-logs/${log.id}`)}>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => router.push(`/audit-logs/${log.id}`)}
+                        >
                           Detalhes
                         </Button>
                       </TableCell>
@@ -327,17 +308,15 @@ export function AuditLogsClient() {
           {totalPages > 1 && (
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>
-                {total.toLocaleString("pt-BR")} registro{total !== 1 ? "s" : ""}{" "}
-                encontrado{total !== 1 ? "s" : ""}
+                {total.toLocaleString("pt-BR")} registro{total !== 1 ? "s" : ""} encontrado
+                {total !== 1 ? "s" : ""}
               </span>
               <div className="flex items-center gap-2">
                 <Button
                   variant="outline"
                   size="sm"
                   disabled={filters.page <= 1 || isLoading}
-                  onClick={() =>
-                    updateParams({ page: String(filters.page - 1) })
-                  }
+                  onClick={() => updateParams({ page: String(filters.page - 1) })}
                 >
                   Anterior
                 </Button>
@@ -348,9 +327,7 @@ export function AuditLogsClient() {
                   variant="outline"
                   size="sm"
                   disabled={filters.page >= totalPages || isLoading}
-                  onClick={() =>
-                    updateParams({ page: String(filters.page + 1) })
-                  }
+                  onClick={() => updateParams({ page: String(filters.page + 1) })}
                 >
                   Próxima
                 </Button>
@@ -360,7 +337,7 @@ export function AuditLogsClient() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 export function AuditLogsTableSkeleton() {
@@ -382,5 +359,5 @@ export function AuditLogsTableSkeleton() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }

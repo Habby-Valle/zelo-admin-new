@@ -1,5 +1,1 @@
-export {
-  fetchInvoices,
-  fetchPayments,
-  fetchPaymentStats,
-} from "./payments.service"
+export { fetchInvoices, fetchPayments, fetchPaymentStats } from "./payments.service";

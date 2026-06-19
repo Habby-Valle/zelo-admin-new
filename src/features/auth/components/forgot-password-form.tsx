@@ -1,32 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { useForm } from "react-hook-form"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { ShieldCheck, Loader2, Mail } from "lucide-react"
-import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { ShieldCheck, Loader2, Mail } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import {
-  forgotPasswordSchema,
-  type ForgotPasswordSchema,
-} from "@/lib/validations/auth"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { forgotPasswordSchema, type ForgotPasswordSchema } from "@/lib/validations/auth";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
 export function ForgotPasswordForm() {
-  const router = useRouter()
-  const [serverError, setServerError] = useState<string | null>(null)
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
+  const router = useRouter();
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const {
     register,
@@ -34,34 +25,30 @@ export function ForgotPasswordForm() {
     formState: { errors, isSubmitting },
   } = useForm<ForgotPasswordSchema>({
     resolver: zodResolver(forgotPasswordSchema),
-  })
+  });
 
   async function onSubmit(data: ForgotPasswordSchema) {
-    setServerError(null)
-    setSuccessMessage(null)
+    setServerError(null);
+    setSuccessMessage(null);
 
     try {
       const res = await fetch("/api/auth/password-reset", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: data.email }),
-      })
+      });
 
       if (!res.ok) {
-        const err = await res.json()
-        throw new Error(err.error ?? "Erro ao enviar e-mail")
+        const err = await res.json();
+        throw new Error(err.error ?? "Erro ao enviar e-mail");
       }
 
       setSuccessMessage(
         "Enviamos um código de 6 dígitos para o seu e-mail. Verifique sua caixa de entrada."
-      )
-      router.push(`/verify-otp?email=${encodeURIComponent(data.email)}`)
+      );
+      router.push(`/verify-otp?email=${encodeURIComponent(data.email)}`);
     } catch (err) {
-      setServerError(
-        err instanceof Error
-          ? err.message
-          : "Ocorreu um erro ao enviar o e-mail."
-      )
+      setServerError(err instanceof Error ? err.message : "Ocorreu um erro ao enviar o e-mail.");
     }
   }
 
@@ -76,9 +63,7 @@ export function ForgotPasswordForm() {
             <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
               Zelo
             </p>
-            <p className="text-sm leading-none font-semibold">
-              Painel Administrativo
-            </p>
+            <p className="text-sm leading-none font-semibold">Painel Administrativo</p>
           </div>
         </div>
 
@@ -91,11 +76,7 @@ export function ForgotPasswordForm() {
       </CardHeader>
 
       <CardContent>
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4"
-          noValidate
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4" noValidate>
           {serverError && (
             <Alert variant="destructive">
               <AlertDescription>{serverError}</AlertDescription>
@@ -120,16 +101,10 @@ export function ForgotPasswordForm() {
               aria-invalid={!!errors.email}
               {...register("email")}
             />
-            {errors.email && (
-              <p className="text-xs text-destructive">{errors.email.message}</p>
-            )}
+            {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
           </div>
 
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={isSubmitting || !!successMessage}
-          >
+          <Button type="submit" className="w-full" disabled={isSubmitting || !!successMessage}>
             {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -152,5 +127,5 @@ export function ForgotPasswordForm() {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

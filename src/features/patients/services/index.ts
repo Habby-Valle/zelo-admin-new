@@ -8,4 +8,4 @@ export {
   removeCaregiverFetch,
   addEmergencyContactFetch,
   removeEmergencyContactFetch,
-} from "./patients.service"
+} from "./patients.service";

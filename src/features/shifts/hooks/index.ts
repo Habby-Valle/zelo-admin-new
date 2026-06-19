@@ -7,4 +7,4 @@ export {
   useUpdateShiftStatus,
   useAddShiftPatient,
   useRemoveShiftPatient,
-} from "./use-shifts"
+} from "./use-shifts";

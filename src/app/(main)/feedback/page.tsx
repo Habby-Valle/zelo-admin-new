@@ -1,10 +1,10 @@
-import { Suspense } from "react"
-import { MessageSquare } from "lucide-react"
-import { FeedbackPageClient } from "@/features/feedback/components"
+import { Suspense } from "react";
+import { MessageSquare } from "lucide-react";
+import { FeedbackPageClient } from "@/features/feedback/components";
 
 export const metadata = {
   title: "Feedbacks",
-}
+};
 
 export default function FeedbackPage() {
   return (
@@ -23,5 +23,5 @@ export default function FeedbackPage() {
         <FeedbackPageClient />
       </Suspense>
     </div>
-  )
+  );
 }

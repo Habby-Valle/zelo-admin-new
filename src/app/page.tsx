@@ -1,23 +1,23 @@
-import { redirect } from "next/navigation"
-import { cookies } from "next/headers"
-import { decodeJwt, isTokenExpired } from "@/lib/jwt"
+import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
+import { decodeJwt, isTokenExpired } from "@/lib/jwt";
 
 export default async function RootPage() {
-  const cookieStore = await cookies()
-  const accessToken = cookieStore.get("ze_access")?.value
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("ze_access")?.value;
 
   if (!accessToken) {
-    redirect("/login")
+    redirect("/login");
   }
 
-  const payload = decodeJwt(accessToken)
+  const payload = decodeJwt(accessToken);
   if (!payload || isTokenExpired(payload)) {
-    redirect("/login")
+    redirect("/login");
   }
 
   if (payload.role === "super_admin") {
-    redirect("/dashboard")
+    redirect("/dashboard");
   }
 
-  redirect("/login")
+  redirect("/login");
 }

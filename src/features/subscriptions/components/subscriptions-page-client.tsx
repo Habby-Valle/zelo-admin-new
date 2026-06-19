@@ -1,45 +1,43 @@
-"use client"
+"use client";
 
-import { useMemo } from "react"
+import { useMemo } from "react";
 import {
   useSubscriptions,
   useSubscriptionStats,
   useGuardianSubscriptions,
-} from "@/features/subscriptions/hooks"
-import { SubscriptionsTable } from "./subscriptions-table"
-import { GuardianSubscriptionsTable } from "./guardian-subscriptions-table"
-import { StatsCards } from "./stats-cards"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import type { SubscriptionListItem } from "@/features/subscriptions/types"
+} from "@/features/subscriptions/hooks";
+import { SubscriptionsTable } from "./subscriptions-table";
+import { GuardianSubscriptionsTable } from "./guardian-subscriptions-table";
+import { StatsCards } from "./stats-cards";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { SubscriptionListItem } from "@/features/subscriptions/types";
 
 export function SubscriptionsPageClient() {
   const { data: subsData, isLoading: subsLoading } = useSubscriptions({
     page_size: 50,
-  })
-  const { data: stats } = useSubscriptionStats()
-  const { data: guardianData, isLoading: guardianLoading } =
-    useGuardianSubscriptions({ page_size: 50 })
+  });
+  const { data: stats } = useSubscriptionStats();
+  const { data: guardianData, isLoading: guardianLoading } = useGuardianSubscriptions({
+    page_size: 50,
+  });
 
   const subscriptions: SubscriptionListItem[] = useMemo(() => {
-    if (!subsData?.subscriptions) return []
+    if (!subsData?.subscriptions) return [];
 
-    const now = new Date()
+    const now = new Date();
 
     return subsData.subscriptions.map((sub) => {
-      const endDate = sub.end_date ? new Date(sub.end_date) : null
+      const endDate = sub.end_date ? new Date(sub.end_date) : null;
       const daysRemaining = endDate
         ? Math.ceil((endDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24))
-        : null
+        : null;
 
       return {
         ...sub,
-        days_remaining:
-          sub.status === "active" || sub.status === "trial"
-            ? daysRemaining
-            : null,
-      }
-    })
-  }, [subsData])
+        days_remaining: sub.status === "active" || sub.status === "trial" ? daysRemaining : null,
+      };
+    });
+  }, [subsData]);
 
   const statsData = useMemo(
     () => ({
@@ -56,9 +54,9 @@ export function SubscriptionsPageClient() {
       guardian_cancelled: stats?.guardian_cancelled ?? 0,
     }),
     [stats]
-  )
+  );
 
-  const guardianSubscriptions = guardianData?.subscriptions ?? []
+  const guardianSubscriptions = guardianData?.subscriptions ?? [];
 
   if (subsLoading) {
     return (
@@ -70,13 +68,13 @@ export function SubscriptionsPageClient() {
         </div>
         <div className="h-96 animate-pulse rounded-xl bg-muted" />
       </div>
-    )
+    );
   }
 
   return (
     <>
       <StatsCards stats={statsData} />
-      <Tabs defaultValue="clinics" className="flex-col mt-6">
+      <Tabs defaultValue="clinics" className="mt-6 flex-col">
         <TabsList>
           <TabsTrigger value="clinics">
             Clínicas{" "}
@@ -103,5 +101,5 @@ export function SubscriptionsPageClient() {
         </TabsContent>
       </Tabs>
     </>
-  )
+  );
 }

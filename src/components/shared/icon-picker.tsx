@@ -1,70 +1,151 @@
-"use client"
+"use client";
 
-import { useState, useMemo } from "react"
-import { X, Smile } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+import { useState, useMemo } from "react";
+import { X, Smile } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 const ICON_CATEGORIES = [
   {
     label: "Saúde",
-    icons: ["🏥", "💊", "💉", "🩺", "🩹", "🫀", "🧠", "🦷", "👁️", "🩻", "🩼", "🧬", "🔬", "🏋️", "🧘", "😷"],
+    icons: [
+      "🏥",
+      "💊",
+      "💉",
+      "🩺",
+      "🩹",
+      "🫀",
+      "🧠",
+      "🦷",
+      "👁️",
+      "🩻",
+      "🩼",
+      "🧬",
+      "🔬",
+      "🏋️",
+      "🧘",
+      "😷",
+    ],
   },
   {
     label: "Cuidados",
-    icons: ["🛁", "🚿", "🪥", "🧴", "🧼", "💆", "🛏️", "🍽️", "🥗", "🥤", "💧", "☕", "🍵", "🫖", "🥣", "🧃"],
+    icons: [
+      "🛁",
+      "🚿",
+      "🪥",
+      "🧴",
+      "🧼",
+      "💆",
+      "🛏️",
+      "🍽️",
+      "🥗",
+      "🥤",
+      "💧",
+      "☕",
+      "🍵",
+      "🫖",
+      "🥣",
+      "🧃",
+    ],
   },
   {
     label: "Rotina",
-    icons: ["☀️", "🌙", "🌅", "🕐", "📋", "✅", "📝", "📌", "🔔", "⏰", "🗓️", "📅", "🔄", "⚡", "🌟", "✨"],
+    icons: [
+      "☀️",
+      "🌙",
+      "🌅",
+      "🕐",
+      "📋",
+      "✅",
+      "📝",
+      "📌",
+      "🔔",
+      "⏰",
+      "🗓️",
+      "📅",
+      "🔄",
+      "⚡",
+      "🌟",
+      "✨",
+    ],
   },
   {
     label: "Pessoas",
-    icons: ["👤", "👴", "👵", "🧑‍⚕️", "👨‍⚕️", "👩‍⚕️", "🫂", "🤝", "💪", "🙏", "❤️", "💙", "💚", "💜", "🧡", "💛"],
+    icons: [
+      "👤",
+      "👴",
+      "👵",
+      "🧑‍⚕️",
+      "👨‍⚕️",
+      "👩‍⚕️",
+      "🫂",
+      "🤝",
+      "💪",
+      "🙏",
+      "❤️",
+      "💙",
+      "💚",
+      "💜",
+      "🧡",
+      "💛",
+    ],
   },
   {
     label: "Atividades",
-    icons: ["🚶", "🏃", "🧗", "🎯", "🎮", "📚", "🎵", "🎨", "🌿", "🌺", "🌈", "🏡", "🚗", "✈️", "🎁", "🎉"],
+    icons: [
+      "🚶",
+      "🏃",
+      "🧗",
+      "🎯",
+      "🎮",
+      "📚",
+      "🎵",
+      "🎨",
+      "🌿",
+      "🌺",
+      "🌈",
+      "🏡",
+      "🚗",
+      "✈️",
+      "🎁",
+      "🎉",
+    ],
   },
-]
+];
 
-const ALL_ICONS = ICON_CATEGORIES.flatMap((cat) => cat.icons)
+const ALL_ICONS = ICON_CATEGORIES.flatMap((cat) => cat.icons);
 
 interface IconPickerProps {
-  value: string
-  onChange: (value: string) => void
+  value: string;
+  onChange: (value: string) => void;
 }
 
 export function IconPicker({ value, onChange }: IconPickerProps) {
-  const [open, setOpen] = useState(false)
-  const [search, setSearch] = useState("")
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
 
   const filteredCategories = useMemo(() => {
-    if (!search.trim()) return ICON_CATEGORIES
+    if (!search.trim()) return ICON_CATEGORIES;
     return [
       {
         label: "Resultados",
         icons: ALL_ICONS.filter((icon) => icon.includes(search.trim())),
       },
-    ]
-  }, [search])
+    ];
+  }, [search]);
 
   const handleSelect = (icon: string) => {
-    onChange(icon)
-    setOpen(false)
-    setSearch("")
-  }
+    onChange(icon);
+    setOpen(false);
+    setSearch("");
+  };
 
   const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    onChange("")
-  }
+    e.stopPropagation();
+    onChange("");
+  };
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -111,9 +192,7 @@ export function IconPicker({ value, onChange }: IconPickerProps) {
             {filteredCategories.map((cat) =>
               cat.icons.length === 0 ? null : (
                 <div key={cat.label}>
-                  <p className="mb-1.5 text-xs font-medium text-muted-foreground">
-                    {cat.label}
-                  </p>
+                  <p className="mb-1.5 text-xs font-medium text-muted-foreground">{cat.label}</p>
                   <div className="grid grid-cols-8 gap-0.5">
                     {cat.icons.map((icon) => (
                       <button
@@ -152,8 +231,8 @@ export function IconPicker({ value, onChange }: IconPickerProps) {
                 size="sm"
                 className="h-7 text-xs"
                 onClick={() => {
-                  onChange("")
-                  setOpen(false)
+                  onChange("");
+                  setOpen(false);
                 }}
               >
                 <X className="mr-1 h-3 w-3" />
@@ -164,5 +243,5 @@ export function IconPicker({ value, onChange }: IconPickerProps) {
         </div>
       </PopoverContent>
     </Popover>
-  )
+  );
 }

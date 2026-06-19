@@ -4,4 +4,4 @@ export {
   acknowledgeSosAlertApi,
   resolveSosAlertApi,
   getSosSummaryApi,
-} from "./sos.service"
+} from "./sos.service";

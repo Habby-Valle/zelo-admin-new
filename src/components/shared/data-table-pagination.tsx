@@ -1,24 +1,24 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 
 interface DataTablePaginationProps {
-  page: number
-  pageSize: number
-  total: number
-  onPageChange: (page: number) => void
-  onPageSizeChange?: (pageSize: number) => void
-  pageSizeOptions?: number[]
-  disabled?: boolean
+  page: number;
+  pageSize: number;
+  total: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange?: (pageSize: number) => void;
+  pageSizeOptions?: number[];
+  disabled?: boolean;
 }
 
 export function DataTablePagination({
@@ -30,19 +30,19 @@ export function DataTablePagination({
   pageSizeOptions = [10, 20, 50],
   disabled = false,
 }: DataTablePaginationProps) {
-  const totalPages = Math.max(1, Math.ceil(total / pageSize))
-  const from = total === 0 ? 0 : (page - 1) * pageSize + 1
-  const to = Math.min(page * pageSize, total)
+  const totalPages = Math.max(1, Math.ceil(total / pageSize));
+  const from = total === 0 ? 0 : (page - 1) * pageSize + 1;
+  const to = Math.min(page * pageSize, total);
 
-  const [jumpValue, setJumpValue] = useState("")
+  const [jumpValue, setJumpValue] = useState("");
 
   const handleJump = () => {
-    const n = parseInt(jumpValue, 10)
+    const n = parseInt(jumpValue, 10);
     if (!isNaN(n) && n >= 1 && n <= totalPages) {
-      onPageChange(n)
+      onPageChange(n);
     }
-    setJumpValue("")
-  }
+    setJumpValue("");
+  };
 
   return (
     <div className="flex flex-col gap-3 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
@@ -59,7 +59,7 @@ export function DataTablePagination({
             <Select
               value={String(pageSize)}
               onValueChange={(v) => {
-                onPageSizeChange(Number(v))
+                onPageSizeChange(Number(v));
               }}
               disabled={disabled}
             >
@@ -113,7 +113,7 @@ export function DataTablePagination({
               placeholder="—"
               onChange={(e) => setJumpValue(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === "Enter") handleJump()
+                if (e.key === "Enter") handleJump();
               }}
               onBlur={handleJump}
               disabled={disabled}
@@ -122,5 +122,5 @@ export function DataTablePagination({
         )}
       </div>
     </div>
-  )
+  );
 }

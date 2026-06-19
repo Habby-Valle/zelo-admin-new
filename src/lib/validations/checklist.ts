@@ -1,9 +1,8 @@
-import { z } from "zod"
+import { z } from "zod";
 
-export const checklistItemTypeSchema = z.enum(
-  ["text", "boolean", "select", "number"],
-  { message: "Tipo inválido" }
-)
+export const checklistItemTypeSchema = z.enum(["text", "boolean", "select", "number"], {
+  message: "Tipo inválido",
+});
 
 export const checklistItemSchema = z.object({
   id: z.string().optional(),
@@ -20,7 +19,7 @@ export const checklistItemSchema = z.object({
       })
     )
     .optional(),
-})
+});
 
 export const checklistFormSchema = z.object({
   name: z.string().min(2, "Nome deve ter pelo menos 2 caracteres").max(100),
@@ -28,8 +27,8 @@ export const checklistFormSchema = z.object({
   clinic_id: z.coerce.number().int().positive().nullable().optional(),
   is_active: z.boolean().default(true),
   items: z.array(checklistItemSchema).min(1, "Adicione pelo menos 1 item"),
-})
+});
 
-export type ChecklistItemType = z.infer<typeof checklistItemTypeSchema>
-export type ChecklistItemFormValues = z.infer<typeof checklistItemSchema>
-export type ChecklistFormValues = z.infer<typeof checklistFormSchema>
+export type ChecklistItemType = z.infer<typeof checklistItemTypeSchema>;
+export type ChecklistItemFormValues = z.infer<typeof checklistItemSchema>;
+export type ChecklistFormValues = z.infer<typeof checklistFormSchema>;

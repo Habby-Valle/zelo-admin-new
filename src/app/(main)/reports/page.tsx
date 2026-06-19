@@ -1,9 +1,9 @@
-import { BarChart3 } from "lucide-react"
-import { ReportsPageClient } from "@/features/reports/components"
+import { BarChart3 } from "lucide-react";
+import { ReportsPageClient } from "@/features/reports/components";
 
 export const metadata = {
   title: "Relatórios",
-}
+};
 
 export default function ReportsPage() {
   return (
@@ -20,5 +20,5 @@ export default function ReportsPage() {
 
       <ReportsPageClient />
     </div>
-  )
+  );
 }

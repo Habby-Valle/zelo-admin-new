@@ -1,8 +1,8 @@
-"use client"
+"use client";
 
-import { useMemo, useState } from "react"
-import { useRouter } from "next/navigation"
-import { Eye, Search, Trash2 } from "lucide-react"
+import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Eye, Search, Trash2 } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -10,17 +10,17 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/components/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -30,46 +30,46 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { useFeedbacks, useDeleteFeedback } from "@/features/feedback/hooks"
-import type { FeedbackFilters } from "@/features/feedback/types"
-import { formatDateTime } from "@/lib/format"
+} from "@/components/ui/alert-dialog";
+import { useFeedbacks, useDeleteFeedback } from "@/features/feedback/hooks";
+import type { FeedbackFilters } from "@/features/feedback/types";
+import { formatDateTime } from "@/lib/format";
 
 const TYPE_LABELS: Record<string, string> = {
   bug: "Bug",
   feature: "Melhoria",
   compliment: "Elogio",
   other: "Outro",
-}
+};
 
 const TYPE_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   bug: "destructive",
   feature: "default",
   compliment: "secondary",
   other: "outline",
-}
+};
 
 const STATUS_LABELS: Record<string, string> = {
   received: "Recebido",
   in_review: "Em Análise",
   resolved: "Resolvido",
   closed: "Fechado",
-}
+};
 
 const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   received: "secondary",
   in_review: "outline",
   resolved: "default",
   closed: "outline",
-}
+};
 
 export function FeedbackPageClient() {
-  const router = useRouter()
-  const [search, setSearch] = useState("")
-  const [typeFilter, setTypeFilter] = useState<string>("all")
-  const [statusFilter, setStatusFilter] = useState<string>("all")
-  const [page, setPage] = useState(1)
-  const [deleteTarget, setDeleteTarget] = useState<number | null>(null)
+  const router = useRouter();
+  const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [page, setPage] = useState(1);
+  const [deleteTarget, setDeleteTarget] = useState<number | null>(null);
 
   const filters: FeedbackFilters = useMemo(
     () => ({
@@ -80,14 +80,14 @@ export function FeedbackPageClient() {
       page_size: 20,
     }),
     [typeFilter, statusFilter, search, page]
-  )
+  );
 
-  const { data, isLoading } = useFeedbacks(filters)
-  const deleteMutation = useDeleteFeedback()
+  const { data, isLoading } = useFeedbacks(filters);
+  const deleteMutation = useDeleteFeedback();
 
-  const feedbacks = data?.feedbacks ?? []
-  const total = data?.total ?? 0
-  const totalPages = Math.max(1, Math.ceil(total / 20))
+  const feedbacks = data?.feedbacks ?? [];
+  const total = data?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / 20));
 
   return (
     <div className="space-y-4">
@@ -98,8 +98,8 @@ export function FeedbackPageClient() {
             placeholder="Buscar por assunto, mensagem, email..."
             value={search}
             onChange={(e) => {
-              setSearch(e.target.value)
-              setPage(1)
+              setSearch(e.target.value);
+              setPage(1);
             }}
             className="max-w-md pl-9"
           />
@@ -107,8 +107,8 @@ export function FeedbackPageClient() {
         <Select
           value={typeFilter}
           onValueChange={(v) => {
-            setTypeFilter(v ?? "all")
-            setPage(1)
+            setTypeFilter(v ?? "all");
+            setPage(1);
           }}
         >
           <SelectTrigger className="w-40">
@@ -125,8 +125,8 @@ export function FeedbackPageClient() {
         <Select
           value={statusFilter}
           onValueChange={(v) => {
-            setStatusFilter(v ?? "all")
-            setPage(1)
+            setStatusFilter(v ?? "all");
+            setPage(1);
           }}
         >
           <SelectTrigger className="w-40">
@@ -168,10 +168,7 @@ export function FeedbackPageClient() {
               ))
             ) : feedbacks.length === 0 ? (
               <TableRow>
-                <TableCell
-                  colSpan={7}
-                  className="py-12 text-center text-muted-foreground"
-                >
+                <TableCell colSpan={7} className="py-12 text-center text-muted-foreground">
                   Nenhum feedback encontrado
                 </TableCell>
               </TableRow>
@@ -189,9 +186,7 @@ export function FeedbackPageClient() {
                   <TableCell className="text-muted-foreground">
                     {fb.user_name ?? <span className="italic">Anônimo</span>}
                   </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {fb.clinic_name ?? "-"}
-                  </TableCell>
+                  <TableCell className="text-muted-foreground">{fb.clinic_name ?? "-"}</TableCell>
                   <TableCell>
                     <Badge variant={STATUS_VARIANTS[fb.status] ?? "outline"}>
                       {STATUS_LABELS[fb.status] ?? fb.status}
@@ -209,11 +204,7 @@ export function FeedbackPageClient() {
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setDeleteTarget(fb.id)}
-                      >
+                      <Button variant="ghost" size="sm" onClick={() => setDeleteTarget(fb.id)}>
                         <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     </div>
@@ -228,8 +219,7 @@ export function FeedbackPageClient() {
       {totalPages > 1 && (
         <div className="flex items-center justify-between">
           <p className="text-sm text-muted-foreground">
-            Mostrando {(page - 1) * 20 + 1} a {Math.min(page * 20, total)} de{" "}
-            {total} feedbacks
+            Mostrando {(page - 1) * 20 + 1} a {Math.min(page * 20, total)} de {total} feedbacks
           </p>
           <div className="flex gap-2">
             <Button
@@ -260,8 +250,7 @@ export function FeedbackPageClient() {
           <AlertDialogHeader>
             <AlertDialogTitle>Remover feedback</AlertDialogTitle>
             <AlertDialogDescription>
-              Esta ação oculta o feedback da lista. É possível recuperá-lo
-              futuramente.
+              Esta ação oculta o feedback da lista. É possível recuperá-lo futuramente.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
@@ -271,7 +260,7 @@ export function FeedbackPageClient() {
                 if (deleteTarget !== null) {
                   deleteMutation.mutate(deleteTarget, {
                     onSettled: () => setDeleteTarget(null),
-                  })
+                  });
                 }
               }}
             >
@@ -281,5 +270,5 @@ export function FeedbackPageClient() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

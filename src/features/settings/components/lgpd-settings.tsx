@@ -1,6 +1,6 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 import {
   Download,
   UserX,
@@ -11,18 +11,12 @@ import {
   Search,
   AlertTriangle,
   Info,
-} from "lucide-react"
-import { toast } from "sonner"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
+} from "lucide-react";
+import { toast } from "sonner";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,8 +26,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { Separator } from "@/components/ui/separator"
+} from "@/components/ui/alert-dialog";
+import { Separator } from "@/components/ui/separator";
 import {
   useLgpdConfig,
   useUpdateRetentionPolicy,
@@ -41,22 +35,22 @@ import {
   useExportPatientData,
   useAnonymizeUser,
   useAnonymizePatient,
-} from "@/features/settings/hooks"
-import { searchUsersForLgpdFetch } from "@/features/settings/services"
-import type { LgpdConfig, RetentionPolicy } from "@/features/settings/types"
+} from "@/features/settings/hooks";
+import { searchUsersForLgpdFetch } from "@/features/settings/services";
+import type { LgpdConfig, RetentionPolicy } from "@/features/settings/types";
 
 function downloadJson(json: string, filename: string) {
-  const blob = new Blob([json], { type: "application/json" })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement("a")
-  a.href = url
-  a.download = filename
-  a.click()
-  URL.revokeObjectURL(url)
+  const blob = new Blob([json], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
 interface LgpdSettingsProps {
-  config: LgpdConfig
+  config: LgpdConfig;
 }
 
 export function LgpdSettings({ config }: LgpdSettingsProps) {
@@ -73,7 +67,7 @@ export function LgpdSettings({ config }: LgpdSettingsProps) {
       <Separator />
       <AnonymizeSection />
     </div>
-  )
+  );
 }
 
 // Encryption Status
@@ -82,8 +76,8 @@ function EncryptionStatusSection({
   statuses,
   keyConfigured,
 }: {
-  statuses: LgpdConfig["encryption_statuses"]
-  keyConfigured: boolean
+  statuses: LgpdConfig["encryption_statuses"];
+  keyConfigured: boolean;
 }) {
   return (
     <div className="space-y-4">
@@ -101,9 +95,7 @@ function EncryptionStatusSection({
         <CardContent className="space-y-3 pt-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2 text-sm">
-              <span className="font-medium">
-                Chave de criptografia (ENCRYPTION_KEY)
-              </span>
+              <span className="font-medium">Chave de criptografia (ENCRYPTION_KEY)</span>
             </div>
             {keyConfigured ? (
               <Badge variant="default" className="gap-1 bg-green-600">
@@ -127,10 +119,8 @@ function EncryptionStatusSection({
                   ENCRYPTION_KEY=&lt;string segura&gt;
                 </code>{" "}
                 no arquivo{" "}
-                <code className="rounded bg-amber-100 px-1 dark:bg-amber-900">
-                  .env.local
-                </code>{" "}
-                para habilitar a criptografia.
+                <code className="rounded bg-amber-100 px-1 dark:bg-amber-900">.env.local</code> para
+                habilitar a criptografia.
               </span>
             </div>
           )}
@@ -154,16 +144,11 @@ function EncryptionStatusSection({
                   </div>
                   <div className="flex items-center gap-2">
                     {!s.sample_checked && (
-                      <span className="text-xs text-muted-foreground">
-                        sem dados
-                      </span>
+                      <span className="text-xs text-muted-foreground">sem dados</span>
                     )}
                     {s.sample_checked &&
                       (s.encrypted ? (
-                        <Badge
-                          variant="default"
-                          className="gap-1 bg-green-600 text-xs"
-                        >
+                        <Badge variant="default" className="gap-1 bg-green-600 text-xs">
                           <Lock className="h-3 w-3" />
                           Cifrado
                         </Badge>
@@ -181,7 +166,7 @@ function EncryptionStatusSection({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
 
 // Retention Policies
@@ -203,39 +188,35 @@ const POLICY_LABELS: Record<string, { label: string; description: string }> = {
     label: "Dados de Pacientes",
     description: "Prontuários e dados dos pacientes",
   },
-}
+};
 
-function RetentionPoliciesSection({
-  policies,
-}: {
-  policies: RetentionPolicy[]
-}) {
-  const updatePolicy = useUpdateRetentionPolicy()
-  const [editing, setEditing] = useState<Record<number, string>>({})
+function RetentionPoliciesSection({ policies }: { policies: RetentionPolicy[] }) {
+  const updatePolicy = useUpdateRetentionPolicy();
+  const [editing, setEditing] = useState<Record<number, string>>({});
 
   const handleSave = (policy: RetentionPolicy) => {
-    const days = parseInt(editing[policy.id] ?? "")
+    const days = parseInt(editing[policy.id] ?? "");
     if (isNaN(days) || days < 1) {
-      toast.error("Período inválido")
-      return
+      toast.error("Período inválido");
+      return;
     }
     updatePolicy.mutate(
       { policyId: policy.id, retentionDays: days },
       {
         onSuccess: () => {
-          toast.success("Política de retenção atualizada")
+          toast.success("Política de retenção atualizada");
           setEditing((prev) => {
-            const next = { ...prev }
-            delete next[policy.id]
-            return next
-          })
+            const next = { ...prev };
+            delete next[policy.id];
+            return next;
+          });
         },
         onError: () => {
-          toast.error("Erro ao atualizar")
+          toast.error("Erro ao atualizar");
         },
       }
-    )
-  }
+    );
+  };
 
   return (
     <div className="space-y-4">
@@ -254,14 +235,12 @@ function RetentionPoliciesSection({
           const meta = POLICY_LABELS[policy.model_name] ?? {
             label: policy.model_name,
             description: "",
-          }
+          };
           return (
             <Card key={policy.id}>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm">{meta.label}</CardTitle>
-                <CardDescription className="text-xs">
-                  {meta.description}
-                </CardDescription>
+                <CardDescription className="text-xs">{meta.description}</CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex items-center gap-2">
@@ -290,101 +269,101 @@ function RetentionPoliciesSection({
                 </div>
               </CardContent>
             </Card>
-          )
+          );
         })}
       </div>
     </div>
-  )
+  );
 }
 
 // Export Section
 
 interface SearchUserResult {
-  id: number
-  name: string
-  email: string
-  role: string
+  id: number;
+  name: string;
+  email: string;
+  role: string;
 }
 
 interface SearchPatientResult {
-  id: number
-  name: string
-  clinic_name: string
+  id: number;
+  name: string;
+  clinic_name: string;
 }
 
 function ExportSection() {
-  const [userQuery, setUserQuery] = useState("")
-  const [patientQuery, setPatientQuery] = useState("")
-  const [userResults, setUserResults] = useState<SearchUserResult[]>([])
-  const [patientResults, setPatientResults] = useState<SearchPatientResult[]>([])
-  const [searchingUsers, setSearchingUsers] = useState(false)
-  const [searchingPatients, setSearchingPatients] = useState(false)
+  const [userQuery, setUserQuery] = useState("");
+  const [patientQuery, setPatientQuery] = useState("");
+  const [userResults, setUserResults] = useState<SearchUserResult[]>([]);
+  const [patientResults, setPatientResults] = useState<SearchPatientResult[]>([]);
+  const [searchingUsers, setSearchingUsers] = useState(false);
+  const [searchingPatients, setSearchingPatients] = useState(false);
 
-  const exportUser = useExportUserData()
-  const exportPatient = useExportPatientData()
+  const exportUser = useExportUserData();
+  const exportPatient = useExportPatientData();
 
   const searchUsers = async () => {
-    if (!userQuery.trim()) return
-    setSearchingUsers(true)
+    if (!userQuery.trim()) return;
+    setSearchingUsers(true);
     try {
-      const results = await searchUsersForLgpdFetch(userQuery)
-      setUserResults(results)
+      const results = await searchUsersForLgpdFetch(userQuery);
+      setUserResults(results);
     } catch {
-      toast.error("Erro ao buscar usuários")
+      toast.error("Erro ao buscar usuários");
     } finally {
-      setSearchingUsers(false)
+      setSearchingUsers(false);
     }
-  }
+  };
 
   const searchPatients = async () => {
-    if (!patientQuery.trim()) return
-    setSearchingPatients(true)
+    if (!patientQuery.trim()) return;
+    setSearchingPatients(true);
     try {
       // Use search with clinic param
-      const params = new URLSearchParams()
-      params.set("search", patientQuery)
-      params.set("page_size", "20")
-      const { fetchPatients } = await import("@/features/patients/services")
-      const result = await fetchPatients({ search: patientQuery, pageSize: 20 })
+      const params = new URLSearchParams();
+      params.set("search", patientQuery);
+      params.set("page_size", "20");
+      const { fetchPatients } = await import("@/features/patients/services");
+      const result = await fetchPatients({ search: patientQuery, pageSize: 20 });
       setPatientResults(
         result.patients.map((p) => ({
           id: Number(p.id),
           name: p.name,
           clinic_name: p.clinic_name ?? "",
         }))
-      )
+      );
     } catch {
-      toast.error("Erro ao buscar pacientes")
+      toast.error("Erro ao buscar pacientes");
     } finally {
-      setSearchingPatients(false)
+      setSearchingPatients(false);
     }
-  }
+  };
 
   const handleExportUser = (id: number, name: string) => {
     exportUser.mutate(id, {
       onSuccess: (result) => {
         if (result.success && result.data) {
-          downloadJson(result.data, `lgpd-usuario-${id}.json`)
-          toast.success(`Dados de ${name} exportados com sucesso`)
+          downloadJson(result.data, `lgpd-usuario-${id}.json`);
+          toast.success(`Dados de ${name} exportados com sucesso`);
         } else {
-          toast.error(result.error ?? "Erro ao exportar dados")
+          toast.error(result.error ?? "Erro ao exportar dados");
         }
       },
-    })
-  }
+    });
+  };
 
   const handleExportPatient = (id: number, name: string) => {
     exportPatient.mutate(id, {
       onSuccess: (result) => {
         if (result.success && result.data) {
-          downloadJson(result.data, `lgpd-paciente-${id}.json`)
-          toast.success(`Dados de ${name} exportados com sucesso`)
+          downloadJson(result.data, `lgpd-paciente-${id}.json`);
+          toast.success(`Dados de ${name} exportados com sucesso`);
         } else {
-          toast.error(result.error ?? "Erro ao exportar dados")
+          toast.error(result.error ?? "Erro ao exportar dados");
         }
       },
-    })
-  }
+    });
+  };
 
   return (
     <div className="space-y-4">
@@ -411,12 +390,7 @@ function ExportSection() {
                 onChange={(e) => setUserQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && searchUsers()}
               />
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={searchUsers}
-                disabled={searchingUsers}
-              >
+              <Button variant="outline" size="icon" onClick={searchUsers} disabled={searchingUsers}>
                 <Search className="h-4 w-4" />
               </Button>
             </div>
@@ -471,9 +445,7 @@ function ExportSection() {
               >
                 <div>
                   <p className="font-medium">{p.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {p.clinic_name}
-                  </p>
+                  <p className="text-xs text-muted-foreground">{p.clinic_name}</p>
                 </div>
                 <Button
                   variant="outline"
@@ -490,88 +462,88 @@ function ExportSection() {
         </Card>
       </div>
     </div>
-  )
+  );
 }
 
 // Anonymize Section
 
 function AnonymizeSection() {
-  const [userQuery, setUserQuery] = useState("")
-  const [patientQuery, setPatientQuery] = useState("")
-  const [userResults, setUserResults] = useState<SearchUserResult[]>([])
-  const [patientResults, setPatientResults] = useState<SearchPatientResult[]>([])
-  const [searchingUsers, setSearchingUsers] = useState(false)
-  const [searchingPatients, setSearchingPatients] = useState(false)
-  const [confirmUser, setConfirmUser] = useState<{ id: number; name: string } | null>(null)
-  const [confirmPatient, setConfirmPatient] = useState<{ id: number; name: string } | null>(null)
+  const [userQuery, setUserQuery] = useState("");
+  const [patientQuery, setPatientQuery] = useState("");
+  const [userResults, setUserResults] = useState<SearchUserResult[]>([]);
+  const [patientResults, setPatientResults] = useState<SearchPatientResult[]>([]);
+  const [searchingUsers, setSearchingUsers] = useState(false);
+  const [searchingPatients, setSearchingPatients] = useState(false);
+  const [confirmUser, setConfirmUser] = useState<{ id: number; name: string } | null>(null);
+  const [confirmPatient, setConfirmPatient] = useState<{ id: number; name: string } | null>(null);
 
-  const anonymizeUser = useAnonymizeUser()
-  const anonymizePatient = useAnonymizePatient()
+  const anonymizeUser = useAnonymizeUser();
+  const anonymizePatient = useAnonymizePatient();
 
   const searchUsers = async () => {
-    if (!userQuery.trim()) return
-    setSearchingUsers(true)
+    if (!userQuery.trim()) return;
+    setSearchingUsers(true);
     try {
-      const results = await searchUsersForLgpdFetch(userQuery)
-      setUserResults(results)
+      const results = await searchUsersForLgpdFetch(userQuery);
+      setUserResults(results);
     } catch {
-      toast.error("Erro ao buscar usuários")
+      toast.error("Erro ao buscar usuários");
     } finally {
-      setSearchingUsers(false)
+      setSearchingUsers(false);
     }
-  }
+  };
 
   const searchPatients = async () => {
-    if (!patientQuery.trim()) return
-    setSearchingPatients(true)
+    if (!patientQuery.trim()) return;
+    setSearchingPatients(true);
     try {
-      const { fetchPatients } = await import("@/features/patients/services")
-      const result = await fetchPatients({ search: patientQuery, pageSize: 20 })
+      const { fetchPatients } = await import("@/features/patients/services");
+      const result = await fetchPatients({ search: patientQuery, pageSize: 20 });
       setPatientResults(
         result.patients.map((p) => ({
           id: Number(p.id),
           name: p.name,
           clinic_name: p.clinic_name ?? "",
         }))
-      )
+      );
     } catch {
-      toast.error("Erro ao buscar pacientes")
+      toast.error("Erro ao buscar pacientes");
     } finally {
-      setSearchingPatients(false)
+      setSearchingPatients(false);
     }
-  }
+  };
 
   const handleAnonymizeUser = () => {
-    if (!confirmUser) return
-    const { id, name } = confirmUser
-    setConfirmUser(null)
+    if (!confirmUser) return;
+    const { id, name } = confirmUser;
+    setConfirmUser(null);
     anonymizeUser.mutate(id, {
       onSuccess: (result) => {
         if (result.success) {
-          toast.success(`Dados de ${name} anonimizados`)
-          setUserResults((prev) => prev.filter((u) => u.id !== id))
+          toast.success(`Dados de ${name} anonimizados`);
+          setUserResults((prev) => prev.filter((u) => u.id !== id));
         } else {
-          toast.error(result.error ?? "Erro ao anonimizar")
+          toast.error(result.error ?? "Erro ao anonimizar");
         }
       },
-    })
-  }
+    });
+  };
 
   const handleAnonymizePatient = () => {
-    if (!confirmPatient) return
-    const { id, name } = confirmPatient
-    setConfirmPatient(null)
+    if (!confirmPatient) return;
+    const { id, name } = confirmPatient;
+    setConfirmPatient(null);
     anonymizePatient.mutate(id, {
       onSuccess: (result) => {
         if (result.success) {
-          toast.success(`Dados de ${name} anonimizados`)
-          setPatientResults((prev) => prev.filter((p) => p.id !== id))
+          toast.success(`Dados de ${name} anonimizados`);
+          setPatientResults((prev) => prev.filter((p) => p.id !== id));
         } else {
-          toast.error(result.error ?? "Erro ao anonimizar")
+          toast.error(result.error ?? "Erro ao anonimizar");
         }
       },
-    })
-  }
+    });
+  };
 
   return (
     <div className="space-y-4">
@@ -581,8 +553,8 @@ function AnonymizeSection() {
           Anonimização (Direito ao Esquecimento)
         </h2>
         <p className="text-sm text-muted-foreground">
-          Substitui dados pessoais por valores anônimos, mantendo registros
-          operacionais. Irreversível. (LGPD Art. 18, VI)
+          Substitui dados pessoais por valores anônimos, mantendo registros operacionais.
+          Irreversível. (LGPD Art. 18, VI)
         </p>
       </div>
 
@@ -602,12 +574,7 @@ function AnonymizeSection() {
                 onChange={(e) => setUserQuery(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && searchUsers()}
               />
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={searchUsers}
-                disabled={searchingUsers}
-              >
+              <Button variant="outline" size="icon" onClick={searchUsers} disabled={searchingUsers}>
                 <Search className="h-4 w-4" />
               </Button>
             </div>
@@ -665,9 +632,7 @@ function AnonymizeSection() {
               >
                 <div>
                   <p className="font-medium">{p.name}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {p.clinic_name}
-                  </p>
+                  <p className="text-xs text-muted-foreground">{p.clinic_name}</p>
                 </div>
                 <Button
                   variant="destructive"
@@ -684,24 +649,18 @@ function AnonymizeSection() {
         </Card>
       </div>
 
-      <AlertDialog
-        open={!!confirmUser}
-        onOpenChange={(open) => !open && setConfirmUser(null)}
-      >
+      <AlertDialog open={!!confirmUser} onOpenChange={(open) => !open && setConfirmUser(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Anonimizar usuário?</AlertDialogTitle>
             <AlertDialogDescription className="space-y-2">
               <p>
-                Você está prestes a anonimizar os dados de{" "}
-                <strong>{confirmUser?.name}</strong>.
+                Você está prestes a anonimizar os dados de <strong>{confirmUser?.name}</strong>.
               </p>
-              <p className="text-destructive font-medium">
-                Esta ação é irreversível.
-              </p>
+              <p className="font-medium text-destructive">Esta ação é irreversível.</p>
               <p className="text-sm">
-                Nome, email e dados pessoais serão substituídos por valores
-                anônimos. O usuário perderá acesso ao sistema.
+                Nome, email e dados pessoais serão substituídos por valores anônimos. O usuário
+                perderá acesso ao sistema.
               </p>
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -727,15 +686,12 @@ function AnonymizeSection() {
             <AlertDialogTitle>Anonimizar paciente?</AlertDialogTitle>
             <AlertDialogDescription className="space-y-2">
               <p>
-                Você está prestes a anonimizar os dados de{" "}
-                <strong>{confirmPatient?.name}</strong>.
+                Você está prestes a anonimizar os dados de <strong>{confirmPatient?.name}</strong>.
               </p>
-              <p className="text-destructive font-medium">
-                Esta ação é irreversível.
-              </p>
+              <p className="font-medium text-destructive">Esta ação é irreversível.</p>
               <p className="text-sm">
-                Nome, CPF e dados de saúde serão substituídos por valores
-                anônimos. O registro permanece para fins estatísticos.
+                Nome, CPF e dados de saúde serão substituídos por valores anônimos. O registro
+                permanece para fins estatísticos.
               </p>
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -752,5 +708,5 @@ function AnonymizeSection() {
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  )
+  );
 }

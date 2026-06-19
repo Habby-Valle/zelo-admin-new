@@ -1,13 +1,11 @@
-import { Suspense } from "react"
-import { Skeleton } from "@/components/ui/skeleton"
-import { AcceptInvitationForm } from "@/features/auth"
+import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { AcceptInvitationForm } from "@/features/auth";
 
 export default function AcceptInvitationPage() {
   return (
-    <Suspense
-      fallback={<Skeleton className="h-[420px] w-full max-w-md rounded-xl" />}
-    >
+    <Suspense fallback={<Skeleton className="h-[420px] w-full max-w-md rounded-xl" />}>
       <AcceptInvitationForm />
     </Suspense>
-  )
+  );
 }

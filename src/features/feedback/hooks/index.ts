@@ -4,4 +4,4 @@ export {
   useFeedback,
   useUpdateFeedbackStatus,
   useDeleteFeedback,
-} from "./use-feedback"
+} from "./use-feedback";
