@@ -1,5 +1,8 @@
 import { Settings } from "lucide-react";
 import { SettingsClient } from "@/features/settings/components";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = { title: "Configurações" };
 
 export default function SettingsPage() {
   return (
