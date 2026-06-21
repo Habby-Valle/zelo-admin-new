@@ -22,22 +22,23 @@ import { Filter, ExternalLink } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/format";
 import type { PaymentRecord } from "@/features/payments/types";
 
+const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  all: "Todos",
+  succeeded: "Sucesso",
+  processing: "Processando",
+  requires_action: "Ação necessária",
+  failed: "Falhou",
+};
+
+const PAYMENT_STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+  succeeded: "default",
+  processing: "secondary",
+  requires_action: "secondary",
+  failed: "destructive",
+};
+
 function StatusBadge({ status }: { status: string }) {
-  const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-    succeeded: "default",
-    processing: "secondary",
-    requires_action: "secondary",
-    failed: "destructive",
-  };
-
-  const labels: Record<string, string> = {
-    succeeded: "Sucesso",
-    processing: "Processando",
-    requires_action: "Ação necessária",
-    failed: "Falhou",
-  };
-
-  return <Badge variant={variants[status] ?? "outline"}>{labels[status] ?? status}</Badge>;
+  return <Badge variant={PAYMENT_STATUS_VARIANTS[status] ?? "outline"}>{PAYMENT_STATUS_LABELS[status] ?? status}</Badge>;
 }
 
 function formatBillingCycle(cycle: string) {
@@ -88,7 +89,9 @@ export function ClinicPaymentsTable({ payments }: { payments: PaymentRecord[] })
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v ?? "all")}>
           <SelectTrigger className="w-40">
             <Filter className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Status" />
+            <SelectValue>
+              {PAYMENT_STATUS_LABELS[statusFilter] ?? statusFilter}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>
