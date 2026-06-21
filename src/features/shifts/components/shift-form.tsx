@@ -99,7 +99,12 @@ export function ShiftForm({ shift }: ShiftFormProps) {
             onValueChange={(v) => setValue("caregiver_id", Number(v))}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Selecione o cuidador" />
+              <SelectValue>
+                {watchedCaregiver
+                  ? caregivers.find((c) => String(c.id) === String(watchedCaregiver))?.name ??
+                    String(watchedCaregiver)
+                  : "Selecione o cuidador"}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               {caregivers.map((c) => (
@@ -121,7 +126,11 @@ export function ShiftForm({ shift }: ShiftFormProps) {
             onValueChange={(v) => setValue("clinic_id", v === "none" ? undefined : Number(v))}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Selecione a clínica" />
+              <SelectValue>
+                {watchedClinic
+                  ? clinics.find((c) => c.id === watchedClinic)?.name ?? String(watchedClinic)
+                  : "Selecione a clínica"}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="none">Nenhuma</SelectItem>

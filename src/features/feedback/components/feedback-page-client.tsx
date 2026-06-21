@@ -112,7 +112,19 @@ export function FeedbackPageClient() {
           }}
         >
           <SelectTrigger className="w-40">
-            <SelectValue placeholder="Tipo" />
+            <SelectValue>
+              {typeFilter === "all"
+                ? "Todos os tipos"
+                : typeFilter === "bug"
+                  ? "Bug"
+                  : typeFilter === "feature"
+                    ? "Melhoria"
+                    : typeFilter === "compliment"
+                      ? "Elogio"
+                      : typeFilter === "other"
+                        ? "Outro"
+                        : typeFilter}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos os tipos</SelectItem>
@@ -130,7 +142,19 @@ export function FeedbackPageClient() {
           }}
         >
           <SelectTrigger className="w-40">
-            <SelectValue placeholder="Status" />
+            <SelectValue>
+              {statusFilter === "all"
+                ? "Todos os status"
+                : statusFilter === "received"
+                  ? "Recebido"
+                  : statusFilter === "in_review"
+                    ? "Em Análise"
+                    : statusFilter === "resolved"
+                      ? "Resolvido"
+                      : statusFilter === "closed"
+                        ? "Fechado"
+                        : statusFilter}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos os status</SelectItem>

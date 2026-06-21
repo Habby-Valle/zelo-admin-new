@@ -180,7 +180,9 @@ export function AuditLogsClient() {
               }
             >
               <SelectTrigger className="w-40">
-                <SelectValue placeholder="Ação" />
+                <SelectValue>
+                  {filters.action ? ACTION_LABELS[filters.action] ?? filters.action : "Todas ações"}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas ações</SelectItem>
@@ -200,7 +202,23 @@ export function AuditLogsClient() {
               }
             >
               <SelectTrigger className="w-40">
-                <SelectValue placeholder="Entidade" />
+                <SelectValue>
+                  {filters.content_type === "all" || !filters.content_type
+                    ? "Todas entidades"
+                    : filters.content_type === "shift"
+                      ? "Turno"
+                      : filters.content_type === "checklist"
+                        ? "Checklist"
+                        : filters.content_type === "patient"
+                          ? "Paciente"
+                          : filters.content_type === "clinic"
+                            ? "Clínica"
+                            : filters.content_type === "invite"
+                              ? "Convite"
+                              : filters.content_type === "profilecaregiver"
+                                ? "Cuidador"
+                                : filters.content_type}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas entidades</SelectItem>

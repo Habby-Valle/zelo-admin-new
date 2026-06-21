@@ -394,7 +394,12 @@ export function ShiftDetailClient({ id }: ShiftDetailClientProps) {
                 onValueChange={(v) => setSelectedPatientId(v ?? "")}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione o paciente" />
+                  <SelectValue>
+                    {selectedPatientId
+                      ? availablePatients.find((p) => p.id === selectedPatientId)?.name ??
+                        selectedPatientId
+                      : "Selecione o paciente"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {availablePatients.length === 0 ? (
@@ -436,7 +441,9 @@ export function ShiftDetailClient({ id }: ShiftDetailClientProps) {
               <label className="text-sm font-medium">Novo status</label>
               <Select value={newStatus} onValueChange={(v) => setNewStatus(v as ShiftStatus)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione o status" />
+                  <SelectValue>
+                    {newStatus ? STATUS_LABELS[newStatus] ?? newStatus : "Selecione o status"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="scheduled">Agendado</SelectItem>
