@@ -29,24 +29,25 @@ interface SubscriptionsTableProps {
   subscriptions: SubscriptionListItem[];
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  all: "Todos",
+  active: "Ativo",
+  trial: "Trial",
+  free: "Gratuito",
+  expired: "Expirado",
+  cancelled: "Cancelado",
+};
+
+const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+  active: "default",
+  trial: "secondary",
+  free: "outline",
+  expired: "destructive",
+  cancelled: "outline",
+};
+
 function StatusBadge({ status }: { status: string }) {
-  const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-    active: "default",
-    trial: "secondary",
-    free: "outline",
-    expired: "destructive",
-    cancelled: "outline",
-  };
-
-  const labels: Record<string, string> = {
-    active: "Ativo",
-    trial: "Trial",
-    free: "Gratuito",
-    expired: "Expirado",
-    cancelled: "Cancelado",
-  };
-
-  return <Badge variant={variants[status] ?? "outline"}>{labels[status] ?? status}</Badge>;
+  return <Badge variant={STATUS_VARIANTS[status] ?? "outline"}>{STATUS_LABELS[status] ?? status}</Badge>;
 }
 
 function formatBillingCycle(cycle: string) {
@@ -88,7 +89,9 @@ export function SubscriptionsTable({ subscriptions }: SubscriptionsTableProps) {
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v ?? "all")}>
           <SelectTrigger className="w-40">
             <Filter className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Status" />
+            <SelectValue>
+              {STATUS_LABELS[statusFilter] ?? statusFilter}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>

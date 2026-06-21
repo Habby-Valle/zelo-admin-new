@@ -26,26 +26,27 @@ interface GuardianSubscriptionsTableProps {
   subscriptions: GuardianSubscriptionListItem[];
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  all: "Todos",
+  active: "Ativo",
+  free: "Gratuito",
+  trial: "Trial",
+  expired: "Expirado",
+  cancelled: "Cancelado",
+  canceled: "Cancelado",
+};
+
+const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
+  active: "default",
+  free: "secondary",
+  trial: "secondary",
+  expired: "destructive",
+  cancelled: "outline",
+  canceled: "outline",
+};
+
 function StatusBadge({ status }: { status: string }) {
-  const variants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-    active: "default",
-    free: "secondary",
-    trial: "secondary",
-    expired: "destructive",
-    cancelled: "outline",
-    canceled: "outline",
-  };
-
-  const labels: Record<string, string> = {
-    active: "Ativo",
-    free: "Gratuito",
-    trial: "Trial",
-    expired: "Expirado",
-    cancelled: "Cancelado",
-    canceled: "Cancelado",
-  };
-
-  return <Badge variant={variants[status] ?? "outline"}>{labels[status] ?? status}</Badge>;
+  return <Badge variant={STATUS_VARIANTS[status] ?? "outline"}>{STATUS_LABELS[status] ?? status}</Badge>;
 }
 
 export function GuardianSubscriptionsTable({ subscriptions }: GuardianSubscriptionsTableProps) {
@@ -77,7 +78,9 @@ export function GuardianSubscriptionsTable({ subscriptions }: GuardianSubscripti
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v ?? "all")}>
           <SelectTrigger className="w-40">
             <Filter className="mr-2 h-4 w-4" />
-            <SelectValue placeholder="Status" />
+            <SelectValue>
+              {STATUS_LABELS[statusFilter] ?? statusFilter}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>
