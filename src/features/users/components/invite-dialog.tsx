@@ -125,7 +125,12 @@ export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecionar clínica..." />
+                  <SelectValue>
+                    {watch("clinic_id") != null
+                      ? clinics.find((c) => c.id === watch("clinic_id"))?.name ??
+                        String(watch("clinic_id"))
+                      : "Selecionar clínica..."}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {clinics.map((c) => (
