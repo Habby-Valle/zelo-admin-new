@@ -182,7 +182,9 @@ export function SosPageClient() {
               onValueChange={(v) => updateParams({ status: v ?? "all", page: "1" })}
             >
               <SelectTrigger className="w-44">
-                <SelectValue />
+                <SelectValue>
+                  {status === "all" ? "Todos os status" : STATUS_LABELS[status as SosStatus] ?? status}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos os status</SelectItem>
@@ -197,7 +199,11 @@ export function SosPageClient() {
               onValueChange={(v) => updateParams({ clinicId: v ?? "all", page: "1" })}
             >
               <SelectTrigger className="w-48">
-                <SelectValue />
+                <SelectValue>
+                  {clinicId === "all"
+                    ? "Todas as clínicas"
+                    : clinics.find((c) => String(c.id) === clinicId)?.name ?? clinicId}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas as clínicas</SelectItem>

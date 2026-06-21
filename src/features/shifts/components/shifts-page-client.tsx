@@ -152,7 +152,9 @@ export function ShiftsPageClient() {
             }}
           >
             <SelectTrigger className="w-44">
-              <SelectValue />
+              <SelectValue>
+                {statusFilter === "all" ? "Todos os status" : STATUS_LABELS[statusFilter as ShiftStatus] ?? statusFilter}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos os status</SelectItem>
@@ -170,7 +172,11 @@ export function ShiftsPageClient() {
             }}
           >
             <SelectTrigger className="w-48">
-              <SelectValue />
+              <SelectValue>
+                {clinicFilter
+                  ? clinics.find((c) => String(c.id) === clinicFilter)?.name ?? clinicFilter
+                  : "Todas as clínicas"}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todas as clínicas</SelectItem>

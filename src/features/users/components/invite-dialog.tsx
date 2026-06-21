@@ -98,7 +98,9 @@ export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
               }
             >
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue>
+                  {ROLE_LABELS[role] ?? role}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {Object.entries(ROLE_LABELS).map(([value, label]) => (

@@ -347,7 +347,11 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
                 <Label>Plano</Label>
                 <Select value={selectedPlanId} onValueChange={(v) => setSelectedPlanId(v ?? "")}>
                   <SelectTrigger>
-                    <SelectValue placeholder="Selecione um plano" />
+                    <SelectValue>
+                      {selectedPlanId
+                        ? availablePlans.find((p) => p.id === selectedPlanId)?.name ?? selectedPlanId
+                        : "Selecione um plano"}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     {availablePlans.map((plan) => (
@@ -365,7 +369,9 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
                   onValueChange={(v) => setSelectedBillingCycle(v ?? "monthly")}
                 >
                   <SelectTrigger>
-                    <SelectValue />
+                    <SelectValue>
+                      {formatBillingCycle(selectedBillingCycle)}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="monthly">Mensal</SelectItem>
@@ -642,7 +648,11 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
               <Label>Plano</Label>
               <Select value={selectedPlanId} onValueChange={(v) => setSelectedPlanId(v ?? "")}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione um plano" />
+                  <SelectValue>
+                    {selectedPlanId
+                      ? availablePlans.find((p) => p.id === selectedPlanId)?.name ?? selectedPlanId
+                      : "Selecione um plano"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {availablePlans.map((plan) => (
@@ -660,7 +670,9 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
                 onValueChange={(v) => setSelectedBillingCycle(v ?? "monthly")}
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue>
+                    {formatBillingCycle(selectedBillingCycle)}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="monthly">Mensal</SelectItem>
@@ -761,7 +773,11 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
               <Label>Novo Plano</Label>
               <Select value={newPlanId} onValueChange={(v) => setNewPlanId(v ?? "")}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecione um plano" />
+                  <SelectValue>
+                    {newPlanId
+                      ? availablePlans.find((p) => p.id === newPlanId)?.name ?? newPlanId
+                      : "Selecione um plano"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {availablePlans
@@ -781,7 +797,9 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
                 onValueChange={(v) => setNewBillingCycle(v ?? "monthly")}
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue>
+                    {formatBillingCycle(newBillingCycle)}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="monthly">Mensal</SelectItem>

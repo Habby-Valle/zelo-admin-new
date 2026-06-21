@@ -124,7 +124,9 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
               }
             >
               <SelectTrigger className="w-full">
-                <SelectValue />
+                <SelectValue>
+                  {watch("scope") === "clinic" ? "Clínica" : "Guardião (individual)"}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="clinic">Clínica</SelectItem>

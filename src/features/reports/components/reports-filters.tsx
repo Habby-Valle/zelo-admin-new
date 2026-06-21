@@ -84,7 +84,7 @@ export function ReportsFilters({ clinics, onFilterChange }: ReportsFiltersProps)
             <Label className="text-xs text-muted-foreground">Clínica</Label>
             <Select value="all" onValueChange={(v) => handleClinicChange(v ?? "all")}>
               <SelectTrigger className="w-48">
-                <SelectValue />
+                <SelectValue>Todas as clínicas</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todas as clínicas</SelectItem>
@@ -101,7 +101,7 @@ export function ReportsFilters({ clinics, onFilterChange }: ReportsFiltersProps)
             <Label className="text-xs text-muted-foreground">Período</Label>
             <Select value="30d" onValueChange={(v) => handlePresetChange(v ?? "30d")}>
               <SelectTrigger className="w-40">
-                <SelectValue />
+                <SelectValue>Últimos 30 dias</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {DATE_PRESETS.map((p) => (

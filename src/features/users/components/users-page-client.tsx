@@ -162,7 +162,9 @@ export function UsersPageClient() {
               }}
             >
               <SelectTrigger className="w-44">
-                <SelectValue placeholder="Perfil" />
+                <SelectValue>
+                  {role === "" || role === "all" ? "Todos os perfis" : ROLE_LABELS[role] ?? role}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos os perfis</SelectItem>
@@ -170,22 +172,6 @@ export function UsersPageClient() {
                 <SelectItem value="guardian">Responsável</SelectItem>
                 <SelectItem value="caregiver">Cuidador</SelectItem>
                 <SelectItem value="family">Familiar</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select
-              value={isActive || "all"}
-              onValueChange={(v) => {
-                const val = v ?? "";
-                updateParams({ is_active: val === "all" ? "" : val, page: "" });
-              }}
-            >
-              <SelectTrigger className="w-36">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="true">Ativo</SelectItem>
-                <SelectItem value="false">Inativo</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -336,7 +322,11 @@ export function UsersPageClient() {
               }}
             >
               <SelectTrigger className="w-36">
-                <SelectValue placeholder="Status" />
+                <SelectValue>
+                  {status === "" || status === "all"
+                    ? "Todos"
+                    : STATUS_LABELS[status as InviteStatus] ?? status}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos</SelectItem>
@@ -354,7 +344,9 @@ export function UsersPageClient() {
               }}
             >
               <SelectTrigger className="w-44">
-                <SelectValue placeholder="Perfil" />
+                <SelectValue>
+                  {role === "" || role === "all" ? "Todos os perfis" : ROLE_LABELS[role] ?? role}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos os perfis</SelectItem>

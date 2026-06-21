@@ -138,7 +138,9 @@ export function ChecklistsPageClient() {
             }}
           >
             <SelectTrigger className="w-40">
-              <SelectValue />
+              <SelectValue>
+                {isActive === "all" ? "Todos" : isActive === "true" ? "Ativos" : "Inativos"}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos</SelectItem>

@@ -66,6 +66,13 @@ const STATUS_MAP: Record<
   suspended: { label: "Suspensa", variant: "destructive" },
 };
 
+const STATUS_FILTER_LABELS: Record<string, string> = {
+  all: "Todos status",
+  active: "Ativas",
+  inactive: "Inativas",
+  suspended: "Suspensas",
+};
+
 export function ClinicsList() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState<ClinicStatus | "all">("all");
@@ -167,7 +174,9 @@ export function ClinicsList() {
             }}
           >
             <SelectTrigger className="w-36">
-              <SelectValue />
+              <SelectValue>
+                {STATUS_FILTER_LABELS[status] ?? status}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos status</SelectItem>

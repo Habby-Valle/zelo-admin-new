@@ -273,7 +273,9 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
                       }
                     >
                       <SelectTrigger className="w-32">
-                        <SelectValue />
+                        <SelectValue>
+                          {ITEM_TYPES.find((t) => t.value === item.type)?.label ?? item.type}
+                        </SelectValue>
                       </SelectTrigger>
                       <SelectContent>
                         {ITEM_TYPES.map((t) => (

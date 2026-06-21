@@ -436,7 +436,13 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
                 onValueChange={(v) => setSelectedBillingCycle(v ?? "monthly")}
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue>
+                    {selectedBillingCycle === "monthly"
+                      ? "Mensal"
+                      : selectedBillingCycle === "quarterly"
+                        ? "Trimestral"
+                        : "Anual"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="monthly">Mensal</SelectItem>
