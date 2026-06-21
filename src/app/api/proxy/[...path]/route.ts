@@ -6,7 +6,8 @@ async function proxy(request: NextRequest, { params }: { params: Promise<{ path:
   const { path } = await params;
   const pathname = "/" + path.join("/");
   const search = request.nextUrl.search;
-  const url = `${API_URL}${pathname}${search}`;
+  const pathnameWithSlash = pathname.endsWith("/") ? pathname : `${pathname}/`;
+  const url = `${API_URL}${pathnameWithSlash}${search}`;
 
   const token = request.cookies.get("ze_access")?.value;
 
@@ -27,25 +28,44 @@ async function proxy(request: NextRequest, { params }: { params: Promise<{ path:
       method: request.method,
       headers,
       body: body || undefined,
+      redirect: "manual",
     });
 
-    const responseHeaders: Record<string, string> = {};
-    res.headers.forEach((value, key) => {
-      if (!["content-encoding", "content-length", "transfer-encoding"].includes(key)) {
-        responseHeaders[key] = value;
+    if (res.status >= 300 && res.status < 400) {
+      const location = res.headers.get("location");
+      if (location) {
+        const redirectedRes = await fetch(location, {
+          method: request.method,
+          headers,
+          body: body || undefined,
+        });
+        return proxyResponse(redirectedRes);
       }
-    });
+    }
 
-    const responseBody = res.status === 204 ? null : await res.text();
-
-    return new NextResponse(responseBody, {
-      status: res.status,
-      headers: responseHeaders,
-    });
+    return proxyResponse(res);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Erro interno do proxy";
     return NextResponse.json({ error: message }, { status: 502 });
   }
+}
+
+function formatHeaders(headers: Headers): Record<string, string> {
+  const result: Record<string, string> = {};
+  const skip = new Set(["content-encoding", "content-length", "transfer-encoding"]);
+  headers.forEach((value, key) => {
+    if (!skip.has(key)) result[key] = value;
+  });
+  return result;
+}
+
+async function proxyResponse(res: Response): Promise<NextResponse> {
+  const responseHeaders = formatHeaders(res.headers);
+  const responseBody = res.status === 204 ? null : await res.text();
+  return new NextResponse(responseBody, {
+    status: res.status,
+    headers: responseHeaders,
+  });
 }
 
 export const GET = proxy;
