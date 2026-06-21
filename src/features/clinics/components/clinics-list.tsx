@@ -8,7 +8,6 @@ import {
   MoreHorizontal,
   Pencil,
   PowerOff,
-  Plus,
   Trash2,
   LogIn,
   Building2,
@@ -87,11 +86,6 @@ export function ClinicsList() {
   const [editClinic, setEditClinic] = useState<Clinic | undefined>();
   const [deactivateTarget, setDeactivateTarget] = useState<Clinic | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Clinic | null>(null);
-
-  const openCreate = () => {
-    setEditClinic(undefined);
-    setDialogOpen(true);
-  };
 
   const openEdit = (clinic: Clinic) => {
     setEditClinic(clinic);
@@ -186,10 +180,7 @@ export function ClinicsList() {
             </SelectContent>
           </Select>
         </div>
-        <Button onClick={openCreate} size="sm">
-          <Plus className="mr-1.5 h-4 w-4" />
-          Nova clínica
-        </Button>
+        <div />
       </div>
 
       {/* Table */}
@@ -345,7 +336,7 @@ export function ClinicsList() {
         </div>
       )}
 
-      {/* Dialog criação/edição */}
+      {/* Dialog edição */}
       <ClinicDialog open={dialogOpen} onOpenChange={setDialogOpen} clinic={editClinic} />
 
       {/* Confirm desativar */}

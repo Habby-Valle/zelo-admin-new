@@ -283,22 +283,6 @@ export function ClinicForm({
         </div>
       )}
 
-      {!isEditing && (
-        <div className="space-y-1">
-          <Label htmlFor="admin_email">E-mail do administrador</Label>
-          <Input
-            id="admin_email"
-            type="email"
-            placeholder="admin@clinica.com.br"
-            {...register("admin_email")}
-          />
-          <p className="text-xs text-muted-foreground">Se informado, um convite será enviado.</p>
-          {errors.admin_email && (
-            <p className="text-xs text-destructive">{errors.admin_email.message}</p>
-          )}
-        </div>
-      )}
-
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
         {isEditing ? "Salvar alterações" : "Criar clínica"}
