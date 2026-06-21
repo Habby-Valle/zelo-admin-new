@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Calendar } from "lucide-react";
 import {
   Select,
@@ -51,19 +52,22 @@ function getDateRange(preset: string): { from: string; to: string } {
 
 interface ReportsFiltersProps {
   clinics: Clinic[];
+  clinicId: string;
   onFilterChange: (filters: { clinicId: string; dateRange: { from: string; to: string } }) => void;
 }
 
-export function ReportsFilters({ clinics, onFilterChange }: ReportsFiltersProps) {
+export function ReportsFilters({ clinics, clinicId, onFilterChange }: ReportsFiltersProps) {
+  const [preset, setPreset] = useState("30d");
+
   const handleClinicChange = (value: string) => {
-    const dateRange = getDateRange("30d");
     onFilterChange({
       clinicId: value === "all" ? "all" : value,
-      dateRange,
+      dateRange: getDateRange("30d"),
     });
   };
 
   const handlePresetChange = (value: string) => {
+    setPreset(value);
     onFilterChange({
       clinicId: "all",
       dateRange: getDateRange(value),
@@ -82,7 +86,7 @@ export function ReportsFilters({ clinics, onFilterChange }: ReportsFiltersProps)
         <div className="flex flex-wrap gap-4">
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Clínica</Label>
-            <Select value="all" onValueChange={(v) => handleClinicChange(v ?? "all")}>
+            <Select value={clinicId} onValueChange={(v) => handleClinicChange(v ?? "all")}>
               <SelectTrigger className="w-48">
                 <SelectValue>Todas as clínicas</SelectValue>
               </SelectTrigger>
@@ -99,7 +103,7 @@ export function ReportsFilters({ clinics, onFilterChange }: ReportsFiltersProps)
 
           <div className="space-y-1.5">
             <Label className="text-xs text-muted-foreground">Período</Label>
-            <Select value="30d" onValueChange={(v) => handlePresetChange(v ?? "30d")}>
+            <Select value={preset} onValueChange={(v) => handlePresetChange(v ?? "30d")}>
               <SelectTrigger className="w-40">
                 <SelectValue>Últimos 30 dias</SelectValue>
               </SelectTrigger>

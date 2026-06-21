@@ -124,7 +124,7 @@ export function ReportsPageClient() {
 
   return (
     <div className="space-y-6">
-      <ReportsFilters clinics={clinics} onFilterChange={handleFilterChange} />
+      <ReportsFilters clinics={clinics} clinicId={filters.clinicId} onFilterChange={handleFilterChange} />
 
       <div className="grid gap-6 md:grid-cols-2">
         <ShiftsReport data={shiftsData} loading={isPending} onExport={exportShiftsCsv} />
