@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import {
@@ -12,6 +13,7 @@ import {
   CalendarClock,
   Bell,
   CreditCard,
+  UserPlus,
 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -34,6 +36,7 @@ import { useUsers } from "@/features/users/hooks";
 import { useShifts } from "@/features/shifts/hooks";
 import { useSosAlerts } from "@/features/sos/hooks";
 import { formatCnpj, formatDate, formatDateTime, formatCurrency } from "@/lib/format";
+import { InviteDialog } from "@/features/users/components/invite-dialog";
 
 const STATUS_COLORS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   active: "default",
@@ -114,6 +117,7 @@ interface ClinicDetailViewProps {
 
 export function ClinicDetailView({ id }: ClinicDetailViewProps) {
   const router = useRouter();
+  const [inviteOpen, setInviteOpen] = useState(false);
   const { data: clinic, isLoading: loadingClinic } = useClinic(id);
   const { data: patientsData, isLoading: loadingPatients } = usePatients({
     clinicId: String(id),
@@ -197,6 +201,10 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
           </div>
           <p className="text-muted-foreground">CNPJ: {formatCnpj(clinic.cnpj)}</p>
         </div>
+        <Button onClick={() => setInviteOpen(true)}>
+          <UserPlus className="mr-2 h-4 w-4" />
+          Convidar admin
+        </Button>
       </div>
 
       {/* Subscription Card */}
@@ -600,6 +608,12 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
           </div>
         </TabsContent>
       </Tabs>
+
+      <InviteDialog
+        open={inviteOpen}
+        onOpenChange={setInviteOpen}
+        defaultRole="clinic_admin"
+      />
     </div>
   );
 }

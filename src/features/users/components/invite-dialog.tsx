@@ -29,9 +29,10 @@ const ROLE_LABELS: Record<string, string> = {
 interface InviteDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  defaultRole?: SendInviteValues["role"];
 }
 
-export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
+export function InviteDialog({ open, onOpenChange, defaultRole = "clinic_admin" }: InviteDialogProps) {
   const sendInvite = useSendInvite();
   const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 });
   const clinics = clinicsData?.results ?? [];
@@ -45,14 +46,14 @@ export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
     formState: { errors },
   } = useForm<SendInviteValues>({
     resolver: zodResolver(sendInviteSchema),
-    defaultValues: { email: "", role: "clinic_admin", clinic_id: null },
+    defaultValues: { email: "", role: defaultRole, clinic_id: null },
   });
 
   const role = watch("role");
 
   useEffect(() => {
-    if (open) reset({ email: "", role: "clinic_admin", clinic_id: null });
-  }, [open, reset]);
+    if (open) reset({ email: "", role: defaultRole, clinic_id: null });
+  }, [open, reset, defaultRole]);
 
   function onSubmit(values: SendInviteValues) {
     sendInvite.mutate(
@@ -89,27 +90,33 @@ export function InviteDialog({ open, onOpenChange }: InviteDialogProps) {
 
           <div className="space-y-1.5">
             <Label>Perfil *</Label>
-            <Select
-              value={role}
-              onValueChange={(v) =>
-                setValue("role", v as SendInviteValues["role"], {
-                  shouldValidate: true,
-                })
-              }
-            >
-              <SelectTrigger>
-                <SelectValue>
-                  {ROLE_LABELS[role] ?? role}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(ROLE_LABELS).map(([value, label]) => (
-                  <SelectItem key={value} value={value}>
-                    {label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            {defaultRole ? (
+              <div className="flex h-9 items-center rounded-lg border bg-muted px-3 text-sm text-muted-foreground">
+                {ROLE_LABELS[defaultRole] ?? defaultRole}
+              </div>
+            ) : (
+              <Select
+                value={role}
+                onValueChange={(v) =>
+                  setValue("role", v as SendInviteValues["role"], {
+                    shouldValidate: true,
+                  })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue>
+                    {ROLE_LABELS[role] ?? role}
+                  </SelectValue>
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(ROLE_LABELS).map(([value, label]) => (
+                    <SelectItem key={value} value={value}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
             {errors.role && <p className="text-xs text-destructive">{errors.role.message}</p>}
           </div>
 
