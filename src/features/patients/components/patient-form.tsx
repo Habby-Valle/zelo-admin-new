@@ -92,7 +92,9 @@ export function PatientForm({
             render={({ field }) => (
               <Select value={field.value ?? ""} onValueChange={field.onChange}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecionar..." />
+                  <SelectValue>
+                    {field.value ? GENDER_LABELS[field.value] ?? field.value : "Selecionar..."}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(GENDER_LABELS).map(([v, l]) => (
@@ -138,7 +140,11 @@ export function PatientForm({
                 }
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecionar clínica..." />
+                  <SelectValue>
+                    {field.value != null
+                      ? clinics.find((c) => Number(c.id) === field.value)?.name ?? `#${field.value}`
+                      : "Selecionar clínica..."}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Nenhuma</SelectItem>
@@ -164,7 +170,9 @@ export function PatientForm({
                 onValueChange={(v) => field.onChange(v === "none" ? null : v)}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecionar..." />
+                  <SelectValue>
+                    {field.value ?? "Não informado"}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="none">Não informado</SelectItem>

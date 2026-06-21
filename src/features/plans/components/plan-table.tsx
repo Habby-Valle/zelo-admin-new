@@ -104,7 +104,9 @@ export function PlanTable({
           />
           <Select value={isActive} onValueChange={(v) => onActiveChange(v ?? "all")}>
             <SelectTrigger className="w-40">
-              <SelectValue placeholder="Status" />
+              <SelectValue>
+                {isActive === "all" ? "Todos" : isActive === "true" ? "Ativos" : "Inativos"}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos</SelectItem>

@@ -127,7 +127,11 @@ export function PatientsPageClient() {
           onValueChange={(v) => updateParams({ clinic_id: v === "all" ? "" : (v ?? ""), page: "" })}
         >
           <SelectTrigger className="w-48">
-            <SelectValue placeholder="Clínica" />
+            <SelectValue>
+              {clinicId
+                ? clinics.find((c) => String(c.id) === clinicId)?.name ?? clinicId
+                : "Todas as clínicas"}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todas as clínicas</SelectItem>
@@ -145,7 +149,11 @@ export function PatientsPageClient() {
           }
         >
           <SelectTrigger className="w-48">
-            <SelectValue placeholder="Responsável" />
+            <SelectValue>
+              {guardianId
+                ? guardians.find((g) => g.id === guardianId)?.name ?? guardianId
+                : "Todos os responsáveis"}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos os responsáveis</SelectItem>
@@ -161,7 +169,9 @@ export function PatientsPageClient() {
           onValueChange={(v) => updateParams({ is_active: v === "all" ? "" : (v ?? ""), page: "" })}
         >
           <SelectTrigger className="w-36">
-            <SelectValue placeholder="Status" />
+            <SelectValue>
+              {isActive === "" || isActive === "all" ? "Todos" : isActive === "true" ? "Ativo" : "Inativo"}
+            </SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>

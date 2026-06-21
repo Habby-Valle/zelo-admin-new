@@ -458,7 +458,11 @@ export function PatientDetailClient({ id }: { id: string }) {
               onValueChange={(v) => setSelectedCaregiverId(v ?? "")}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Selecionar cuidador..." />
+                <SelectValue>
+                  {selectedCaregiverId
+                    ? caregivers.find((c) => c.id === selectedCaregiverId)?.name ?? selectedCaregiverId
+                    : "Selecionar cuidador..."}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {caregivers.length === 0 ? (
@@ -506,7 +510,11 @@ export function PatientDetailClient({ id }: { id: string }) {
               <Label>Familiar</Label>
               <Select value={selectedFamilyId} onValueChange={(v) => setSelectedFamilyId(v ?? "")}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Selecionar familiar..." />
+                  <SelectValue>
+                    {selectedFamilyId
+                      ? familyMembers.find((f) => f.id === selectedFamilyId)?.name ?? selectedFamilyId
+                      : "Selecionar familiar..."}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {familyMembers.length === 0 ? (
