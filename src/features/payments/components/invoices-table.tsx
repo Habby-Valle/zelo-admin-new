@@ -34,15 +34,20 @@ const INVOICE_STATUS_LABELS: Record<string, string> = {
   uncollectible: "Não cobrável",
 };
 
-const INVOICE_STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-  paid: "default",
-  open: "secondary",
-  void: "outline",
-  uncollectible: "destructive",
-};
+const INVOICE_STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> =
+  {
+    paid: "default",
+    open: "secondary",
+    void: "outline",
+    uncollectible: "destructive",
+  };
 
 function StatusBadge({ status }: { status: string }) {
-  return <Badge variant={INVOICE_STATUS_VARIANTS[status] ?? "outline"}>{INVOICE_STATUS_LABELS[status] ?? status}</Badge>;
+  return (
+    <Badge variant={INVOICE_STATUS_VARIANTS[status] ?? "outline"}>
+      {INVOICE_STATUS_LABELS[status] ?? status}
+    </Badge>
+  );
 }
 
 function TypeBadge({ type }: { type: string }) {
@@ -79,9 +84,7 @@ export function InvoicesTable({ invoices }: InvoicesTableProps) {
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v ?? "all")}>
           <SelectTrigger className="w-40">
             <Filter className="mr-2 h-4 w-4" />
-            <SelectValue>
-              {INVOICE_STATUS_LABELS[statusFilter] ?? statusFilter}
-            </SelectValue>
+            <SelectValue>{INVOICE_STATUS_LABELS[statusFilter] ?? statusFilter}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>

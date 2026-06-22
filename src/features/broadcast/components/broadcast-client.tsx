@@ -110,9 +110,7 @@ export function BroadcastClient() {
             <Label>Destinatários</Label>
             <Select value={targetRole} onValueChange={(v) => setTargetRole(v ?? "all")}>
               <SelectTrigger>
-                <SelectValue>
-                  {ROLE_LABELS[targetRole] ?? targetRole}
-                </SelectValue>
+                <SelectValue>{ROLE_LABELS[targetRole] ?? targetRole}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">

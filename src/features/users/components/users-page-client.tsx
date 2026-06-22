@@ -163,7 +163,7 @@ export function UsersPageClient() {
             >
               <SelectTrigger className="w-44">
                 <SelectValue>
-                  {role === "" || role === "all" ? "Todos os perfis" : ROLE_LABELS[role] ?? role}
+                  {role === "" || role === "all" ? "Todos os perfis" : (ROLE_LABELS[role] ?? role)}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
@@ -325,7 +325,7 @@ export function UsersPageClient() {
                 <SelectValue>
                   {status === "" || status === "all"
                     ? "Todos"
-                    : STATUS_LABELS[status as InviteStatus] ?? status}
+                    : (STATUS_LABELS[status as InviteStatus] ?? status)}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
@@ -345,7 +345,7 @@ export function UsersPageClient() {
             >
               <SelectTrigger className="w-44">
                 <SelectValue>
-                  {role === "" || role === "all" ? "Todos os perfis" : ROLE_LABELS[role] ?? role}
+                  {role === "" || role === "all" ? "Todos os perfis" : (ROLE_LABELS[role] ?? role)}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>

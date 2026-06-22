@@ -46,7 +46,9 @@ const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | 
 };
 
 function StatusBadge({ status }: { status: string }) {
-  return <Badge variant={STATUS_VARIANTS[status] ?? "outline"}>{STATUS_LABELS[status] ?? status}</Badge>;
+  return (
+    <Badge variant={STATUS_VARIANTS[status] ?? "outline"}>{STATUS_LABELS[status] ?? status}</Badge>
+  );
 }
 
 export function GuardianSubscriptionsTable({ subscriptions }: GuardianSubscriptionsTableProps) {
@@ -78,9 +80,7 @@ export function GuardianSubscriptionsTable({ subscriptions }: GuardianSubscripti
         <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v ?? "all")}>
           <SelectTrigger className="w-40">
             <Filter className="mr-2 h-4 w-4" />
-            <SelectValue>
-              {STATUS_LABELS[statusFilter] ?? statusFilter}
-            </SelectValue>
+            <SelectValue>{STATUS_LABELS[statusFilter] ?? statusFilter}</SelectValue>
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>

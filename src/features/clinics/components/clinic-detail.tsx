@@ -609,11 +609,7 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
         </TabsContent>
       </Tabs>
 
-      <InviteDialog
-        open={inviteOpen}
-        onOpenChange={setInviteOpen}
-        defaultRole="clinic_admin"
-      />
+      <InviteDialog open={inviteOpen} onOpenChange={setInviteOpen} defaultRole="clinic_admin" />
     </div>
   );
 }

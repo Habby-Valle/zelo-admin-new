@@ -396,8 +396,8 @@ export function ShiftDetailClient({ id }: ShiftDetailClientProps) {
                 <SelectTrigger>
                   <SelectValue>
                     {selectedPatientId
-                      ? availablePatients.find((p) => p.id === selectedPatientId)?.name ??
-                        selectedPatientId
+                      ? (availablePatients.find((p) => p.id === selectedPatientId)?.name ??
+                        selectedPatientId)
                       : "Selecione o paciente"}
                   </SelectValue>
                 </SelectTrigger>
@@ -442,7 +442,7 @@ export function ShiftDetailClient({ id }: ShiftDetailClientProps) {
               <Select value={newStatus} onValueChange={(v) => setNewStatus(v as ShiftStatus)}>
                 <SelectTrigger>
                   <SelectValue>
-                    {newStatus ? STATUS_LABELS[newStatus] ?? newStatus : "Selecione o status"}
+                    {newStatus ? (STATUS_LABELS[newStatus] ?? newStatus) : "Selecione o status"}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>

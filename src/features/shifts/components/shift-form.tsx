@@ -101,8 +101,8 @@ export function ShiftForm({ shift }: ShiftFormProps) {
             <SelectTrigger>
               <SelectValue>
                 {watchedCaregiver
-                  ? caregivers.find((c) => String(c.id) === String(watchedCaregiver))?.name ??
-                    String(watchedCaregiver)
+                  ? (caregivers.find((c) => String(c.id) === String(watchedCaregiver))?.name ??
+                    String(watchedCaregiver))
                   : "Selecione o cuidador"}
               </SelectValue>
             </SelectTrigger>
@@ -128,7 +128,7 @@ export function ShiftForm({ shift }: ShiftFormProps) {
             <SelectTrigger>
               <SelectValue>
                 {watchedClinic
-                  ? clinics.find((c) => c.id === watchedClinic)?.name ?? String(watchedClinic)
+                  ? (clinics.find((c) => c.id === watchedClinic)?.name ?? String(watchedClinic))
                   : "Selecione a clínica"}
               </SelectValue>
             </SelectTrigger>

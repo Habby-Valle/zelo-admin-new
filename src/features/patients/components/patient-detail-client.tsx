@@ -460,7 +460,8 @@ export function PatientDetailClient({ id }: { id: string }) {
               <SelectTrigger>
                 <SelectValue>
                   {selectedCaregiverId
-                    ? caregivers.find((c) => c.id === selectedCaregiverId)?.name ?? selectedCaregiverId
+                    ? (caregivers.find((c) => c.id === selectedCaregiverId)?.name ??
+                      selectedCaregiverId)
                     : "Selecionar cuidador..."}
                 </SelectValue>
               </SelectTrigger>
@@ -512,7 +513,8 @@ export function PatientDetailClient({ id }: { id: string }) {
                 <SelectTrigger>
                   <SelectValue>
                     {selectedFamilyId
-                      ? familyMembers.find((f) => f.id === selectedFamilyId)?.name ?? selectedFamilyId
+                      ? (familyMembers.find((f) => f.id === selectedFamilyId)?.name ??
+                        selectedFamilyId)
                       : "Selecionar familiar..."}
                   </SelectValue>
                 </SelectTrigger>

@@ -129,7 +129,7 @@ export function PatientsPageClient() {
           <SelectTrigger className="w-48">
             <SelectValue>
               {clinicId
-                ? clinics.find((c) => String(c.id) === clinicId)?.name ?? clinicId
+                ? (clinics.find((c) => String(c.id) === clinicId)?.name ?? clinicId)
                 : "Todas as clínicas"}
             </SelectValue>
           </SelectTrigger>
@@ -151,7 +151,7 @@ export function PatientsPageClient() {
           <SelectTrigger className="w-48">
             <SelectValue>
               {guardianId
-                ? guardians.find((g) => g.id === guardianId)?.name ?? guardianId
+                ? (guardians.find((g) => g.id === guardianId)?.name ?? guardianId)
                 : "Todos os responsáveis"}
             </SelectValue>
           </SelectTrigger>
@@ -170,7 +170,11 @@ export function PatientsPageClient() {
         >
           <SelectTrigger className="w-36">
             <SelectValue>
-              {isActive === "" || isActive === "all" ? "Todos" : isActive === "true" ? "Ativo" : "Inativo"}
+              {isActive === "" || isActive === "all"
+                ? "Todos"
+                : isActive === "true"
+                  ? "Ativo"
+                  : "Inativo"}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>

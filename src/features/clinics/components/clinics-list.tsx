@@ -168,9 +168,7 @@ export function ClinicsList() {
             }}
           >
             <SelectTrigger className="w-36">
-              <SelectValue>
-                {STATUS_FILTER_LABELS[status] ?? status}
-              </SelectValue>
+              <SelectValue>{STATUS_FILTER_LABELS[status] ?? status}</SelectValue>
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos status</SelectItem>

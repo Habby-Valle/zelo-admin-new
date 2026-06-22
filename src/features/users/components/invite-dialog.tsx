@@ -32,7 +32,11 @@ interface InviteDialogProps {
   defaultRole?: SendInviteValues["role"];
 }
 
-export function InviteDialog({ open, onOpenChange, defaultRole = "clinic_admin" }: InviteDialogProps) {
+export function InviteDialog({
+  open,
+  onOpenChange,
+  defaultRole = "clinic_admin",
+}: InviteDialogProps) {
   const sendInvite = useSendInvite();
   const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 });
   const clinics = clinicsData?.results ?? [];
@@ -104,9 +108,7 @@ export function InviteDialog({ open, onOpenChange, defaultRole = "clinic_admin" 
                 }
               >
                 <SelectTrigger>
-                  <SelectValue>
-                    {ROLE_LABELS[role] ?? role}
-                  </SelectValue>
+                  <SelectValue>{ROLE_LABELS[role] ?? role}</SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {Object.entries(ROLE_LABELS).map(([value, label]) => (
@@ -134,8 +136,8 @@ export function InviteDialog({ open, onOpenChange, defaultRole = "clinic_admin" 
                 <SelectTrigger>
                   <SelectValue>
                     {watch("clinic_id") != null
-                      ? clinics.find((c) => c.id === watch("clinic_id"))?.name ??
-                        String(watch("clinic_id"))
+                      ? (clinics.find((c) => c.id === watch("clinic_id"))?.name ??
+                        String(watch("clinic_id")))
                       : "Selecionar clínica..."}
                   </SelectValue>
                 </SelectTrigger>

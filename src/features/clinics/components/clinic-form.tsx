@@ -137,7 +137,11 @@ export function ClinicForm({
         >
           <SelectTrigger className="w-full">
             <SelectValue>
-              {statusValue === "active" ? "Ativa" : statusValue === "inactive" ? "Inativa" : "Suspensa"}
+              {statusValue === "active"
+                ? "Ativa"
+                : statusValue === "inactive"
+                  ? "Inativa"
+                  : "Suspensa"}
             </SelectValue>
           </SelectTrigger>
           <SelectContent>

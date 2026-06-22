@@ -181,7 +181,9 @@ export function AuditLogsClient() {
             >
               <SelectTrigger className="w-40">
                 <SelectValue>
-                  {filters.action ? ACTION_LABELS[filters.action] ?? filters.action : "Todas ações"}
+                  {filters.action
+                    ? (ACTION_LABELS[filters.action] ?? filters.action)
+                    : "Todas ações"}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>

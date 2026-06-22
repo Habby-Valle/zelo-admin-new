@@ -183,7 +183,9 @@ export function SosPageClient() {
             >
               <SelectTrigger className="w-44">
                 <SelectValue>
-                  {status === "all" ? "Todos os status" : STATUS_LABELS[status as SosStatus] ?? status}
+                  {status === "all"
+                    ? "Todos os status"
+                    : (STATUS_LABELS[status as SosStatus] ?? status)}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
@@ -202,7 +204,7 @@ export function SosPageClient() {
                 <SelectValue>
                   {clinicId === "all"
                     ? "Todas as clínicas"
-                    : clinics.find((c) => String(c.id) === clinicId)?.name ?? clinicId}
+                    : (clinics.find((c) => String(c.id) === clinicId)?.name ?? clinicId)}
                 </SelectValue>
               </SelectTrigger>
               <SelectContent>
