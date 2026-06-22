@@ -1,0 +1,15 @@
+{
+  "name": "Zelo Admin",
+  "short_name": "Zelo Admin",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/logo.ico",
+      "sizes": "any",
+      "type": "image/x-icon"
+    }
+  ]
+}

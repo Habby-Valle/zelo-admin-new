@@ -9,9 +9,62 @@ import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
+const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://admin.zelo.com.br";
+
 export const metadata: Metadata = {
-  title: "Zelo Admin",
-  description: "Painel Administrativo Super Admin",
+  title: {
+    default: "Zelo Admin",
+    template: "%s | Zelo Admin",
+  },
+  description:
+    "Painel Administrativo Super Admin — Gerencie clínicas, planos, assinaturas e configurações do sistema.",
+  metadataBase: new URL(appUrl),
+  applicationName: "Zelo Admin",
+  authors: [{ name: "Zelo" }],
+  generator: "Next.js",
+  keywords: ["admin", "clínicas", "planos", "assinaturas", "saúde", "gestão"],
+  referrer: "origin-when-cross-origin",
+  creator: "Zelo",
+  publisher: "Zelo",
+  robots: {
+    index: true,
+    follow: true,
+  },
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    siteName: "Zelo Admin",
+    title: "Zelo Admin",
+    description:
+      "Painel Administrativo Super Admin — Gerencie clínicas, planos, assinaturas e configurações do sistema.",
+  },
+  twitter: {
+    card: "summary",
+    title: "Zelo Admin",
+    description:
+      "Painel Administrativo Super Admin — Gerencie clínicas, planos, assinaturas e configurações do sistema.",
+  },
+  icons: {
+    icon: "/logo.ico",
+    shortcut: "/logo.ico",
+    apple: "/logo.ico",
+  },
+  manifest: "/site.webmanifest",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+  colorScheme: "light dark",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+  },
+  formatDetection: {
+    telephone: true,
+    email: true,
+    address: true,
+  },
 };
 
 export default function RootLayout({
