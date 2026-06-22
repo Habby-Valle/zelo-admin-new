@@ -195,7 +195,7 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
       apiFetchClient<DjangoGuardianSubscription>(`/management/guardian-subscriptions/${id}/`)
         .then((data) => setSubscription(mapSubscription(data)))
         .catch(() => setSubscription(null));
-    } catch (err) {
+    } catch {
       alert("Erro ao atribuir plano");
     } finally {
       setActivating(false);

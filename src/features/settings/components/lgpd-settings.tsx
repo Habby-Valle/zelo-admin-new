@@ -29,7 +29,6 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Separator } from "@/components/ui/separator";
 import {
-  useLgpdConfig,
   useUpdateRetentionPolicy,
   useExportUserData,
   useExportPatientData,

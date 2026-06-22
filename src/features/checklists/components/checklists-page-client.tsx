@@ -6,7 +6,6 @@ import { ListChecks, Pencil, Plus, Trash2, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 
 import { useChecklists, useDeleteChecklist, useChecklist } from "@/features/checklists/hooks";
-import { useClinics } from "@/features/clinics/hooks";
 import type { Checklist, ChecklistDetail } from "@/features/checklists/types";
 import { ChecklistDialog } from "./checklist-dialog";
 import { Badge } from "@/components/ui/badge";

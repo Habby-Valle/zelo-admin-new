@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Search } from "lucide-react";
 import { useState } from "react";
@@ -53,7 +53,7 @@ export function ClinicForm({
     watch,
     formState: { errors },
   } = useForm<ClinicFormValues>({
-    resolver: zodResolver(clinicSchema) as any,
+    resolver: zodResolver(clinicSchema) as unknown as Resolver<ClinicFormValues>,
     defaultValues: {
       name: "",
       cnpj: "",

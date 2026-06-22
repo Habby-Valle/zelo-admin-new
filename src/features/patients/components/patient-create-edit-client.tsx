@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { useCreatePatient, usePatient, useUpdatePatient } from "@/features/patients/hooks";
 import { PatientForm } from "@/features/patients/components/patient-form";

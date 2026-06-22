@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { patientSchema, type PatientFormValues } from "@/lib/validations/patient";
@@ -44,7 +44,7 @@ export function PatientForm({
     control,
     formState: { errors },
   } = useForm<PatientFormValues>({
-    resolver: zodResolver(patientSchema) as any,
+    resolver: zodResolver(patientSchema) as unknown as Resolver<PatientFormValues>,
     defaultValues: {
       name: "",
       birth_date: "",

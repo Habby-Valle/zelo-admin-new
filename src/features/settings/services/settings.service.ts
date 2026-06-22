@@ -3,9 +3,7 @@ import type { PaginatedResponse } from "@/types";
 import type {
   SystemSettings,
   LgpdConfig,
-  RetentionPolicy,
   UserSearchResult,
-  PatientSearchResult,
 } from "@/features/settings/types";
 
 export async function fetchSystemSettings(): Promise<SystemSettings> {

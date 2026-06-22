@@ -1,5 +1,4 @@
 import { apiFetchClient } from "@/lib/api-client";
-import type { PaginatedResponse } from "@/types";
 import type { UserProfile } from "@/features/users/types";
 
 interface ApiProfile {

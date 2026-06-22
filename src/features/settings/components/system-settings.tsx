@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { AlertTriangle, Globe, Mail, MapPin, Phone, Save, ToggleLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,8 @@ import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useSystemSettings, useSaveSystemSettings } from "@/features/settings/hooks";
 import { ImageUpload } from "@/components/shared/image-upload";
+import type { UseMutationResult } from "@tanstack/react-query";
+import type { SystemSettings } from "@/features/settings/types";
 
 function toISOStringLocal(dateStr: string): string {
   if (!dateStr) return "";
@@ -19,52 +21,38 @@ function toISOStringLocal(dateStr: string): string {
   return new Date(date.getTime() - offset).toISOString();
 }
 
-export function SystemSettingsTab() {
-  const { data: settings, isLoading } = useSystemSettings();
-  const saveMutation = useSaveSystemSettings();
-
-  const [maintenanceMode, setMaintenanceMode] = useState(false);
-  const [message, setMessage] = useState("");
-  const [plannedEnd, setPlannedEnd] = useState("");
-  const [plansEnabled, setPlansEnabled] = useState(false);
-  const [feedbackVisible, setFeedbackVisible] = useState(true);
-  const [appName, setAppName] = useState("");
-  const [appUrl, setAppUrl] = useState("");
-  const [appSiteUrl, setAppSiteUrl] = useState("");
-  const [appStoreUrl, setAppStoreUrl] = useState("");
-  const [playStoreUrl, setPlayStoreUrl] = useState("");
-  const [supportEmail, setSupportEmail] = useState("");
-  const [supportPhone, setSupportPhone] = useState("");
-  const [supportWhatsapp, setSupportWhatsapp] = useState("");
-  const [adminLogoUrl, setAdminLogoUrl] = useState("");
+function SystemSettingsForm({
+  settings,
+  saveMutation,
+}: {
+  settings: SystemSettings;
+  saveMutation: UseMutationResult<
+    void,
+    Error,
+    Partial<SystemSettings & { admin_logo_media_id?: number | null }>
+  >;
+}) {
+  const [maintenanceMode, setMaintenanceMode] = useState(settings.maintenance_mode);
+  const [message, setMessage] = useState(settings.maintenance_message);
+  const [plannedEnd, setPlannedEnd] = useState(
+    settings.maintenance_planned_end
+      ? new Date(settings.maintenance_planned_end).toISOString().slice(0, 16)
+      : ""
+  );
+  const [plansEnabled, setPlansEnabled] = useState(settings.plans_enabled);
+  const [feedbackVisible, setFeedbackVisible] = useState(settings.feedback_visible);
+  const [appName, setAppName] = useState(settings.app_name);
+  const [appUrl, setAppUrl] = useState(settings.app_url);
+  const [appSiteUrl, setAppSiteUrl] = useState(settings.app_site_url);
+  const [appStoreUrl, setAppStoreUrl] = useState(settings.app_store_url);
+  const [playStoreUrl, setPlayStoreUrl] = useState(settings.play_store_url);
+  const [supportEmail, setSupportEmail] = useState(settings.support_email);
+  const [supportPhone, setSupportPhone] = useState(settings.support_phone);
+  const [supportWhatsapp, setSupportWhatsapp] = useState(settings.support_whatsapp);
+  const [adminLogoUrl, setAdminLogoUrl] = useState(settings.admin_logo_url);
   const [logoMediaId, setLogoMediaId] = useState<number | null>(null);
-  const [cnpj, setCnpj] = useState("");
-  const [address, setAddress] = useState("");
-
-  useEffect(() => {
-    if (settings) {
-      setMaintenanceMode(settings.maintenance_mode);
-      setMessage(settings.maintenance_message);
-      setPlannedEnd(
-        settings.maintenance_planned_end
-          ? new Date(settings.maintenance_planned_end).toISOString().slice(0, 16)
-          : ""
-      );
-      setPlansEnabled(settings.plans_enabled);
-      setFeedbackVisible(settings.feedback_visible);
-      setAppName(settings.app_name);
-      setAppUrl(settings.app_url);
-      setAppSiteUrl(settings.app_site_url);
-      setAppStoreUrl(settings.app_store_url);
-      setPlayStoreUrl(settings.play_store_url);
-      setSupportEmail(settings.support_email);
-      setSupportPhone(settings.support_phone);
-      setSupportWhatsapp(settings.support_whatsapp);
-      setAdminLogoUrl(settings.admin_logo_url);
-      setCnpj(settings.cnpj);
-      setAddress(settings.address);
-    }
-  }, [settings]);
+  const [cnpj, setCnpj] = useState(settings.cnpj);
+  const [address, setAddress] = useState(settings.address);
 
   const handleSaveFlags = async (newPlansEnabled: boolean, newFeedbackVisible: boolean) => {
     try {
@@ -106,14 +94,6 @@ export function SystemSettingsTab() {
       toast.error("Erro ao salvar configurações");
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
@@ -372,4 +352,23 @@ export function SystemSettingsTab() {
       </Card>
     </div>
   );
+}
+
+export function SystemSettingsTab() {
+  const { data: settings, isLoading } = useSystemSettings();
+  const saveMutation = useSaveSystemSettings();
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+
+  if (!settings) {
+    return null;
+  }
+
+  return <SystemSettingsForm settings={settings} saveMutation={saveMutation} />
 }
