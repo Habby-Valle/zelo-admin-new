@@ -93,7 +93,7 @@ function mapSubscriptionDetails(data: DjangoSubscription): SubscriptionDetails {
     planBillingCycle: data.plan_billing_cycle ?? "monthly",
     status: data.status,
     startedAt: data.start_date,
-    expiresAt: data.end_date ?? "",
+    expiresAt: data.end_date ?? data.trial_ends_at ?? "",
     trialEndsAt: data.trial_ends_at ?? "",
     createdAt: data.created_at,
     maxUsers: 0,

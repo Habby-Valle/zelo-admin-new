@@ -226,7 +226,7 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => router.push(`/subscriptions/${subscription.id}`)}
+              onClick={() => router.push(`/subscriptions/${subscription.clinic_id}`)}
             >
               Ver assinatura
             </Button>
@@ -595,7 +595,7 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
                       variant="outline"
                       size="sm"
                       className="mt-2 w-full"
-                      onClick={() => router.push(`/subscriptions/${subscription.id}`)}
+                      onClick={() => router.push(`/subscriptions/${subscription.clinic_id}`)}
                     >
                       Gerenciar assinatura
                     </Button>
