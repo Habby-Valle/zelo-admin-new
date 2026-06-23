@@ -21,7 +21,7 @@ export function useSendInvite() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: { email: string; role: string; clinic_id?: number | null }) =>
+    mutationFn: (data: { email: string; role: string; clinic_id?: string | null }) =>
       createInviteFetch(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inviteKeys.lists() });

@@ -15,7 +15,7 @@ export const feedbackKeys = {
   lists: () => [...feedbackKeys.all, "list"] as const,
   list: (params: FeedbackFilters) => [...feedbackKeys.lists(), params] as const,
   details: () => [...feedbackKeys.all, "detail"] as const,
-  detail: (id: number) => [...feedbackKeys.details(), id] as const,
+  detail: (id: string) => [...feedbackKeys.details(), id] as const,
 };
 
 export function useFeedbacks(params: FeedbackFilters) {
@@ -25,7 +25,7 @@ export function useFeedbacks(params: FeedbackFilters) {
   });
 }
 
-export function useFeedback(id: number) {
+export function useFeedback(id: string) {
   return useQuery({
     queryKey: feedbackKeys.detail(id),
     queryFn: () => fetchFeedback(id),
@@ -37,7 +37,7 @@ export function useUpdateFeedbackStatus() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, status }: { id: number; status: string }) =>
+    mutationFn: ({ id, status }: { id: string; status: string }) =>
       updateFeedbackStatusApi(id, status),
     onSuccess: () => {
       toast.success("Status atualizado.");
@@ -53,7 +53,7 @@ export function useDeleteFeedback() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => softDeleteFeedbackApi(id),
+    mutationFn: (id: string) => softDeleteFeedbackApi(id),
     onSuccess: () => {
       toast.success("Feedback removido.");
       queryClient.invalidateQueries({ queryKey: feedbackKeys.all });

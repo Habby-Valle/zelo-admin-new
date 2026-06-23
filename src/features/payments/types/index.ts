@@ -1,7 +1,7 @@
 export interface PaymentRecord {
-  id: number;
-  invoice_id: number;
-  clinic_id: number;
+  id: string;
+  invoice_id: string;
+  clinic_id: string;
   clinic_name: string;
   plan_name: string | null;
   amount: number;
@@ -24,8 +24,8 @@ export interface PaymentStats {
 }
 
 export interface InvoiceRecord {
-  id: number;
-  owner_id: number;
+  id: string;
+  owner_id: string;
   owner_name: string;
   owner_type: "clinic" | "guardian";
   stripe_invoice_id: string;

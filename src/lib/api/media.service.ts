@@ -16,7 +16,7 @@ export async function uploadMedia(
   }
 }
 
-export async function deleteMedia(mediaId: number): Promise<{ success: boolean; error?: string }> {
+export async function deleteMedia(mediaId: string): Promise<{ success: boolean; error?: string }> {
   try {
     await apiFetchClient<void>(`/media/${mediaId}/`, {
       method: "DELETE",

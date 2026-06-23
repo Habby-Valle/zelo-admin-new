@@ -8,7 +8,7 @@ export const metadata = {
 
 export default async function ClinicPaymentsPage(props: { params: Promise<{ clinicId: string }> }) {
   const { clinicId: clinicIdStr } = await props.params;
-  const clinicId = Number(clinicIdStr);
+  const clinicId = clinicIdStr;
 
   if (Number.isNaN(clinicId)) {
     notFound();

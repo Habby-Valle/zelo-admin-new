@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { clinicKeys } from "@/lib/query-keys";
 import { getClinicApi } from "@/features/clinics/services/clinics.service";
 
-export function useClinic(id: number) {
+export function useClinic(id: string) {
   return useQuery({
     queryKey: clinicKeys.detail(id),
     queryFn: () => getClinicApi(id),

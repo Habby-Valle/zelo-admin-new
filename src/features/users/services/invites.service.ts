@@ -3,26 +3,26 @@ import type { PaginatedResponse } from "@/types";
 import type { Invite } from "@/features/users/types";
 
 interface ApiInvite {
-  id: number;
+  id: string;
   email: string;
   role: string;
   status: string;
   created_by_name: string;
-  clinic_id: number | null;
-  guardian_id: number | null;
+  clinic_id: string | null;
+  guardian_id: string | null;
   created_at: string;
   expires_at: string;
 }
 
 function mapInvite(api: ApiInvite): Invite {
   return {
-    id: String(api.id),
+    id: api.id,
     email: api.email,
     role: api.role as Invite["role"],
     status: api.status as Invite["status"],
     created_by_name: api.created_by_name,
-    clinic_id: api.clinic_id != null ? String(api.clinic_id) : null,
-    guardian_id: api.guardian_id != null ? String(api.guardian_id) : null,
+    clinic_id: api.clinic_id,
+    guardian_id: api.guardian_id,
     created_at: api.created_at,
     expires_at: api.expires_at,
   };
@@ -51,7 +51,7 @@ export async function fetchInvites(params?: {
 export async function createInviteFetch(data: {
   email: string;
   role: string;
-  clinic_id?: number | null;
+  clinic_id?: string | null;
 }): Promise<Invite> {
   const result = await apiFetchClient<ApiInvite>("/invites/", {
     method: "POST",

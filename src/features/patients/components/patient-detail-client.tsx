@@ -152,7 +152,7 @@ export function PatientDetailClient({ id }: { id: string }) {
 
   function handleAddCaregiver() {
     if (!selectedCaregiverId) return;
-    addCaregiver.mutate(Number(selectedCaregiverId), {
+    addCaregiver.mutate(selectedCaregiverId, {
       onSuccess: () => {
         setAddCaregiverOpen(false);
         setSelectedCaregiverId("");
@@ -163,7 +163,7 @@ export function PatientDetailClient({ id }: { id: string }) {
   function handleAddContact() {
     if (!selectedFamilyId) return;
     addContact.mutate(
-      { profileFamilyId: Number(selectedFamilyId), priority: parseInt(contactPriority, 10) || 1 },
+      { profileFamilyId: selectedFamilyId, priority: parseInt(contactPriority, 10) || 1 },
       {
         onSuccess: () => {
           setAddContactOpen(false);

@@ -191,7 +191,7 @@ const POLICY_LABELS: Record<string, { label: string; description: string }> = {
 
 function RetentionPoliciesSection({ policies }: { policies: RetentionPolicy[] }) {
   const updatePolicy = useUpdateRetentionPolicy();
-  const [editing, setEditing] = useState<Record<number, string>>({});
+  const [editing, setEditing] = useState<Record<string, string>>({});
 
   const handleSave = (policy: RetentionPolicy) => {
     const days = parseInt(editing[policy.id] ?? "");
@@ -278,14 +278,14 @@ function RetentionPoliciesSection({ policies }: { policies: RetentionPolicy[] })
 // Export Section
 
 interface SearchUserResult {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: string;
 }
 
 interface SearchPatientResult {
-  id: number;
+  id: string;
   name: string;
   clinic_name: string;
 }
@@ -326,7 +326,7 @@ function ExportSection() {
       const result = await fetchPatients({ search: patientQuery, pageSize: 20 });
       setPatientResults(
         result.patients.map((p) => ({
-          id: Number(p.id),
+          id: p.id,
           name: p.name,
           clinic_name: p.clinic_name ?? "",
         }))
@@ -338,7 +338,7 @@ function ExportSection() {
     }
   };
 
-  const handleExportUser = (id: number, name: string) => {
+  const handleExportUser = (id: string, name: string) => {
     exportUser.mutate(id, {
       onSuccess: (result) => {
         if (result.success && result.data) {
@@ -351,7 +351,7 @@ function ExportSection() {
     });
   };
 
-  const handleExportPatient = (id: number, name: string) => {
+  const handleExportPatient = (id: string, name: string) => {
     exportPatient.mutate(id, {
       onSuccess: (result) => {
         if (result.success && result.data) {
@@ -473,8 +473,8 @@ function AnonymizeSection() {
   const [patientResults, setPatientResults] = useState<SearchPatientResult[]>([]);
   const [searchingUsers, setSearchingUsers] = useState(false);
   const [searchingPatients, setSearchingPatients] = useState(false);
-  const [confirmUser, setConfirmUser] = useState<{ id: number; name: string } | null>(null);
-  const [confirmPatient, setConfirmPatient] = useState<{ id: number; name: string } | null>(null);
+  const [confirmUser, setConfirmUser] = useState<{ id: string; name: string } | null>(null);
+  const [confirmPatient, setConfirmPatient] = useState<{ id: string; name: string } | null>(null);
 
   const anonymizeUser = useAnonymizeUser();
   const anonymizePatient = useAnonymizePatient();
@@ -500,7 +500,7 @@ function AnonymizeSection() {
       const result = await fetchPatients({ search: patientQuery, pageSize: 20 });
       setPatientResults(
         result.patients.map((p) => ({
-          id: Number(p.id),
+          id: p.id,
           name: p.name,
           clinic_name: p.clinic_name ?? "",
         }))

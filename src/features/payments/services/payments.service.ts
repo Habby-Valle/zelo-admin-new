@@ -31,14 +31,14 @@ export async function fetchInvoices(params?: {
 export async function fetchPayments(params?: {
   status?: string;
   search?: string;
-  clinic_id?: number;
+  clinic_id?: string;
   page?: number;
   page_size?: number;
 }): Promise<{ payments: PaymentRecord[]; total: number }> {
   const searchParams = new URLSearchParams();
   if (params?.status) searchParams.set("status", params.status);
   if (params?.search) searchParams.set("search", params.search);
-  if (params?.clinic_id) searchParams.set("clinic_id", String(params.clinic_id));
+  if (params?.clinic_id) searchParams.set("clinic_id", params.clinic_id);
   if (params?.page) searchParams.set("page", String(params.page));
   if (params?.page_size) searchParams.set("page_size", String(params.page_size));
   const query = searchParams.toString();
@@ -48,7 +48,7 @@ export async function fetchPayments(params?: {
   return { payments: data.results, total: data.count };
 }
 
-export async function fetchPaymentStats(clinicId?: number): Promise<PaymentStats> {
+export async function fetchPaymentStats(clinicId?: string): Promise<PaymentStats> {
   const qs = clinicId ? `?clinic_id=${clinicId}` : "";
   return apiFetchClient<PaymentStats>(`/payments/stats/${qs}`);
 }

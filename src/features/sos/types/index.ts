@@ -1,20 +1,20 @@
 export type SosStatus = "active" | "acknowledged" | "resolved";
 
 export interface SosAlert {
-  id: number;
-  caregiver_id: number;
+  id: string;
+  caregiver_id: string;
   caregiver_name: string | null;
-  patient_id: number;
+  patient_id: string;
   patient_name: string | null;
-  shift_id: number | null;
-  clinic_id: number | null;
+  shift_id: string | null;
+  clinic_id: string | null;
   clinic_name: string | null;
   status: SosStatus;
   triggered_at: string;
-  acknowledged_by_id: number | null;
+  acknowledged_by_id: string | null;
   acknowledged_by_name: string | null;
   acknowledged_at: string | null;
-  resolved_by_id: number | null;
+  resolved_by_id: string | null;
   resolved_by_name: string | null;
   resolved_at: string | null;
   resolution_reason: string | null;
@@ -25,7 +25,7 @@ export interface SosAlert {
 
 export interface SosFilters {
   status?: SosStatus | "all";
-  clinic_id?: string | number;
+  clinic_id?: string;
   page?: number;
   page_size?: number;
 }

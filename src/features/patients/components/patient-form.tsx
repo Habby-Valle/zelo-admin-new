@@ -134,15 +134,15 @@ export function PatientForm({
             control={control}
             render={({ field }) => (
               <Select
-                value={field.value != null ? String(field.value) : "none"}
+                value={field.value ?? "none"}
                 onValueChange={(v) =>
-                  field.onChange(v === "none" || v === null ? null : parseInt(v as string, 10))
+                  field.onChange(v === "none" || v === null ? null : v)
                 }
               >
                 <SelectTrigger>
                   <SelectValue>
                     {field.value != null
-                      ? (clinics.find((c) => Number(c.id) === field.value)?.name ??
+                      ? (clinics.find((c) => c.id === field.value)?.name ??
                         `#${field.value}`)
                       : "Selecionar clínica..."}
                   </SelectValue>

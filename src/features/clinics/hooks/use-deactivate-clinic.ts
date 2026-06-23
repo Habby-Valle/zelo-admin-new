@@ -8,7 +8,7 @@ export function useDeactivateClinic() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => updateClinicApi(id, { status: "inactive" }),
+    mutationFn: (id: string) => updateClinicApi(id, { status: "inactive" }),
     onSuccess: (_data, id) => {
       queryClient.invalidateQueries({ queryKey: clinicKeys.lists() });
       queryClient.invalidateQueries({ queryKey: clinicKeys.detail(id) });

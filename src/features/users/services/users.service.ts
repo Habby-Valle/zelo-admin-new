@@ -2,12 +2,12 @@ import { apiFetchClient } from "@/lib/api-client";
 import type { UserProfile } from "@/features/users/types";
 
 interface ApiProfile {
-  id: number;
+  id: string;
   email: string;
   name: string;
   phone: string;
   role: string;
-  media_id: number | null;
+  media_id: string | null;
   media_url: string | null;
   is_active: boolean;
   verification_status?: string | null;
@@ -21,7 +21,7 @@ interface ApiUsersResponse {
 
 function mapProfile(api: ApiProfile): UserProfile {
   return {
-    id: String(api.id),
+    id: api.id,
     email: api.email,
     name: api.name,
     phone: api.phone,
@@ -29,7 +29,7 @@ function mapProfile(api: ApiProfile): UserProfile {
     media_id: api.media_id,
     media: api.media_url
       ? {
-          id: String(api.media_id),
+          id: api.media_id ?? "",
           url: api.media_url,
           original_filename: "",
           mime_type: "",
@@ -52,7 +52,7 @@ export async function fetchUsers(params?: {
   search?: string;
   role?: string;
   isActive?: string;
-  clinicId?: string | number;
+  clinicId?: string;
   page?: number;
   pageSize?: number;
 }): Promise<{ users: UserProfile[]; total: number }> {
@@ -60,7 +60,7 @@ export async function fetchUsers(params?: {
   if (params?.search) searchParams.set("search", params.search);
   if (params?.role) searchParams.set("role", params.role);
   if (params?.isActive) searchParams.set("is_active", params.isActive);
-  if (params?.clinicId) searchParams.set("clinic_id", String(params.clinicId));
+  if (params?.clinicId) searchParams.set("clinic_id", params.clinicId);
   if (params?.page) searchParams.set("page", String(params.page));
   if (params?.pageSize) searchParams.set("page_size", String(params.pageSize));
   const query = searchParams.toString();

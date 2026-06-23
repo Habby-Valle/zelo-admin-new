@@ -16,7 +16,7 @@ export const sosKeys = {
   lists: () => [...sosKeys.all, "list"] as const,
   list: (params: SosFilters) => [...sosKeys.lists(), params] as const,
   details: () => [...sosKeys.all, "detail"] as const,
-  detail: (id: number) => [...sosKeys.details(), id] as const,
+  detail: (id: string) => [...sosKeys.details(), id] as const,
   summary: () => [...sosKeys.all, "summary"] as const,
 };
 
@@ -29,7 +29,7 @@ export function useSosAlerts(params?: SosFilters) {
   });
 }
 
-export function useSosAlert(id: number) {
+export function useSosAlert(id: string) {
   return useQuery({
     queryKey: sosKeys.detail(id),
     queryFn: () => getSosAlertApi(id),
@@ -37,7 +37,7 @@ export function useSosAlert(id: number) {
   });
 }
 
-export function useSosSummary(clinicId?: string | number) {
+export function useSosSummary(clinicId?: string) {
   return useQuery({
     queryKey: sosKeys.summary(),
     queryFn: () => getSosSummaryApi(clinicId),

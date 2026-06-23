@@ -126,7 +126,7 @@ export function PatientEditClient({ id }: { id: string }) {
           cpf: patient.cpf,
           phone: patient.phone,
           email: patient.email,
-          clinic_id: patient.clinic_id ? Number(patient.clinic_id) : null,
+          clinic_id: patient.clinic_id ?? null,
           blood_type: patient.blood_type,
           health_conditions: patient.health_conditions,
           allergies: patient.allergies,

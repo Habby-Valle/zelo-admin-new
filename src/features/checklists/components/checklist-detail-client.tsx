@@ -48,7 +48,7 @@ const ITEM_TYPE_LABELS: Record<string, string> = {
 };
 
 interface ChecklistDetailClientProps {
-  id: number;
+  id: string;
 }
 
 export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {

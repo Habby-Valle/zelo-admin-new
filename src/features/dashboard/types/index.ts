@@ -13,7 +13,7 @@ export interface DashboardKPIs {
 }
 
 export interface ClinicStat {
-  id: number;
+  id: string;
   name: string;
   status: string;
   patientCount: number;
@@ -21,7 +21,7 @@ export interface ClinicStat {
 }
 
 export interface RecentActivity {
-  id: number;
+  id: string;
   action: string;
   entity: string;
   user_name: string;

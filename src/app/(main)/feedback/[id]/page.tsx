@@ -21,7 +21,7 @@ export default async function FeedbackDetailPage({ params }: FeedbackDetailPageP
         </h1>
       </div>
 
-      <FeedbackDetailClient id={Number(id)} />
+      <FeedbackDetailClient id={id} />
     </div>
   );
 }

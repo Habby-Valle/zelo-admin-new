@@ -96,7 +96,7 @@ function formatDuration(start: string, end: string): string {
 }
 
 interface ShiftDetailClientProps {
-  id: number;
+  id: string;
 }
 
 export function ShiftDetailClient({ id }: ShiftDetailClientProps) {
@@ -175,7 +175,7 @@ export function ShiftDetailClient({ id }: ShiftDetailClientProps) {
   const handleAddPatient = async () => {
     if (!selectedPatientId) return;
     try {
-      await addPatient.mutateAsync(Number(selectedPatientId));
+      await addPatient.mutateAsync(selectedPatientId);
       toast.success("Paciente adicionado ao turno.");
       setAddPatientOpen(false);
       setSelectedPatientId("");

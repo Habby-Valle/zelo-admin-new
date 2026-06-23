@@ -38,7 +38,7 @@ export function ShiftForm({ shift }: ShiftFormProps) {
   const caregivers = usersData?.users ?? [];
 
   const createShift = useCreateShift();
-  const updateShift = useUpdateShift(shift?.id ?? 0);
+  const updateShift = useUpdateShift(shift?.id ?? "");
 
   const {
     register,
@@ -95,13 +95,13 @@ export function ShiftForm({ shift }: ShiftFormProps) {
         <div className="space-y-2">
           <Label>Cuidador *</Label>
           <Select
-            value={watchedCaregiver ? String(watchedCaregiver) : ""}
-            onValueChange={(v) => setValue("caregiver_id", Number(v))}
+            value={watchedCaregiver ?? ""}
+            onValueChange={(v) => setValue("caregiver_id", v ?? "")}
           >
             <SelectTrigger>
               <SelectValue>
                 {watchedCaregiver
-                  ? (caregivers.find((c) => String(c.id) === String(watchedCaregiver))?.name ??
+                  ? (caregivers.find((c) => c.id === watchedCaregiver)?.name ??
                     String(watchedCaregiver))
                   : "Selecione o cuidador"}
               </SelectValue>
@@ -122,13 +122,13 @@ export function ShiftForm({ shift }: ShiftFormProps) {
         <div className="space-y-2">
           <Label>Clínica</Label>
           <Select
-            value={watchedClinic ? String(watchedClinic) : "none"}
-            onValueChange={(v) => setValue("clinic_id", v === "none" ? undefined : Number(v))}
+            value={watchedClinic ?? "none"}
+            onValueChange={(v) => setValue("clinic_id", v === "none" ? undefined : v)}
           >
             <SelectTrigger>
               <SelectValue>
                 {watchedClinic
-                  ? (clinics.find((c) => c.id === watchedClinic)?.name ?? String(watchedClinic))
+                  ? (clinics.find((c) => c.id === watchedClinic)?.name ?? watchedClinic)
                   : "Selecione a clínica"}
               </SelectValue>
             </SelectTrigger>

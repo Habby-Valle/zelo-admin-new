@@ -7,5 +7,5 @@ export const metadata: Metadata = {
 
 export default async function ClinicDetailPage(props: { params: Promise<{ id: string }> }) {
   const { id } = await props.params;
-  return <ClinicDetailView id={Number(id)} />;
+  return <ClinicDetailView id={id} />;
 }

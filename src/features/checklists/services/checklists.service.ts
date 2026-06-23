@@ -8,12 +8,12 @@ import type {
 } from "@/features/checklists/types";
 
 interface ApiChecklist {
-  id: number;
+  id: string;
   name: string;
   icon: string | null;
   order: number;
   is_active: boolean;
-  clinic_id: number | null;
+  clinic_id: string | null;
   clinic_name: string | null;
   created_by_name: string | null;
   items_count: number;
@@ -22,13 +22,13 @@ interface ApiChecklist {
 
 interface ApiChecklistDetail extends Omit<ApiChecklist, "items_count"> {
   items: {
-    id: number;
+    id: string;
     name: string;
     type: string;
     required: boolean;
     has_observation: boolean;
     order: number;
-    options: { id: number; label: string; value: string }[];
+    options: { id: string; label: string; value: string }[];
   }[];
 }
 
@@ -59,14 +59,14 @@ function mapChecklistDetail(api: ApiChecklistDetail): ChecklistDetail {
     created_by_name: api.created_by_name,
     created_at: api.created_at,
     items: (api.items ?? []).map((item) => ({
-      id: String(item.id),
+      id: item.id,
       name: item.name,
       type: item.type as ChecklistItemType,
       required: item.required,
       has_observation: item.has_observation,
       order: item.order,
       options: (item.options ?? []).map((opt) => ({
-        id: String(opt.id),
+        id: opt.id,
         label: opt.label,
         value: opt.value,
       })),
@@ -90,7 +90,7 @@ export async function fetchChecklists(
   return { checklists: data.results.map(mapChecklist), total: data.count };
 }
 
-export async function fetchChecklist(id: number): Promise<ChecklistDetail> {
+export async function fetchChecklist(id: string): Promise<ChecklistDetail> {
   const data = await apiFetchClient<ApiChecklistDetail>(`/checklists/${id}/`);
   return mapChecklistDetail(data);
 }
@@ -106,7 +106,7 @@ export async function createChecklistFetch(
 }
 
 export async function updateChecklistFetch(
-  id: number,
+  id: string,
   data: Record<string, unknown>
 ): Promise<ChecklistDetail> {
   const result = await apiFetchClient<ApiChecklistDetail>(`/checklists/${id}/`, {
@@ -116,6 +116,6 @@ export async function updateChecklistFetch(
   return mapChecklistDetail(result);
 }
 
-export async function deleteChecklistFetch(id: number): Promise<void> {
+export async function deleteChecklistFetch(id: string): Promise<void> {
   await apiFetchClient<void>(`/checklists/${id}/`, { method: "DELETE" });
 }

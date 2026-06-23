@@ -60,7 +60,7 @@ export function useLgpdConfig() {
 export function useUpdateRetentionPolicy() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ policyId, retentionDays }: { policyId: number; retentionDays: number }) =>
+    mutationFn: ({ policyId, retentionDays }: { policyId: string; retentionDays: number }) =>
       updateRetentionPolicyFetch(policyId, retentionDays),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: settingsKeys.lgpd() });
@@ -70,24 +70,24 @@ export function useUpdateRetentionPolicy() {
 
 export function useExportUserData() {
   return useMutation({
-    mutationFn: (userId: number) => exportUserDataFetch(userId),
+    mutationFn: (userId: string) => exportUserDataFetch(userId),
   });
 }
 
 export function useExportPatientData() {
   return useMutation({
-    mutationFn: (patientId: number) => exportPatientDataFetch(patientId),
+    mutationFn: (patientId: string) => exportPatientDataFetch(patientId),
   });
 }
 
 export function useAnonymizeUser() {
   return useMutation({
-    mutationFn: (userId: number) => anonymizeUserFetch(userId),
+    mutationFn: (userId: string) => anonymizeUserFetch(userId),
   });
 }
 
 export function useAnonymizePatient() {
   return useMutation({
-    mutationFn: (patientId: number) => anonymizePatientFetch(patientId),
+    mutationFn: (patientId: string) => anonymizePatientFetch(patientId),
   });
 }

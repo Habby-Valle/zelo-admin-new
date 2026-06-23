@@ -91,7 +91,7 @@ export async function createPlanFetch(data: {
   yearly_price?: number | null;
   scope?: string;
   is_active: boolean;
-  benefits?: { benefit_id: number; value: string }[];
+  benefits?: { benefit_id: string; value: string }[];
 }): Promise<Plan> {
   const result = await apiFetchClient<ApiPlan>("/plans/", {
     method: "POST",
@@ -108,7 +108,7 @@ export async function updatePlanFetch(
     monthly_price: number;
     yearly_price: number | null;
     is_active: boolean;
-    benefits: { benefit_id: number; value: string }[];
+    benefits: { benefit_id: string; value: string }[];
   }>
 ): Promise<Plan> {
   const result = await apiFetchClient<ApiPlan>(`/plans/${id}/`, {

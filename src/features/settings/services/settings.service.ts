@@ -65,7 +65,7 @@ export async function fetchSystemSettings(): Promise<SystemSettings> {
 }
 
 export async function saveSystemSettings(
-  data: Partial<SystemSettings & { admin_logo_media_id?: number | null }>
+  data: Partial<SystemSettings & {   admin_logo_media_id?: string | null }>
 ): Promise<void> {
   const body: Record<string, unknown> = {
     app_name: data.app_name,
@@ -141,7 +141,7 @@ export async function fetchLgpdConfig(): Promise<LgpdConfig> {
       }>("/system-config/encryption-status/"),
       apiFetchClient<
         {
-          id: number;
+          id: string;
           model_name: string;
           retention_days: number;
           action: string;
@@ -177,7 +177,7 @@ export async function fetchLgpdConfig(): Promise<LgpdConfig> {
 }
 
 export async function updateRetentionPolicyFetch(
-  policyId: number,
+  policyId: string,
   retentionDays: number
 ): Promise<{ success: boolean; error?: string }> {
   try {
@@ -202,10 +202,10 @@ export async function searchUsersForLgpdFetch(query: string): Promise<UserSearch
 }
 
 export async function createUserSearchResult(
-  id: number
-): Promise<{ id: number; name: string; email: string; role: string } | null> {
+  id: string
+): Promise<{ id: string; name: string; email: string; role: string } | null> {
   try {
-    const data = await apiFetchClient<{ id: number; name: string; email: string; role: string }>(
+    const data = await apiFetchClient<{ id: string; name: string; email: string; role: string }>(
       `/users/${id}/`
     );
     return data;
@@ -215,7 +215,7 @@ export async function createUserSearchResult(
 }
 
 export async function exportUserDataFetch(
-  userId: number
+  userId: string
 ): Promise<{ success: boolean; data?: string; error?: string }> {
   try {
     const data = await apiFetchClient<Record<string, unknown>>(`/users/${userId}/export/`);
@@ -226,7 +226,7 @@ export async function exportUserDataFetch(
 }
 
 export async function exportPatientDataFetch(
-  patientId: number
+  patientId: string
 ): Promise<{ success: boolean; data?: string; error?: string }> {
   try {
     const data = await apiFetchClient<Record<string, unknown>>(`/patients/${patientId}/export/`);
@@ -237,7 +237,7 @@ export async function exportPatientDataFetch(
 }
 
 export async function anonymizeUserFetch(
-  userId: number
+  userId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
     await apiFetchClient(`/users/${userId}/anonymize/`, { method: "POST" });
@@ -248,7 +248,7 @@ export async function anonymizeUserFetch(
 }
 
 export async function anonymizePatientFetch(
-  patientId: number
+  patientId: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
     await apiFetchClient(`/patients/${patientId}/anonymize/`, { method: "POST" });

@@ -7,7 +7,7 @@ import { ClinicPaymentsTable } from "./clinic-payments-table";
 import { ClinicPaymentStatsCards } from "./clinic-payment-stats-cards";
 
 interface ClinicPaymentsPageClientProps {
-  clinicId: number;
+  clinicId: string;
 }
 
 export function ClinicPaymentsPageClient({ clinicId }: ClinicPaymentsPageClientProps) {

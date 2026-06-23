@@ -37,7 +37,7 @@ export interface Patient {
   medications: string;
   blood_type: PatientBloodType | null;
   observations: string;
-  media_id?: number | null;
+  media_id?: string | null;
   media?: Media | null;
   clinic_name?: string | null;
   guardian_name?: string | null;

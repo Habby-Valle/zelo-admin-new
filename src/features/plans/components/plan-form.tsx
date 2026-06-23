@@ -48,15 +48,15 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
 
   const currentBenefits = watch("benefits") ?? [];
 
-  function getBenefitValue(benefitId: number): string {
+  function getBenefitValue(benefitId: string): string {
     return currentBenefits.find((b) => b.benefit_id === benefitId)?.value ?? "";
   }
 
-  function isBenefitEnabled(benefitId: number): boolean {
+  function isBenefitEnabled(benefitId: string): boolean {
     return currentBenefits.some((b) => b.benefit_id === benefitId);
   }
 
-  function toggleBenefit(benefitId: number, enabled: boolean) {
+  function toggleBenefit(benefitId: string, enabled: boolean) {
     if (enabled) {
       setValue("benefits", [...currentBenefits, { benefit_id: benefitId, value: "" }], {
         shouldValidate: true,
@@ -70,7 +70,7 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
     }
   }
 
-  function setBenefitValue(benefitId: number, value: string) {
+  function setBenefitValue(benefitId: string, value: string) {
     setValue(
       "benefits",
       currentBenefits.map((b) => (b.benefit_id === benefitId ? { ...b, value } : b)),
@@ -194,15 +194,15 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
           </div>
           <div className="space-y-4 p-6">
             {benefits.map((benefit) => {
-              const numId = Number(benefit.id);
-              const enabled = isBenefitEnabled(numId);
+              const benefitId = benefit.id;
+              const enabled = isBenefitEnabled(benefitId);
               return (
                 <div
                   key={benefit.id}
                   className="rounded-lg border bg-muted/30 p-4 transition-colors hover:bg-muted/50"
                 >
                   <div className="flex items-center gap-3">
-                    <Switch checked={enabled} onCheckedChange={(v) => toggleBenefit(numId, v)} />
+                    <Switch checked={enabled} onCheckedChange={(v) => toggleBenefit(benefitId, v)} />
                     <div className="flex-1">
                       <p className="text-sm font-medium">{benefit.label}</p>
                       {benefit.description && (
@@ -214,8 +214,8 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
                     <div className="mt-3 ml-10">
                       <Input
                         placeholder="Valor (ex: Ilimitado, 5GB, 10...)"
-                        value={getBenefitValue(numId)}
-                        onChange={(e) => setBenefitValue(numId, e.target.value)}
+                        value={getBenefitValue(benefitId)}
+                        onChange={(e) => setBenefitValue(benefitId, e.target.value)}
                       />
                     </div>
                   )}

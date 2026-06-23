@@ -3,7 +3,7 @@ import type { Address, Media } from "@/types";
 export type ClinicStatus = "active" | "inactive" | "suspended";
 
 export interface Clinic {
-  id: number;
+  id: string;
   name: string;
   cnpj: string;
   address: Address | null;
@@ -11,7 +11,7 @@ export interface Clinic {
   status: ClinicStatus;
   plan?: string | null;
   clinic_plan_id?: string | null;
-  media_id?: number | null;
+  media_id?: string | null;
   media?: Media | null;
   created_at: string;
   updated_at?: string;
@@ -19,9 +19,9 @@ export interface Clinic {
 }
 
 export interface SubscriptionInfo {
-  id: number;
-  clinic_id: number;
-  plan_id: number;
+  id: string;
+  clinic_id: string;
+  plan_id: string;
   plan_name: string;
   plan_price: number;
   status: string;
@@ -31,7 +31,7 @@ export interface SubscriptionInfo {
 }
 
 export interface PlanOption {
-  id: number;
+  id: string;
   name: string;
   description: string;
   monthly_price: string;

@@ -29,7 +29,7 @@ function SystemSettingsForm({
   saveMutation: UseMutationResult<
     void,
     Error,
-    Partial<SystemSettings & { admin_logo_media_id?: number | null }>
+    Partial<SystemSettings & { admin_logo_media_id?: string | null }>
   >;
 }) {
   const [maintenanceMode, setMaintenanceMode] = useState(settings.maintenance_mode);
@@ -50,7 +50,7 @@ function SystemSettingsForm({
   const [supportPhone, setSupportPhone] = useState(settings.support_phone);
   const [supportWhatsapp, setSupportWhatsapp] = useState(settings.support_whatsapp);
   const [adminLogoUrl, setAdminLogoUrl] = useState(settings.admin_logo_url);
-  const [logoMediaId, setLogoMediaId] = useState<number | null>(null);
+  const [logoMediaId, setLogoMediaId] = useState<string | null>(null);
   const [cnpj, setCnpj] = useState(settings.cnpj);
   const [address, setAddress] = useState(settings.address);
 

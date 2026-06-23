@@ -7,9 +7,9 @@ export interface ShiftPatient {
 }
 
 export interface Shift {
-  id: number;
-  caregiver_id: number;
-  clinic_id: number | null;
+  id: string;
+  caregiver_id: string;
+  clinic_id: string | null;
   start: string;
   end: string;
   status: ShiftStatus;

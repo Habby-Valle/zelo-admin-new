@@ -126,9 +126,9 @@ export function InviteDialog({
             <div className="space-y-1.5">
               <Label>Clínica vinculada</Label>
               <Select
-                value={watch("clinic_id") != null ? String(watch("clinic_id")) : ""}
+                value={watch("clinic_id") ?? ""}
                 onValueChange={(v) =>
-                  setValue("clinic_id", v ? parseInt(v, 10) : null, {
+                  setValue("clinic_id", v || null, {
                     shouldValidate: true,
                   })
                 }
@@ -143,7 +143,7 @@ export function InviteDialog({
                 </SelectTrigger>
                 <SelectContent>
                   {clinics.map((c) => (
-                    <SelectItem key={c.id} value={String(c.id)}>
+                    <SelectItem key={c.id} value={c.id}>
                       {c.name}
                     </SelectItem>
                   ))}

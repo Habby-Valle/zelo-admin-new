@@ -76,7 +76,7 @@ export function useAddCaregiver(patientId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (caregiverId: number) => addCaregiverFetch(patientId, caregiverId),
+    mutationFn: (caregiverId: string) => addCaregiverFetch(patientId, caregiverId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: patientKeys.detail(patientId) });
     },
@@ -98,7 +98,7 @@ export function useAddEmergencyContact(patientId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ profileFamilyId, priority }: { profileFamilyId: number; priority: number }) =>
+    mutationFn: ({ profileFamilyId, priority }: { profileFamilyId: string; priority: number }) =>
       addEmergencyContactFetch(patientId, profileFamilyId, priority),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: patientKeys.detail(patientId) });

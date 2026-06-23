@@ -27,7 +27,7 @@ export interface User {
   role: UserRole;
   status: "active" | "blocked" | "pending";
   avatar_url?: string | null;
-  media_id?: number | null;
+  media_id?: string | null;
   media?: Media | null;
   created_at: string;
   last_sign_in_at?: string;
@@ -39,7 +39,7 @@ export interface UserProfile {
   name: string;
   phone: string;
   role: string;
-  media_id: number | null;
+  media_id: string | null;
   media: Media | null;
   is_active: boolean;
   verification_status?: string | null;

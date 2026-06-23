@@ -10,7 +10,7 @@ export async function fetchFeedbacks(
   if (params.type && params.type !== "all") qs.set("type", params.type);
   if (params.status && params.status !== "all") qs.set("status", params.status);
   if (params.search) qs.set("search", params.search);
-  if (params.clinic_id) qs.set("clinic_id", String(params.clinic_id));
+  if (params.clinic_id) qs.set("clinic_id", params.clinic_id);
   if (params.include_deleted) qs.set("include_deleted", "true");
   qs.set("page", String(params.page ?? 1));
   qs.set("page_size", String(params.page_size ?? 20));
@@ -19,7 +19,7 @@ export async function fetchFeedbacks(
   return { feedbacks: data.results, total: data.count };
 }
 
-export async function fetchFeedback(id: number): Promise<Feedback | null> {
+export async function fetchFeedback(id: string): Promise<Feedback | null> {
   try {
     return await apiFetchClient<Feedback>(`/feedback/manage/${id}/`);
   } catch {
@@ -27,14 +27,14 @@ export async function fetchFeedback(id: number): Promise<Feedback | null> {
   }
 }
 
-export async function updateFeedbackStatusApi(id: number, status: string): Promise<void> {
+export async function updateFeedbackStatusApi(id: string, status: string): Promise<void> {
   await apiFetchClient<void>(`/feedback/manage/${id}/`, {
     method: "PATCH",
     body: JSON.stringify({ status }),
   });
 }
 
-export async function softDeleteFeedbackApi(id: number): Promise<void> {
+export async function softDeleteFeedbackApi(id: string): Promise<void> {
   await apiFetchClient<void>(`/feedback/manage/${id}/`, {
     method: "DELETE",
   });

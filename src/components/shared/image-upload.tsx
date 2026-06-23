@@ -10,7 +10,7 @@ import { uploadMedia } from "@/lib/api/media.service";
 
 interface ImageUploadProps {
   currentUrl?: string | null;
-  onMediaChange: (mediaId: number | null) => void;
+  onMediaChange: (mediaId: string | null) => void;
   disabled?: boolean;
 }
 
@@ -43,7 +43,7 @@ export function ImageUpload({ currentUrl, onMediaChange, disabled }: ImageUpload
 
       const media = result.data!;
       setPreviewUrl(media.url ?? null);
-      onMediaChange(Number(media.id));
+      onMediaChange(media.id);
       toast.success("Imagem salva com sucesso!");
     } catch {
       toast.error("Erro ao fazer upload");

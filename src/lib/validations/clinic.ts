@@ -45,9 +45,9 @@ export const clinicSchema = z.object({
   status: z.enum(["active", "inactive", "suspended"]),
   address: addressSchema,
   phone: z.string().min(1, "Telefone é obrigatório"),
-  media_id: z.number().int().positive().nullable().optional(),
+  media_id: z.string().optional().nullable(),
   admin_email: z.string().email("Email inválido").optional().or(z.literal("")),
-  plan_id: z.number().int().positive().optional().nullable(),
+  plan_id: z.string().optional().nullable(),
 });
 
 export type AddressFormValues = z.infer<typeof addressSchema>;

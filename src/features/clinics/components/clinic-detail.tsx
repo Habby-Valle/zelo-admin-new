@@ -112,7 +112,7 @@ function StatCard({
 }
 
 interface ClinicDetailViewProps {
-  id: number;
+  id: string;
 }
 
 export function ClinicDetailView({ id }: ClinicDetailViewProps) {
@@ -120,16 +120,16 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
   const [inviteOpen, setInviteOpen] = useState(false);
   const { data: clinic, isLoading: loadingClinic } = useClinic(id);
   const { data: patientsData, isLoading: loadingPatients } = usePatients({
-    clinicId: String(id),
+    clinicId: id,
     pageSize: 5,
   });
   const { data: caregiversData, isLoading: loadingCaregivers } = useUsers({
     role: "caregiver",
-    clinicId: String(id),
+    clinicId: id,
     pageSize: 5,
   });
   const { data: shiftsData, isLoading: loadingShifts } = useShifts({
-    clinicId: String(id),
+    clinicId: id,
     pageSize: 5,
   });
   const { data: sosData, isLoading: loadingSos } = useSosAlerts({

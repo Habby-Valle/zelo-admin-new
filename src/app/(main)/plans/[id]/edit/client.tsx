@@ -36,7 +36,7 @@ export default function EditPlanPageClient({ id }: EditPlanPageClientProps) {
     yearly_price: plan.yearly_price,
     is_active: plan.is_active,
     benefits: plan.benefits.map((b) => ({
-      benefit_id: Number(b.benefit_id),
+      benefit_id: b.benefit_id,
       value: b.value,
     })),
   };

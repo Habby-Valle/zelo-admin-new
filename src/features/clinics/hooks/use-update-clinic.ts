@@ -9,7 +9,7 @@ export function useUpdateClinic() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, values }: { id: number; values: ClinicFormValues }) =>
+    mutationFn: ({ id, values }: { id: string; values: ClinicFormValues }) =>
       updateClinicApi(id, {
         name: values.name,
         document: values.cnpj.replace(/\D/g, ""),

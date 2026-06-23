@@ -3,16 +3,16 @@ import type { PaginatedResponse } from "@/types";
 import type { Shift, ShiftDetail, ShiftPatient, ShiftFilters } from "@/features/shifts/types";
 
 interface ApiShift {
-  id: number;
-  caregiver_id: number;
-  clinic_id: number | null;
+  id: string;
+  caregiver_id: string;
+  clinic_id: string | null;
   start: string;
   end: string;
   status: string;
   notes: string;
   shift_patients: {
-    id: number;
-    patient_id: number;
+    id: string;
+    patient_id: string;
     patient_name: string;
   }[];
   created_at: string;
@@ -32,8 +32,8 @@ function mapShift(api: ApiShift): ShiftDetail {
     status: api.status as Shift["status"],
     notes: api.notes,
     shift_patients: (api.shift_patients ?? []).map((sp) => ({
-      id: String(sp.id),
-      patient_id: String(sp.patient_id),
+      id: sp.id,
+      patient_id: sp.patient_id,
       patient_name: sp.patient_name,
     })),
     created_at: api.created_at,
@@ -60,14 +60,14 @@ export async function fetchShifts(
   return { shifts: data.results.map(mapShift), total: data.count };
 }
 
-export async function fetchShift(id: number): Promise<ShiftDetail> {
+export async function fetchShift(id: string): Promise<ShiftDetail> {
   const data = await apiFetchClient<ApiShift>(`/shifts/${id}/`);
   return mapShift(data);
 }
 
 export async function createShiftFetch(data: {
-  caregiver_id: number;
-  clinic_id?: number | null;
+  caregiver_id: string;
+  clinic_id?: string | null;
   start: string;
   end: string;
   notes?: string;
@@ -80,10 +80,10 @@ export async function createShiftFetch(data: {
 }
 
 export async function updateShiftFetch(
-  id: number,
+  id: string,
   data: Partial<{
-    caregiver_id: number;
-    clinic_id: number | null;
+    caregiver_id: string;
+    clinic_id: string | null;
     start: string;
     end: string;
     notes: string;
@@ -96,11 +96,11 @@ export async function updateShiftFetch(
   return mapShift(result);
 }
 
-export async function deleteShiftFetch(id: number): Promise<void> {
+export async function deleteShiftFetch(id: string): Promise<void> {
   await apiFetchClient<void>(`/shifts/${id}/`, { method: "DELETE" });
 }
 
-export async function updateShiftStatusFetch(id: number, status: string): Promise<void> {
+export async function updateShiftStatusFetch(id: string, status: string): Promise<void> {
   await apiFetchClient<void>(`/shifts/${id}/status/`, {
     method: "PATCH",
     body: JSON.stringify({ status }),
@@ -108,10 +108,10 @@ export async function updateShiftStatusFetch(id: number, status: string): Promis
 }
 
 export async function addShiftPatientFetch(
-  shiftId: number,
-  patientId: number
+  shiftId: string,
+  patientId: string
 ): Promise<ShiftPatient> {
-  const result = await apiFetchClient<{ id: number; patient_id: number; patient_name: string }>(
+  const result = await apiFetchClient<{ id: string; patient_id: string; patient_name: string }>(
     `/shifts/${shiftId}/patients/`,
     {
       method: "POST",
@@ -119,14 +119,14 @@ export async function addShiftPatientFetch(
     }
   );
   return {
-    id: String(result.id),
-    patient_id: String(result.patient_id),
+    id: result.id,
+    patient_id: result.patient_id,
     patient_name: result.patient_name,
   };
 }
 
 export async function removeShiftPatientFetch(
-  shiftId: number,
+  shiftId: string,
   assignmentId: string
 ): Promise<void> {
   await apiFetchClient<void>(`/shifts/${shiftId}/patients/${assignmentId}/`, {

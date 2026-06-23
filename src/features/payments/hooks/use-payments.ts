@@ -19,7 +19,7 @@ export function useInvoices(params?: {
 export function usePayments(params?: {
   status?: string;
   search?: string;
-  clinic_id?: number;
+  clinic_id?: string;
   page?: number;
   page_size?: number;
 }) {
@@ -30,7 +30,7 @@ export function usePayments(params?: {
   });
 }
 
-export function usePaymentStats(clinicId?: number) {
+export function usePaymentStats(clinicId?: string) {
   return useQuery({
     queryKey: ["payment-stats", clinicId],
     queryFn: () => fetchPaymentStats(clinicId),
@@ -39,7 +39,7 @@ export function usePaymentStats(clinicId?: number) {
 }
 
 export function useClinicPayments(
-  clinicId: number,
+  clinicId: string,
   params?: { page?: number; page_size?: number }
 ) {
   return useQuery({
@@ -49,7 +49,7 @@ export function useClinicPayments(
   });
 }
 
-export function useClinicPaymentStats(clinicId: number) {
+export function useClinicPaymentStats(clinicId: string) {
   return useQuery({
     queryKey: ["payment-stats", "clinic", clinicId],
     queryFn: () => fetchPaymentStats(clinicId),

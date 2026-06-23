@@ -8,9 +8,9 @@ import type {
 } from "@/features/patients/types";
 
 interface ApiPatient {
-  id: number;
-  clinic_id: number | null;
-  guardian_id: number | null;
+  id: string;
+  clinic_id: string | null;
+  guardian_id: string | null;
   name: string;
   birth_date: string;
   gender: string;
@@ -22,9 +22,9 @@ interface ApiPatient {
   medications: string;
   blood_type: string | null;
   observations: string;
-  media_id: number | null;
+  media_id: string | null;
   media: {
-    id: number;
+    id: string;
     url: string | null;
     original_filename: string;
     mime_type: string;
@@ -35,15 +35,15 @@ interface ApiPatient {
   guardian_name: string | null;
   is_active: boolean;
   emergency_contacts: {
-    id: number;
-    profile_family_id: number;
+    id: string;
+    profile_family_id: string;
     profile_family_name: string;
     profile_family_phone: string;
     priority: number;
   }[];
   caregiver_assignments: {
-    id: number;
-    caregiver_id: number;
+    id: string;
+    caregiver_id: string;
     caregiver_name: string;
     caregiver_email: string | null;
     caregiver_specialization: string | null;
@@ -149,13 +149,13 @@ export async function createPatientFetch(data: {
   cpf?: string | null;
   phone: string;
   email?: string | null;
-  clinic_id?: number | null;
+  clinic_id?: string | null;
   blood_type?: string | null;
   health_conditions?: string;
   allergies?: string;
   medications?: string;
   observations?: string;
-  media_id?: number | null;
+  media_id?: string | null;
 }): Promise<Patient> {
   const result = await apiFetchClient<ApiPatient>("/patients/", {
     method: "POST",
@@ -173,13 +173,13 @@ export async function updatePatientFetch(
     cpf: string | null;
     phone: string;
     email: string | null;
-    clinic_id: number | null;
+    clinic_id: string | null;
     blood_type: string | null;
     health_conditions: string;
     allergies: string;
     medications: string;
     observations: string;
-    media_id: number | null;
+    media_id: string | null;
   }>
 ): Promise<Patient> {
   const result = await apiFetchClient<ApiPatient>(`/patients/${id}/`, {
@@ -195,11 +195,11 @@ export async function deletePatientFetch(id: string): Promise<void> {
 
 export async function addCaregiverFetch(
   patientId: string,
-  caregiverId: number
+  caregiverId: string
 ): Promise<PatientCaregiverAssignment> {
   const result = await apiFetchClient<{
-    id: number;
-    caregiver_id: number;
+    id: string;
+    caregiver_id: string;
     caregiver_name: string;
     caregiver_email: string | null;
     caregiver_specialization: string | null;
@@ -210,8 +210,8 @@ export async function addCaregiverFetch(
     body: JSON.stringify({ caregiver_id: caregiverId }),
   });
   return {
-    id: String(result.id),
-    caregiver_id: String(result.caregiver_id),
+    id: result.id,
+    caregiver_id: result.caregiver_id,
     caregiver_name: result.caregiver_name,
     caregiver_email: result.caregiver_email,
     caregiver_specialization: result.caregiver_specialization,
@@ -228,12 +228,12 @@ export async function removeCaregiverFetch(patientId: string, assignmentId: stri
 
 export async function addEmergencyContactFetch(
   patientId: string,
-  profileFamilyId: number,
+  profileFamilyId: string,
   priority: number
 ): Promise<PatientEmergencyContact> {
   const result = await apiFetchClient<{
-    id: number;
-    profile_family_id: number;
+    id: string;
+    profile_family_id: string;
     profile_family_name: string;
     profile_family_phone: string;
     priority: number;
@@ -242,8 +242,8 @@ export async function addEmergencyContactFetch(
     body: JSON.stringify({ profile_family_id: profileFamilyId, priority }),
   });
   return {
-    id: String(result.id),
-    profile_family_id: String(result.profile_family_id),
+    id: result.id,
+    profile_family_id: result.profile_family_id,
     profile_family_name: result.profile_family_name,
     profile_family_phone: result.profile_family_phone,
     priority: result.priority,

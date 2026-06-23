@@ -186,7 +186,7 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
         method: "PATCH",
         body: JSON.stringify({
           action: "activate",
-          plan_id: Number(selectedPlanId),
+          plan_id: selectedPlanId,
           billing_cycle: selectedBillingCycle,
         }),
       });

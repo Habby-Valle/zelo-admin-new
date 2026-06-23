@@ -16,7 +16,7 @@ export const benefitSchema = z.object({
 export type BenefitFormValues = z.infer<typeof benefitSchema>;
 
 export const planBenefitEntrySchema = z.object({
-  benefit_id: z.number().int().positive(),
+  benefit_id: z.string(),
   value: z.string().min(1, "Valor do beneficio e obrigatorio"),
 });
 

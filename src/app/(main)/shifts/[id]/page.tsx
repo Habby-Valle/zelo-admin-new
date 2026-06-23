@@ -10,5 +10,5 @@ interface ShiftDetailPageProps {
 
 export default function ShiftDetailPage({ params }: ShiftDetailPageProps) {
   const { id } = use(params);
-  return <ShiftDetailClient id={Number(id)} />;
+  return <ShiftDetailClient id={id} />;
 }

@@ -9,7 +9,7 @@ export async function getSosAlertsApi(params?: SosFilters): Promise<{
   const qs = new URLSearchParams();
 
   if (params?.status && params.status !== "all") qs.set("status", params.status);
-  if (params?.clinic_id) qs.set("clinic_id", String(params.clinic_id));
+  if (params?.clinic_id) qs.set("clinic_id", params.clinic_id);
   qs.set("page", String(params?.page ?? 1));
   qs.set("page_size", String(params?.page_size ?? 20));
 
@@ -20,7 +20,7 @@ export async function getSosAlertsApi(params?: SosFilters): Promise<{
   return { alerts: data.results, total: data.count };
 }
 
-export async function getSosAlertApi(id: number): Promise<SosAlert | null> {
+export async function getSosAlertApi(id: string): Promise<SosAlert | null> {
   try {
     return await apiFetchClient<SosAlert>(`/sos-alerts/${id}/`);
   } catch {
@@ -41,9 +41,9 @@ export async function resolveSosAlertApi(id: string, resolution_reason?: string)
   });
 }
 
-export async function getSosSummaryApi(clinicId?: string | number): Promise<SosSummary> {
+export async function getSosSummaryApi(clinicId?: string): Promise<SosSummary> {
   const qs = new URLSearchParams();
-  if (clinicId) qs.set("clinic_id", String(clinicId));
+  if (clinicId) qs.set("clinic_id", clinicId);
   qs.set("page_size", "10000");
   const query = qs.toString();
   const allData = await apiFetchClient<PaginatedResponse<SosAlert>>(

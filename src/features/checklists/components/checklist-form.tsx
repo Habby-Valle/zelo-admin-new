@@ -62,12 +62,12 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
   const clinics = clinicsData?.results ?? [];
 
   const createChecklist = useCreateChecklist();
-  const updateChecklist = useUpdateChecklist(checklist?.id ?? 0);
+  const updateChecklist = useUpdateChecklist(checklist?.id ?? "");
 
   const [name, setName] = useState(checklist?.name ?? "");
   const [icon, setIcon] = useState(checklist?.icon ?? "");
   const [clinicId, setClinicId] = useState<string>(
-    checklist?.clinic_id ? String(checklist.clinic_id) : ""
+    checklist?.clinic_id ?? ""
   );
   const [isActive, setIsActive] = useState(checklist?.is_active ?? true);
   const [items, setItems] = useState<ItemFormState[]>(() => {
@@ -170,7 +170,7 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
             : [],
       })),
     };
-    if (clinicId) body.clinic_id = Number(clinicId);
+    if (clinicId) body.clinic_id = clinicId;
 
     try {
       if (checklist?.id) {

@@ -38,7 +38,7 @@ const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | 
 };
 
 interface FeedbackDetailClientProps {
-  id: number;
+  id: string;
 }
 
 export function FeedbackDetailClient({ id }: FeedbackDetailClientProps) {

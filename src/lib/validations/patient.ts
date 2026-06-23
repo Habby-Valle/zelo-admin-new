@@ -7,13 +7,13 @@ export const patientSchema = z.object({
   cpf: z.string().max(14).nullable().optional(),
   phone: z.string().min(10, "Telefone inválido"),
   email: z.string().email("Email inválido").nullable().optional().or(z.literal("")),
-  clinic_id: z.number().int().positive().nullable().optional(),
+  clinic_id: z.string().nullable().optional(),
   blood_type: z.enum(["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"]).nullable().optional(),
   health_conditions: z.string().optional(),
   allergies: z.string().optional(),
   medications: z.string().optional(),
   observations: z.string().optional(),
-  media_id: z.number().int().positive().nullable().optional(),
+  media_id: z.string().nullable().optional(),
   caregiver_ids: z.array(z.string()).optional().default([]),
 });
 

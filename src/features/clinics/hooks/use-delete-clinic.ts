@@ -8,7 +8,7 @@ export function useDeleteClinic() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (id: number) => deleteClinicApi(id),
+    mutationFn: (id: string) => deleteClinicApi(id),
     onSuccess: (_data, id) => {
       queryClient.invalidateQueries({ queryKey: clinicKeys.lists() });
       queryClient.removeQueries({ queryKey: clinicKeys.detail(id) });

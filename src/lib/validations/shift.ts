@@ -5,8 +5,8 @@ export const shiftStatusSchema = z.enum(["scheduled", "in_progress", "completed"
 });
 
 export const createShiftSchema = z.object({
-  caregiver_id: z.coerce.number().int().positive("Cuidador inválido"),
-  clinic_id: z.coerce.number().int().positive("Clínica inválida").optional().nullable(),
+  caregiver_id: z.string().min(1, "Cuidador inválido"),
+  clinic_id: z.string().nullable().optional(),
   start: z.string().min(1, "Data de início obrigatória"),
   end: z.string().min(1, "Data de fim obrigatória"),
   notes: z.string().max(2000).optional(),

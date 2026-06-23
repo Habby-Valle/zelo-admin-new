@@ -20,7 +20,7 @@ export interface SystemSettings {
 }
 
 export interface RetentionPolicy {
-  id: number;
+  id: string;
   model_name: string;
   retention_days: number;
 }
@@ -40,14 +40,14 @@ export interface LgpdConfig {
 }
 
 export interface UserSearchResult {
-  id: number;
+  id: string;
   name: string;
   email: string;
   role: string;
 }
 
 export interface PatientSearchResult {
-  id: number;
+  id: string;
   name: string;
   clinic_name: string;
 }

@@ -10,5 +10,5 @@ interface ChecklistDetailPageProps {
 
 export default function ChecklistDetailPage({ params }: ChecklistDetailPageProps) {
   const { id } = use(params);
-  return <ChecklistDetailClient id={Number(id)} />;
+  return <ChecklistDetailClient id={id} />;
 }

@@ -86,7 +86,7 @@ export function ShiftsPageClient() {
   const [clinicFilter, setClinicFilter] = useState("");
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(20);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data, isLoading } = useShifts({
     search,

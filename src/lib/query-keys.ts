@@ -6,12 +6,12 @@ export const clinicKeys = {
   list: (params?: { search?: string; status?: ClinicStatus | "all"; page?: number }) =>
     [...clinicKeys.lists(), params] as const,
   details: () => [...clinicKeys.all, "detail"] as const,
-  detail: (id: number) => [...clinicKeys.details(), id] as const,
+  detail: (id: string) => [...clinicKeys.details(), id] as const,
 };
 
 export const subscriptionKeys = {
   all: ["subscriptions"] as const,
-  byClinic: (clinicId: number) => [...subscriptionKeys.all, "by-clinic", clinicId] as const,
+  byClinic: (clinicId: string) => [...subscriptionKeys.all, "by-clinic", clinicId] as const,
 };
 
 export const planKeys = {
@@ -77,7 +77,7 @@ export const feedbackKeys = {
   lists: () => [...feedbackKeys.all, "list"] as const,
   list: (params: object) => [...feedbackKeys.lists(), params] as const,
   details: () => [...feedbackKeys.all, "detail"] as const,
-  detail: (id: number) => [...feedbackKeys.details(), id] as const,
+  detail: (id: string) => [...feedbackKeys.details(), id] as const,
 };
 
 export const checklistKeys = {
@@ -85,7 +85,7 @@ export const checklistKeys = {
   lists: () => [...checklistKeys.all, "list"] as const,
   list: (params: object) => [...checklistKeys.lists(), params] as const,
   details: () => [...checklistKeys.all, "detail"] as const,
-  detail: (id: number) => [...checklistKeys.details(), id] as const,
+  detail: (id: string) => [...checklistKeys.details(), id] as const,
 };
 
 export const shiftKeys = {
@@ -93,7 +93,7 @@ export const shiftKeys = {
   lists: () => [...shiftKeys.all, "list"] as const,
   list: (params: object) => [...shiftKeys.lists(), params] as const,
   details: () => [...shiftKeys.all, "detail"] as const,
-  detail: (id: number) => [...shiftKeys.details(), id] as const,
+  detail: (id: string) => [...shiftKeys.details(), id] as const,
 };
 
 export const auditLogKeys = {

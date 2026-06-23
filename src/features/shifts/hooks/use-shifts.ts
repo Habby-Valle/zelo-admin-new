@@ -21,7 +21,7 @@ export function useShifts(params?: ShiftFilters) {
   });
 }
 
-export function useShift(id: number) {
+export function useShift(id: string) {
   return useQuery({
     queryKey: shiftKeys.detail(id),
     queryFn: () => fetchShift(id),
@@ -39,7 +39,7 @@ export function useCreateShift() {
   });
 }
 
-export function useUpdateShift(id: number) {
+export function useUpdateShift(id: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: Parameters<typeof updateShiftFetch>[1]) => updateShiftFetch(id, data),
@@ -53,14 +53,14 @@ export function useUpdateShift(id: number) {
 export function useDeleteShift() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: number) => deleteShiftFetch(id),
+    mutationFn: (id: string) => deleteShiftFetch(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: shiftKeys.lists() });
     },
   });
 }
 
-export function useUpdateShiftStatus(id: number) {
+export function useUpdateShiftStatus(id: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (status: string) => updateShiftStatusFetch(id, status),
@@ -71,17 +71,17 @@ export function useUpdateShiftStatus(id: number) {
   });
 }
 
-export function useAddShiftPatient(shiftId: number) {
+export function useAddShiftPatient(shiftId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (patientId: number) => addShiftPatientFetch(shiftId, patientId),
+    mutationFn: (patientId: string) => addShiftPatientFetch(shiftId, patientId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: shiftKeys.detail(shiftId) });
     },
   });
 }
 
-export function useRemoveShiftPatient(shiftId: number) {
+export function useRemoveShiftPatient(shiftId: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (assignmentId: string) => removeShiftPatientFetch(shiftId, assignmentId),

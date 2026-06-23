@@ -92,8 +92,8 @@ export function SosPageClient() {
   const total = alertsData?.total ?? 0;
   const totalPages = Math.ceil(total / pageSize);
 
-  const [acknowledgeTarget, setAcknowledgeTarget] = useState<number | null>(null);
-  const [resolveTarget, setResolveTarget] = useState<number | null>(null);
+  const [acknowledgeTarget, setAcknowledgeTarget] = useState<string | null>(null);
+  const [resolveTarget, setResolveTarget] = useState<string | null>(null);
   const [resolveReason, setResolveReason] = useState("");
 
   const updateParams = useCallback(

@@ -23,13 +23,13 @@ interface ApiMedia {
 }
 
 interface ApiClinic {
-  id: number;
+  id: string;
   name: string;
   document: string;
   address: ApiAddress | null;
   phone: string;
   status: ClinicStatus;
-  media_id: number | null;
+  media_id: string | null;
   media: ApiMedia | null;
   created_at: string;
   updated_at: string;
@@ -37,13 +37,13 @@ interface ApiClinic {
 
 function mapClinic(api: ApiClinic): Clinic {
   return {
-    id: api.id,
+    id: String(api.id),
     name: api.name,
     cnpj: api.document,
     address: api.address as Address | null,
     phone: api.phone,
     status: api.status,
-    media_id: api.media_id,
+    media_id: api.media_id ?? undefined,
     media: api.media as Clinic["media"],
     created_at: api.created_at,
     updated_at: api.updated_at,
@@ -68,7 +68,7 @@ export async function getClinicsApi(params?: {
   return { ...data, results: data.results.map(mapClinic) };
 }
 
-export async function getClinicApi(id: number): Promise<Clinic> {
+export async function getClinicApi(id: string): Promise<Clinic> {
   const data = await apiFetchClient<ApiClinic>(`/clinics/${id}/`);
   return mapClinic(data);
 }
@@ -79,9 +79,9 @@ export async function createClinicApi(data: {
   address: Record<string, unknown>;
   phone: string;
   status: string;
-  media_id?: number;
+  media_id?: string;
   admin_email?: string;
-  plan_id?: number;
+  plan_id?: string;
 }): Promise<Clinic> {
   const result = await apiFetchClient<ApiClinic>("/clinics/", {
     method: "POST",
@@ -91,14 +91,14 @@ export async function createClinicApi(data: {
 }
 
 export async function updateClinicApi(
-  id: number,
+  id: string,
   data: Partial<{
     name: string;
     document: string;
     address: Record<string, unknown>;
     phone: string;
     status: string;
-    media_id?: number;
+    media_id?: string;
   }>
 ): Promise<Clinic> {
   const result = await apiFetchClient<ApiClinic>(`/clinics/${id}/`, {
@@ -108,7 +108,7 @@ export async function updateClinicApi(
   return mapClinic(result);
 }
 
-export async function deleteClinicApi(id: number): Promise<void> {
+export async function deleteClinicApi(id: string): Promise<void> {
   await apiFetchClient<void>(`/clinics/${id}/`, {
     method: "DELETE",
   });

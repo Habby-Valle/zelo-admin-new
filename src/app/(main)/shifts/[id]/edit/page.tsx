@@ -14,7 +14,7 @@ interface EditShiftPageProps {
 export default function EditShiftPage({ params }: EditShiftPageProps) {
   const { id } = use(params);
   const router = useRouter();
-  const { data: shift, isLoading } = useShift(Number(id));
+  const { data: shift, isLoading } = useShift(id);
 
   return (
     <div className="space-y-6">
