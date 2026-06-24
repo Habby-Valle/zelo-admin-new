@@ -14,6 +14,8 @@ export async function fetchSystemSettings(): Promise<SystemSettings> {
       maintenance_planned_end: string | null;
       plans_enabled: boolean;
       feedback_visible: boolean;
+      apk_url: string;
+      apk_enabled: boolean;
       extra: Record<string, unknown>;
       updated_at: string;
     }>("/system-config/");
@@ -26,6 +28,8 @@ export async function fetchSystemSettings(): Promise<SystemSettings> {
       maintenance_planned_end: data.maintenance_planned_end ?? null,
       plans_enabled: data.plans_enabled ?? false,
       feedback_visible: data.feedback_visible ?? true,
+      apk_url: data.apk_url ?? "",
+      apk_enabled: data.apk_enabled ?? false,
       app_name: (extra.app_name as string) ?? "Zelo",
       app_url: (extra.app_url as string) ?? "",
       app_site_url: (extra.app_site_url as string) ?? "",
@@ -47,6 +51,8 @@ export async function fetchSystemSettings(): Promise<SystemSettings> {
       maintenance_planned_end: null,
       plans_enabled: false,
       feedback_visible: true,
+      apk_url: "",
+      apk_enabled: false,
       app_name: "Zelo",
       app_url: "",
       app_site_url: "",
@@ -86,6 +92,8 @@ export async function saveSystemSettings(
     maintenance_planned_end: data.maintenance_planned_end ?? null,
     plans_enabled: data.plans_enabled,
     feedback_visible: data.feedback_visible,
+    apk_url: data.apk_url ?? "",
+    apk_enabled: data.apk_enabled ?? false,
   };
   if (data.admin_logo_media_id !== undefined) {
     body.admin_logo_media_id = data.admin_logo_media_id;
