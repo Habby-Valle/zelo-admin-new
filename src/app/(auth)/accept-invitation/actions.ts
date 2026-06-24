@@ -2,18 +2,23 @@
 
 export async function acceptInvitation(
   token: string,
-  data: { password: string; confirmPassword: string }
+  data: {
+    password: string;
+    confirmPassword: string;
+    name?: string;
+    phone?: string;
+  }
 ): Promise<{ success: boolean; error?: string }> {
-  const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const apiUrl = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 
   try {
-    const res = await fetch(`${baseUrl}/api/invites/accept/${token}`, {
+    const res = await fetch(`${apiUrl}/invites/accept/${token}/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         password: data.password,
-        name: "Usuário",
-        phone: "",
+        name: data.name ?? "Usuário",
+        phone: data.phone ?? "",
       }),
     });
 
