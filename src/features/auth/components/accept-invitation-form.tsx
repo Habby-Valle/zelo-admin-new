@@ -1,18 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { UserPlus, Loader2, Eye, EyeOff } from "lucide-react";
 
-import { acceptInvitationSchema, type AcceptInvitationSchema } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { formatPhone } from "@/lib/format";
 import { acceptInvitation } from "@/app/(auth)/accept-invitation/actions";
+
+const formSchema = z
+  .object({
+    name: z.string().optional(),
+    phone: z.string().optional(),
+    password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+    confirmPassword: z.string().min(1, "Confirmação de senha obrigatória"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
+
+type FormValues = z.infer<typeof formSchema>;
+
+const ROLE_LABELS: Record<string, string> = {
+  super_admin: "Super Admin",
+  clinic_admin: "Admin de Clínica",
+  guardian: "Responsável",
+  caregiver: "Cuidador",
+  family: "Familiar",
+};
+
+interface InviteInfo {
+  email: string;
+  role: string;
+  clinic_name: string | null;
+}
 
 export function AcceptInvitationForm() {
   const router = useRouter();
@@ -23,33 +52,62 @@ export function AcceptInvitationForm() {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [inviteInfo, setInviteInfo] = useState<InviteInfo | null>(null);
+  const [loadingInvite, setLoadingInvite] = useState(true);
+
+  const needsProfile = inviteInfo?.role === "super_admin";
 
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors, isSubmitting },
-  } = useForm<AcceptInvitationSchema>({
-    resolver: zodResolver(acceptInvitationSchema),
+  } = useForm<FormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: { name: "", phone: "", password: "", confirmPassword: "" },
   });
 
-  async function onSubmit(data: AcceptInvitationSchema) {
-    setServerError(null);
-
+  useEffect(() => {
     if (!token) {
-      setServerError("Link inválido ou expirado. Solicite um novo convite.");
+      setLoadingInvite(false);
+      return;
+    }
+
+    fetch(`/api/proxy/invites/accept/${token}/`)
+      .then((res) => {
+        if (!res.ok) throw new Error("Convite inválido ou expirado");
+        return res.json();
+      })
+      .then((data) => {
+        setInviteInfo(data);
+        setLoadingInvite(false);
+      })
+      .catch(() => {
+        setServerError("Link inválido ou expirado. Solicite um novo convite.");
+        setLoadingInvite(false);
+      });
+  }, [token]);
+
+  async function onSubmit(data: FormValues) {
+    setServerError(null);
+    if (!token) return;
+
+    if (needsProfile && (!data.name || !data.phone)) {
+      setServerError("Preencha todos os campos obrigatórios.");
       return;
     }
 
     const result = await acceptInvitation(token, {
       password: data.password,
       confirmPassword: data.confirmPassword,
+      name: data.name || undefined,
+      phone: data.phone || undefined,
     });
-
     if (!result.success) {
       setServerError(result.error ?? "Erro desconhecido");
       return;
     }
-
     setIsSuccess(true);
   }
 
@@ -90,7 +148,7 @@ export function AcceptInvitationForm() {
     );
   }
 
-  if (!token) {
+  if (!token || (!loadingInvite && serverError && !inviteInfo)) {
     return (
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="space-y-4 pb-6">
@@ -109,7 +167,7 @@ export function AcceptInvitationForm() {
           <div>
             <CardTitle className="text-2xl">Sessão inválida</CardTitle>
             <CardDescription className="mt-1">
-              Este link é inválido ou expirou. Solicite um novo convite.
+              {serverError ?? "Este link é inválido ou expirou. Solicite um novo convite."}
             </CardDescription>
           </div>
         </CardHeader>
@@ -119,6 +177,31 @@ export function AcceptInvitationForm() {
             Ir para login
           </Button>
         </CardContent>
+      </Card>
+    );
+  }
+
+  if (loadingInvite) {
+    return (
+      <Card className="w-full max-w-md shadow-lg">
+        <CardHeader className="space-y-4 pb-6">
+          <div className="flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary">
+              <Loader2 className="h-5 w-5 animate-spin text-primary-foreground" />
+            </div>
+            <div>
+              <p className="text-xs font-medium tracking-widest text-muted-foreground uppercase">
+                Zelo
+              </p>
+              <p className="text-sm leading-none font-semibold">Painel Administrativo</p>
+            </div>
+          </div>
+
+          <div>
+            <CardTitle className="text-2xl">Carregando...</CardTitle>
+            <CardDescription className="mt-1">Verificando seu convite.</CardDescription>
+          </div>
+        </CardHeader>
       </Card>
     );
   }
@@ -139,9 +222,18 @@ export function AcceptInvitationForm() {
         </div>
 
         <div>
-          <CardTitle className="text-2xl">Criar senha</CardTitle>
+          <CardTitle className="text-2xl">Criar conta</CardTitle>
           <CardDescription className="mt-1">
-            Defina sua senha para acessar a plataforma.
+            {inviteInfo?.email && (
+              <span className="block text-sm font-medium text-foreground">
+                {inviteInfo.email}
+              </span>
+            )}
+            {inviteInfo?.role && (
+              <span className="mt-1 block text-xs text-muted-foreground">
+                Perfil: {ROLE_LABELS[inviteInfo.role] ?? inviteInfo.role}
+              </span>
+            )}
           </CardDescription>
         </div>
       </CardHeader>
@@ -152,6 +244,42 @@ export function AcceptInvitationForm() {
             <Alert variant="destructive">
               <AlertDescription>{serverError}</AlertDescription>
             </Alert>
+          )}
+
+          {needsProfile && (
+            <>
+              <div className="space-y-1.5">
+                <Label htmlFor="name">Nome</Label>
+                <Input
+                  id="name"
+                  placeholder="Seu nome completo"
+                  autoComplete="name"
+                  disabled={isSubmitting}
+                  aria-invalid={!!errors.name}
+                  {...register("name")}
+                />
+                {errors.name && (
+                  <p className="text-xs text-destructive">{errors.name.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-1.5">
+                <Label htmlFor="phone">Telefone</Label>
+                <Input
+                  id="phone"
+                  type="tel"
+                  placeholder="(11) 99999-9999"
+                  autoComplete="tel"
+                  disabled={isSubmitting}
+                  aria-invalid={!!errors.phone}
+                  value={formatPhone(watch("phone") ?? "")}
+                  onChange={(e) => setValue("phone", e.target.value, { shouldValidate: true })}
+                />
+                {errors.phone && (
+                  <p className="text-xs text-destructive">{errors.phone.message}</p>
+                )}
+              </div>
+            </>
           )}
 
           <div className="space-y-1.5">

@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 
 const ROLE_LABELS: Record<string, string> = {
+  super_admin: "Super Admin",
   clinic_admin: "Admin de Clínica",
   guardian: "Responsável",
   caregiver: "Cuidador",
@@ -35,7 +36,7 @@ interface InviteDialogProps {
 export function InviteDialog({
   open,
   onOpenChange,
-  defaultRole = "clinic_admin",
+  defaultRole,
 }: InviteDialogProps) {
   const sendInvite = useSendInvite();
   const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 });
@@ -50,13 +51,13 @@ export function InviteDialog({
     formState: { errors },
   } = useForm<SendInviteValues>({
     resolver: zodResolver(sendInviteSchema),
-    defaultValues: { email: "", role: defaultRole, clinic_id: null },
+    defaultValues: { email: "", role: defaultRole ?? "super_admin", clinic_id: null },
   });
 
   const role = watch("role");
 
   useEffect(() => {
-    if (open) reset({ email: "", role: defaultRole, clinic_id: null });
+    if (open) reset({ email: "", role: defaultRole ?? "super_admin", clinic_id: null });
   }, [open, reset, defaultRole]);
 
   function onSubmit(values: SendInviteValues) {
@@ -70,7 +71,7 @@ export function InviteDialog({
     );
   }
 
-  const needsClinic = ["guardian", "caregiver", "family"].includes(role);
+  const needsClinic = ["clinic_admin", "guardian", "caregiver", "family"].includes(role);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
