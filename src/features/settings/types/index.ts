@@ -4,6 +4,8 @@ export interface SystemSettings {
   maintenance_planned_end: string | null;
   plans_enabled: boolean;
   feedback_visible: boolean;
+  apk_url: string;
+  apk_enabled: boolean;
   app_name: string;
   app_url: string;
   app_site_url: string;

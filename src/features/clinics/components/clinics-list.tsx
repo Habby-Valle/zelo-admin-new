@@ -13,11 +13,13 @@ import {
   Building2,
   ChevronLeft,
   ChevronRight,
+  UserPlus,
 } from "lucide-react";
 
 import { useClinics, useDeactivateClinic, useDeleteClinic } from "@/features/clinics/hooks";
 import type { Clinic, ClinicStatus } from "@/features/clinics/types";
 import { ClinicDialog } from "./clinic-dialog";
+import { InviteDialog } from "@/features/users/components/invite-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatCnpj } from "@/lib/format";
@@ -84,6 +86,7 @@ export function ClinicsList() {
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editClinic, setEditClinic] = useState<Clinic | undefined>();
+  const [inviteOpen, setInviteOpen] = useState(false);
   const [deactivateTarget, setDeactivateTarget] = useState<Clinic | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Clinic | null>(null);
 
@@ -178,7 +181,10 @@ export function ClinicsList() {
             </SelectContent>
           </Select>
         </div>
-        <div />
+        <Button onClick={() => setInviteOpen(true)}>
+          <UserPlus className="mr-2 h-4 w-4" />
+          Convidar admin
+        </Button>
       </div>
 
       {/* Table */}
@@ -336,6 +342,9 @@ export function ClinicsList() {
 
       {/* Dialog edição */}
       <ClinicDialog open={dialogOpen} onOpenChange={setDialogOpen} clinic={editClinic} />
+
+      {/* Invite admin */}
+      <InviteDialog open={inviteOpen} onOpenChange={setInviteOpen} defaultRole="clinic_admin" />
 
       {/* Confirm desativar */}
       <AlertDialog
