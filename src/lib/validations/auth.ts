@@ -46,3 +46,17 @@ export const acceptInvitationSchema = z
   });
 
 export type AcceptInvitationSchema = z.infer<typeof acceptInvitationSchema>;
+
+export const acceptInvitationWithProfileSchema = z
+  .object({
+    name: z.string().min(1, "Nome obrigatório"),
+    phone: z.string().min(1, "Telefone obrigatório"),
+    password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+    confirmPassword: z.string().min(1, "Confirmação de senha obrigatória"),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "As senhas não coincidem",
+    path: ["confirmPassword"],
+  });
+
+export type AcceptInvitationWithProfileSchema = z.infer<typeof acceptInvitationWithProfileSchema>;

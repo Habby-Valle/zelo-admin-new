@@ -41,6 +41,8 @@ function SystemSettingsForm({
   );
   const [plansEnabled, setPlansEnabled] = useState(settings.plans_enabled);
   const [feedbackVisible, setFeedbackVisible] = useState(settings.feedback_visible);
+  const [apkEnabled, setApkEnabled] = useState(settings.apk_enabled);
+  const [apkUrl, setApkUrl] = useState(settings.apk_url);
   const [appName, setAppName] = useState(settings.app_name);
   const [appUrl, setAppUrl] = useState(settings.app_url);
   const [appSiteUrl, setAppSiteUrl] = useState(settings.app_site_url);
@@ -76,6 +78,8 @@ function SystemSettingsForm({
         maintenance_planned_end: plannedEnd ? toISOStringLocal(plannedEnd) : null,
         plans_enabled: plansEnabled,
         feedback_visible: feedbackVisible,
+        apk_enabled: apkEnabled,
+        apk_url: apkUrl,
         app_name: appName,
         app_url: appUrl,
         app_site_url: appSiteUrl,
@@ -267,6 +271,31 @@ function SystemSettingsForm({
                 placeholder="Link Google Play"
               />
             </div>
+          </div>
+
+          <div className="space-y-4 rounded-lg border p-4">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label>APK do App (versão de teste)</Label>
+                <p className="text-sm text-muted-foreground">
+                  {apkEnabled
+                    ? "Link do APK será exibido nos emails de convite para Cuidador e Familiar"
+                    : "Desativado — nenhum link de APK será enviado"}
+                </p>
+              </div>
+              <Switch checked={apkEnabled} onCheckedChange={setApkEnabled} />
+            </div>
+            {apkEnabled && (
+              <div className="space-y-2">
+                <Label htmlFor="apkUrl">URL do APK</Label>
+                <Input
+                  id="apkUrl"
+                  value={apkUrl}
+                  onChange={(e) => setApkUrl(e.target.value)}
+                  placeholder="https://exemplo.com/app.apk"
+                />
+              </div>
+            )}
           </div>
         </CardContent>
       </Card>
