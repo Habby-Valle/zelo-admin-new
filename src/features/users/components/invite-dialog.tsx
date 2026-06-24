@@ -71,7 +71,7 @@ export function InviteDialog({
     );
   }
 
-  const needsClinic = ["clinic_admin", "guardian", "caregiver", "family"].includes(role);
+  const needsClinic = ["guardian", "caregiver", "family"].includes(role);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
