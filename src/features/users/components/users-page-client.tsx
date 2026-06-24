@@ -168,6 +168,7 @@ export function UsersPageClient() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos os perfis</SelectItem>
+                <SelectItem value="super_admin">Super Admin</SelectItem>
                 <SelectItem value="clinic_admin">Admin de Clínica</SelectItem>
                 <SelectItem value="guardian">Responsável</SelectItem>
                 <SelectItem value="caregiver">Cuidador</SelectItem>
@@ -350,6 +351,7 @@ export function UsersPageClient() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos os perfis</SelectItem>
+                <SelectItem value="super_admin">Super Admin</SelectItem>
                 <SelectItem value="clinic_admin">Admin de Clínica</SelectItem>
                 <SelectItem value="guardian">Responsável</SelectItem>
                 <SelectItem value="caregiver">Cuidador</SelectItem>
