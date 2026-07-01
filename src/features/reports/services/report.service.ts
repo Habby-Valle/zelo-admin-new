@@ -5,6 +5,7 @@ import type {
   PatientsGrowthData,
   SosReportData,
   CaregiverReportData,
+  SatisfactionReportData,
   ReportDateRange,
 } from "@/features/reports/types";
 
@@ -56,4 +57,12 @@ export async function fetchCaregiversReport(
 ): Promise<CaregiverReportData[]> {
   const qs = await buildQuery(dateRange, clinicId);
   return apiFetchClient<CaregiverReportData[]>(`/reports/caregivers/?${qs}`);
+}
+
+export async function fetchSatisfactionReport(
+  dateRange: ReportDateRange,
+  clinicId?: string
+): Promise<SatisfactionReportData> {
+  const qs = await buildQuery(dateRange, clinicId);
+  return apiFetchClient<SatisfactionReportData>(`/reports/satisfaction/?${qs}`);
 }

@@ -5,4 +5,5 @@ export {
   usePatientsGrowthReport,
   useSosReport,
   useCaregiversReport,
+  useSatisfactionReport,
 } from "./use-reports";

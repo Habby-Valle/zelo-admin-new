@@ -7,6 +7,7 @@ import {
   fetchPatientsGrowthReport,
   fetchSosReport,
   fetchCaregiversReport,
+  fetchSatisfactionReport,
 } from "@/features/reports/services";
 import type { ReportFilters } from "@/features/reports/types";
 
@@ -17,6 +18,7 @@ export const reportKeys = {
   patientsGrowth: (params: object) => [...reportKeys.all, "patients-growth", params] as const,
   sos: (params: object) => [...reportKeys.all, "sos", params] as const,
   caregivers: (params: object) => [...reportKeys.all, "caregivers", params] as const,
+  satisfaction: (params: object) => [...reportKeys.all, "satisfaction", params] as const,
 };
 
 export function useShiftsReport(filters: ReportFilters) {
@@ -55,6 +57,14 @@ export function useCaregiversReport(filters: ReportFilters) {
   return useQuery({
     queryKey: reportKeys.caregivers(filters),
     queryFn: () => fetchCaregiversReport(filters.dateRange, filters.clinicId),
+    enabled: !!filters.dateRange.from && !!filters.dateRange.to,
+  });
+}
+
+export function useSatisfactionReport(filters: ReportFilters) {
+  return useQuery({
+    queryKey: reportKeys.satisfaction(filters),
+    queryFn: () => fetchSatisfactionReport(filters.dateRange, filters.clinicId),
     enabled: !!filters.dateRange.from && !!filters.dateRange.to,
   });
 }

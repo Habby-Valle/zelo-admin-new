@@ -10,6 +10,7 @@ import {
   Activity,
   AlertTriangle,
   ShieldCheck,
+  Star,
 } from "lucide-react";
 
 import { useDashboard } from "@/features/dashboard/hooks";
@@ -51,7 +52,7 @@ export function DashboardView() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {Array.from({ length: 8 }).map((_, i) => (
+          {Array.from({ length: 9 }).map((_, i) => (
             <KpiCardSkeleton key={i} />
           ))}
         </div>
@@ -122,6 +123,17 @@ export function DashboardView() {
           value={kpis.checklistsToday}
           description="Execuções completadas"
           icon={ClipboardCheck}
+        />
+        <KpiCard
+          title="Satisfação"
+          value={kpis.avgSatisfaction != null ? `${kpis.avgSatisfaction.toFixed(1)}★` : "—"}
+          description={
+            kpis.totalRatings > 0
+              ? `NPS ${kpis.nps} · ${kpis.totalRatings} avaliação${kpis.totalRatings > 1 ? "ões" : ""}`
+              : "Sem avaliações"
+          }
+          icon={Star}
+          trend={kpis.avgSatisfaction != null ? "up" : "neutral"}
         />
         <KpiCard
           title="Admins de clínica"

@@ -10,6 +10,9 @@ export interface DashboardKPIs {
   checklistsToday: number;
   activeSosAlerts: number;
   acknowledgedSosAlerts: number;
+  avgSatisfaction: number | null;
+  nps: number | null;
+  totalRatings: number;
 }
 
 export interface ClinicStat {

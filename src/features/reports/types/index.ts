@@ -53,6 +53,26 @@ export interface CaregiverReportData {
   completedChecklists: number;
 }
 
+export interface SatisfactionReportData {
+  summary: {
+    avgSatisfaction: number | null;
+    nps: number | null;
+    totalRatings: number;
+  };
+  byCaregiver: {
+    caregiverId: string;
+    caregiverName: string;
+    total: number;
+    avgSatisfaction: number | null;
+    nps: number | null;
+  }[];
+  byDate: {
+    date: string;
+    total: number;
+    avgSatisfaction: number;
+  }[];
+}
+
 export interface ReportFilters {
   clinicId: string;
   dateRange: ReportDateRange;
