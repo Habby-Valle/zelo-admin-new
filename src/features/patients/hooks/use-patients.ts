@@ -17,7 +17,6 @@ import {
 export function usePatients(params?: {
   search?: string;
   clinicId?: string;
-  guardianId?: string;
   isActive?: string;
   page?: number;
   pageSize?: number;

@@ -1,6 +1,6 @@
 "use client";
 
-import { CreditCard, Users, AlertCircle, XCircle, Shield } from "lucide-react";
+import { CreditCard, Users, AlertCircle, XCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { PlanDistributionItem } from "@/features/subscriptions/types";
@@ -13,11 +13,6 @@ interface StatsCardsProps {
     expired: number;
     cancelled: number;
     plan_distribution: PlanDistributionItem[];
-    guardian_total: number;
-    guardian_active: number;
-    guardian_free: number;
-    guardian_trial: number;
-    guardian_cancelled: number;
   };
 }
 
@@ -71,58 +66,6 @@ export function StatsCards({ stats }: StatsCardsProps) {
             <CardContent>
               <div className="text-2xl font-bold text-red-600">{stats.expired}</div>
               <p className="text-xs text-muted-foreground">assinaturas expiradas</p>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-
-      {/* Guardiões */}
-      <div>
-        <p className="mb-2 text-xs font-medium tracking-wide text-muted-foreground uppercase">
-          Guardiões
-        </p>
-        <div className="grid gap-4 md:grid-cols-4">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Total</CardTitle>
-              <Shield className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stats.guardian_total}</div>
-              <p className="text-xs text-muted-foreground">guardiões cadastrados</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Pagantes</CardTitle>
-              <Users className="h-4 w-4 text-green-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-green-600">{stats.guardian_active}</div>
-              <p className="text-xs text-muted-foreground">assinaturas pagas</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Gratuitos</CardTitle>
-              <AlertCircle className="h-4 w-4 text-blue-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-blue-600">{stats.guardian_free}</div>
-              <p className="text-xs text-muted-foreground">no plano gratuito</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">Cancelados</CardTitle>
-              <XCircle className="h-4 w-4 text-red-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold text-red-600">{stats.guardian_cancelled}</div>
-              <p className="text-xs text-muted-foreground">assinaturas canceladas</p>
             </CardContent>
           </Card>
         </div>

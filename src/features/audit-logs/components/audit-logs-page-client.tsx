@@ -230,7 +230,6 @@ export function AuditLogsClient() {
                 <SelectItem value="clinic">Clínica</SelectItem>
                 <SelectItem value="invite">Convite</SelectItem>
                 <SelectItem value="profilecaregiver">Cuidador</SelectItem>
-                <SelectItem value="profileguardian">Responsável</SelectItem>
                 <SelectItem value="profilefamily">Familiar</SelectItem>
               </SelectContent>
             </Select>

@@ -27,7 +27,7 @@ export interface InvoiceRecord {
   id: string;
   owner_id: string;
   owner_name: string;
-  owner_type: "clinic" | "guardian";
+  owner_type: "clinic";
   stripe_invoice_id: string;
   amount: number;
   currency: string;

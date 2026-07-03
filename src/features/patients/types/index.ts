@@ -25,7 +25,6 @@ export interface PatientCaregiverAssignment {
 export interface Patient {
   id: string;
   clinic_id: string | null;
-  guardian_id: string | null;
   name: string;
   birth_date: string;
   gender: PatientGender;
@@ -40,7 +39,6 @@ export interface Patient {
   media_id?: string | null;
   media?: Media | null;
   clinic_name?: string | null;
-  guardian_name?: string | null;
   is_active: boolean;
   emergency_contacts: PatientEmergencyContact[];
   caregiver_assignments: PatientCaregiverAssignment[];
@@ -50,6 +48,5 @@ export interface Patient {
 
 export interface PatientDetail extends Patient {
   clinic_name: string | null;
-  guardian_name: string | null;
   created_by_name: string;
 }

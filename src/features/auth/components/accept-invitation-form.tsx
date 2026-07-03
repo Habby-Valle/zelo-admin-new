@@ -32,7 +32,6 @@ type FormValues = z.infer<typeof formSchema>;
 const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
   clinic_admin: "Admin de Clínica",
-  guardian: "Responsável",
   caregiver: "Cuidador",
   family: "Familiar",
 };

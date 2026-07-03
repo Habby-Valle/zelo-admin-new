@@ -9,7 +9,6 @@ import {
   ClipboardCheck,
   Activity,
   AlertTriangle,
-  ShieldCheck,
   Star,
 } from "lucide-react";
 
@@ -140,12 +139,6 @@ export function DashboardView() {
           value={kpis.totalAdmins}
           description="Contas com role clinic_admin"
           icon={UserCheck}
-        />
-        <KpiCard
-          title="Responsáveis"
-          value={kpis.totalGuardians}
-          description="Contas com role guardian"
-          icon={ShieldCheck}
         />
         <KpiCard
           title="Alertas SOS"

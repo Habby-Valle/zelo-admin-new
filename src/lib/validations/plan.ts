@@ -30,7 +30,6 @@ export const planSchema = z.object({
     .max(99999.99, "Preco muito alto")
     .nullable()
     .optional(),
-  scope: z.enum(["clinic", "guardian"]),
   is_active: z.boolean(),
   benefits: z.array(planBenefitEntrySchema).optional(),
 });

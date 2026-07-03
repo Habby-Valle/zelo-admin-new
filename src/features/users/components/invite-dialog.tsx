@@ -22,7 +22,6 @@ import {
 const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
   clinic_admin: "Admin de Clínica",
-  guardian: "Responsável",
   caregiver: "Cuidador",
   family: "Familiar",
 };
@@ -71,7 +70,7 @@ export function InviteDialog({
     );
   }
 
-  const needsClinic = ["guardian", "caregiver", "family"].includes(role);
+  const needsClinic = ["caregiver", "family"].includes(role);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

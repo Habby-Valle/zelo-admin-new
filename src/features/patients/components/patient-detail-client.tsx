@@ -253,18 +253,6 @@ export function PatientDetailClient({ id }: { id: string }) {
             </p>
           </CardContent>
         </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-              <User className="h-4 w-4" /> Responsável
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="font-medium">
-              {patient.guardian_name ?? <span className="text-muted-foreground">—</span>}
-            </p>
-          </CardContent>
-        </Card>
       </div>
 
       <Card>

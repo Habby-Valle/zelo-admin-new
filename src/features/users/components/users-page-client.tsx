@@ -57,7 +57,6 @@ import type { InviteStatus } from "@/features/users/types";
 const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
   clinic_admin: "Admin de Clínica",
-  guardian: "Responsável",
   caregiver: "Cuidador",
   family: "Familiar",
 };
@@ -170,7 +169,6 @@ export function UsersPageClient() {
                 <SelectItem value="all">Todos os perfis</SelectItem>
                 <SelectItem value="super_admin">Super Admin</SelectItem>
                 <SelectItem value="clinic_admin">Admin de Clínica</SelectItem>
-                <SelectItem value="guardian">Responsável</SelectItem>
                 <SelectItem value="caregiver">Cuidador</SelectItem>
                 <SelectItem value="family">Familiar</SelectItem>
               </SelectContent>
@@ -353,7 +351,6 @@ export function UsersPageClient() {
                 <SelectItem value="all">Todos os perfis</SelectItem>
                 <SelectItem value="super_admin">Super Admin</SelectItem>
                 <SelectItem value="clinic_admin">Admin de Clínica</SelectItem>
-                <SelectItem value="guardian">Responsável</SelectItem>
                 <SelectItem value="caregiver">Cuidador</SelectItem>
                 <SelectItem value="family">Familiar</SelectItem>
               </SelectContent>

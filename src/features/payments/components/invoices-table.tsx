@@ -50,12 +50,8 @@ function StatusBadge({ status }: { status: string }) {
   );
 }
 
-function TypeBadge({ type }: { type: string }) {
-  return (
-    <Badge variant={type === "clinic" ? "secondary" : "outline"}>
-      {type === "clinic" ? "Clínica" : "Guardião"}
-    </Badge>
-  );
+function TypeBadge() {
+  return <Badge variant="secondary">Clínica</Badge>;
 }
 
 export function InvoicesTable({ invoices }: InvoicesTableProps) {
@@ -119,7 +115,7 @@ export function InvoicesTable({ invoices }: InvoicesTableProps) {
                 <TableRow key={inv.id}>
                   <TableCell className="font-medium">{inv.owner_name}</TableCell>
                   <TableCell>
-                    <TypeBadge type={inv.owner_type} />
+                    <TypeBadge />
                   </TableCell>
                   <TableCell className="font-medium">{formatCurrency(inv.amount)}</TableCell>
                   <TableCell>

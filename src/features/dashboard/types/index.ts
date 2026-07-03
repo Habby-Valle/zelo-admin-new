@@ -5,7 +5,6 @@ export interface DashboardKPIs {
   totalUsers: number;
   totalCaregivers: number;
   totalAdmins: number;
-  totalGuardians: number;
   activeShifts: number;
   checklistsToday: number;
   activeSosAlerts: number;

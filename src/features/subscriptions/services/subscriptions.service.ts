@@ -2,7 +2,6 @@ import { apiFetchClient } from "@/lib/api-client";
 import type {
   SubscriptionListItem,
   SubscriptionStats,
-  GuardianSubscriptionListItem,
   SubscriptionDetails,
 } from "@/features/subscriptions/types";
 
@@ -31,32 +30,6 @@ export async function fetchSubscriptions(params?: {
 
 export async function fetchSubscriptionStats(): Promise<SubscriptionStats> {
   return apiFetchClient<SubscriptionStats>("/subscriptions/stats/");
-}
-
-interface GuardianSubscriptionsResult {
-  count: number;
-  results: GuardianSubscriptionListItem[];
-}
-
-export async function fetchGuardianSubscriptions(params?: {
-  status?: string;
-  search?: string;
-  page?: number;
-  page_size?: number;
-}): Promise<{
-  subscriptions: GuardianSubscriptionListItem[];
-  total: number;
-}> {
-  const searchParams = new URLSearchParams();
-  if (params?.status) searchParams.set("status", params.status);
-  if (params?.search) searchParams.set("search", params.search);
-  if (params?.page) searchParams.set("page", String(params.page));
-  if (params?.page_size) searchParams.set("page_size", String(params.page_size));
-  const query = searchParams.toString();
-  const data = await apiFetchClient<GuardianSubscriptionsResult>(
-    `/subscriptions/guardian/${query ? `?${query}` : ""}`
-  );
-  return { subscriptions: data.results, total: data.count };
 }
 
 interface DjangoSubscription {

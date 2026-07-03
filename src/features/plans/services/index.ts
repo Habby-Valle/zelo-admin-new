@@ -63,13 +63,11 @@ export async function fetchPlans(params?: {
   isActive?: boolean | null;
   page?: number;
   pageSize?: number;
-  scope?: string;
 }): Promise<{ plans: Plan[]; total: number }> {
   const searchParams = new URLSearchParams();
   if (params?.search) searchParams.set("search", params.search);
   if (params?.isActive !== null && params?.isActive !== undefined)
     searchParams.set("is_active", String(params.isActive));
-  if (params?.scope) searchParams.set("scope", params.scope);
   if (params?.page) searchParams.set("page", String(params.page));
   if (params?.pageSize) searchParams.set("page_size", String(params.pageSize));
   const query = searchParams.toString();

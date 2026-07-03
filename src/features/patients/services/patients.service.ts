@@ -10,7 +10,6 @@ import type {
 interface ApiPatient {
   id: string;
   clinic_id: string | null;
-  guardian_id: string | null;
   name: string;
   birth_date: string;
   gender: string;
@@ -32,7 +31,6 @@ interface ApiPatient {
     created_at: string;
   } | null;
   clinic_name: string | null;
-  guardian_name: string | null;
   is_active: boolean;
   emergency_contacts: {
     id: string;
@@ -59,7 +57,6 @@ function mapPatient(api: ApiPatient): Patient {
   return {
     id: String(api.id),
     clinic_id: api.clinic_id != null ? String(api.clinic_id) : null,
-    guardian_id: api.guardian_id != null ? String(api.guardian_id) : null,
     name: api.name,
     birth_date: api.birth_date,
     gender: api.gender as Patient["gender"],
@@ -83,7 +80,6 @@ function mapPatient(api: ApiPatient): Patient {
         }
       : null,
     clinic_name: api.clinic_name,
-    guardian_name: api.guardian_name,
     is_active: api.is_active,
     emergency_contacts: (api.emergency_contacts ?? []).map((c) => ({
       id: String(c.id),
@@ -110,7 +106,6 @@ function mapPatientDetail(api: ApiPatient): PatientDetail {
   return {
     ...mapPatient(api),
     clinic_name: api.clinic_name ?? null,
-    guardian_name: api.guardian_name ?? null,
     created_by_name: api.created_by_name ?? "",
   };
 }
@@ -118,7 +113,6 @@ function mapPatientDetail(api: ApiPatient): PatientDetail {
 export async function fetchPatients(params?: {
   search?: string;
   clinicId?: string;
-  guardianId?: string;
   isActive?: string;
   page?: number;
   pageSize?: number;
@@ -126,7 +120,6 @@ export async function fetchPatients(params?: {
   const searchParams = new URLSearchParams();
   if (params?.search) searchParams.set("search", params.search);
   if (params?.clinicId) searchParams.set("clinic_id", params.clinicId);
-  if (params?.guardianId) searchParams.set("guardian_id", params.guardianId);
   if (params?.isActive) searchParams.set("is_active", params.isActive);
   if (params?.page) searchParams.set("page", String(params.page));
   if (params?.pageSize) searchParams.set("page_size", String(params.pageSize));

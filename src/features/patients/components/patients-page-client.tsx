@@ -42,7 +42,6 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { usePatients, useDeletePatient } from "@/features/patients/hooks";
 import { useClinics } from "@/features/clinics/hooks";
-import { useUsers } from "@/features/users/hooks";
 
 const GENDER_LABELS: Record<string, string> = {
   M: "Masculino",
@@ -69,7 +68,6 @@ export function PatientsPageClient() {
 
   const search = searchParams.get("search") ?? "";
   const clinicId = searchParams.get("clinic_id") ?? "";
-  const guardianId = searchParams.get("guardian_id") ?? "";
   const isActive = searchParams.get("is_active") ?? "";
   const page = Math.max(1, parseInt(searchParams.get("page") ?? "1", 10));
   const pageSize = 20;
@@ -77,19 +75,16 @@ export function PatientsPageClient() {
   const { data, isLoading } = usePatients({
     search,
     clinicId,
-    guardianId,
     isActive,
     page,
     pageSize,
   });
   const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 });
-  const { data: guardiansData } = useUsers({ role: "guardian", pageSize: 1000 });
 
   const patients = data?.patients ?? [];
   const total = data?.total ?? 0;
   const totalPages = Math.ceil(total / pageSize);
   const clinics = clinicsData?.results ?? [];
-  const guardians = guardiansData?.users ?? [];
 
   function updateParams(updates: Record<string, string>) {
     const current = new URLSearchParams(searchParams.toString());
@@ -143,28 +138,6 @@ export function PatientsPageClient() {
           </SelectContent>
         </Select>
         <Select
-          value={guardianId || "all"}
-          onValueChange={(v) =>
-            updateParams({ guardian_id: v === "all" ? "" : (v ?? ""), page: "" })
-          }
-        >
-          <SelectTrigger className="w-48">
-            <SelectValue>
-              {guardianId
-                ? (guardians.find((g) => g.id === guardianId)?.name ?? guardianId)
-                : "Todos os responsáveis"}
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="all">Todos os responsáveis</SelectItem>
-            {guardians.map((g) => (
-              <SelectItem key={g.id} value={g.id}>
-                {g.name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Select
           value={isActive || "all"}
           onValueChange={(v) => updateParams({ is_active: v === "all" ? "" : (v ?? ""), page: "" })}
         >
@@ -191,7 +164,6 @@ export function PatientsPageClient() {
             <TableHeader>
               <TableRow>
                 <TableHead>Nome</TableHead>
-                <TableHead>Responsável</TableHead>
                 <TableHead>Clínica</TableHead>
                 <TableHead>Idade</TableHead>
                 <TableHead>Sexo</TableHead>
@@ -203,7 +175,7 @@ export function PatientsPageClient() {
               {isLoading ? (
                 Array.from({ length: 6 }).map((_, i) => (
                   <TableRow key={i}>
-                    {Array.from({ length: 6 }).map((_, j) => (
+                    {Array.from({ length: 5 }).map((_, j) => (
                       <TableCell key={j}>
                         <Skeleton className="h-4 w-full" />
                       </TableCell>
@@ -213,7 +185,7 @@ export function PatientsPageClient() {
                 ))
               ) : patients.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-32 text-center">
+                  <TableCell colSpan={6} className="h-32 text-center">
                     <div className="flex flex-col items-center gap-2 text-muted-foreground">
                       <Users className="h-8 w-8" />
                       <p>Nenhum paciente encontrado</p>
@@ -240,9 +212,6 @@ export function PatientsPageClient() {
                           {patient.name}
                         </button>
                       </div>
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {patient.guardian_name ?? <span className="text-muted-foreground/50">—</span>}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {patient.clinic_id ? (
