@@ -118,3 +118,10 @@ export const caregiverHoursKeys = {
   list: (params: object) => [...caregiverHoursKeys.lists(), params] as const,
   summary: (params: object) => [...caregiverHoursKeys.all, "summary", params] as const,
 };
+
+export const complianceKeys = {
+  all: ["compliance"] as const,
+  lists: () => [...complianceKeys.all, "list"] as const,
+  list: (params: object) => [...complianceKeys.lists(), params] as const,
+  stats: [...complianceKeys.all, "stats"] as const,
+};

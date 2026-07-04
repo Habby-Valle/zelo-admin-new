@@ -23,6 +23,7 @@ import {
   MessageSquare,
   Clock,
   Receipt,
+  ClipboardCheck,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -85,6 +86,7 @@ const navItems = [
   { label: "Faturas de Serviço", href: "/service-invoices", icon: Receipt },
   { label: "Horas", href: "/caregiver-hours", icon: Clock },
   { label: "Relatórios", href: "/reports", icon: BarChart3 },
+  { label: "Conformidade", href: "/quality", icon: ClipboardCheck },
   { label: "Logs de Auditoria", href: "/audit-logs", icon: Shield },
   { label: "Broadcast", href: "/broadcast", icon: Megaphone },
   { label: "Feedbacks", href: "/feedback", icon: MessageSquare },
