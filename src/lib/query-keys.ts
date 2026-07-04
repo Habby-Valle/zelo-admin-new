@@ -111,3 +111,10 @@ export const healthAlertKeys = {
   details: () => [...healthAlertKeys.all, "detail"] as const,
   detail: (id: string) => [...healthAlertKeys.details(), id] as const,
 };
+
+export const caregiverHoursKeys = {
+  all: ["caregiver-hours"] as const,
+  lists: () => [...caregiverHoursKeys.all, "list"] as const,
+  list: (params: object) => [...caregiverHoursKeys.lists(), params] as const,
+  summary: (params: object) => [...caregiverHoursKeys.all, "summary", params] as const,
+};
