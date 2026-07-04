@@ -68,6 +68,7 @@ import {
   useRemoveEmergencyContact,
 } from "@/features/patients/hooks";
 import { useUsers } from "@/features/users/hooks";
+import { HealthAlertsSection } from "@/features/health-alerts/components";
 
 const GENDER_LABELS: Record<string, string> = { M: "Masculino", F: "Feminino", O: "Outro" };
 
@@ -374,6 +375,8 @@ export function PatientDetailClient({ id }: { id: string }) {
           )}
         </CardContent>
       </Card>
+
+      <HealthAlertsSection patientId={id} />
 
       <Card>
         <CardHeader>

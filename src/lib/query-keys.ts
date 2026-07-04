@@ -103,3 +103,11 @@ export const auditLogKeys = {
   details: () => [...auditLogKeys.all, "detail"] as const,
   detail: (id: string) => [...auditLogKeys.details(), id] as const,
 };
+
+export const healthAlertKeys = {
+  all: ["health-alerts"] as const,
+  lists: () => [...healthAlertKeys.all, "list"] as const,
+  list: (params: object) => [...healthAlertKeys.lists(), params] as const,
+  details: () => [...healthAlertKeys.all, "detail"] as const,
+  detail: (id: string) => [...healthAlertKeys.details(), id] as const,
+};
