@@ -64,7 +64,7 @@ export async function fetchCaregiverHours(
 
   const query = searchParams.toString();
   const data = await apiFetchClient<ApiWorkLogPage>(
-    `/shifts/caregiver-hours/${query ? `?${query}` : ""}`
+    `/caregiver-hours/${query ? `?${query}` : ""}`
   );
   return {
     count: data.count,
@@ -82,7 +82,7 @@ export async function fetchCaregiverHoursSummary(
   const query = searchParams.toString();
 
   const data = await apiFetchClient<ApiSummary>(
-    `/shifts/caregiver-hours/summary/${query ? `?${query}` : ""}`
+    `/caregiver-hours/summary/${query ? `?${query}` : ""}`
   );
   if (!data) return null;
   return {
