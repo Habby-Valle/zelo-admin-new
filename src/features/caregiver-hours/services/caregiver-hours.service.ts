@@ -7,26 +7,29 @@ import type {
 
 interface ApiWorkLog {
   id: string;
-  caregiver: string;
+  caregiver_id: string;
   caregiver_name: string;
-  clinic: string;
+  clinic_id: string;
   clinic_name: string;
   date: string;
   total_seconds: number;
-  total_hours: string;
+  total_hours: number;
   shift_count: number;
-  completed: number;
-  cancelled: number;
+  completed_shift_count: number;
+  cancelled_shift_count: number;
   overnight: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 interface ApiSummary {
-  total_hours: string;
-  avg_hours_per_shift: string;
-  period: {
-    start_date: string;
-    end_date: string;
-  };
+  total_seconds: number;
+  total_hours: number;
+  total_shifts: number;
+  completed_shifts: number;
+  avg_hours_per_shift: number;
+  period_start: string;
+  period_end: string;
 }
 
 interface ApiWorkLogPage {
@@ -37,16 +40,16 @@ interface ApiWorkLogPage {
 function mapWorkLog(api: ApiWorkLog): CaregiverWorkLog {
   return {
     id: String(api.id),
-    caregiver_id: String(api.caregiver),
+    caregiver_id: String(api.caregiver_id),
     caregiver_name: api.caregiver_name,
-    clinic_id: String(api.clinic),
+    clinic_id: String(api.clinic_id),
     clinic_name: api.clinic_name,
     date: api.date,
     total_seconds: api.total_seconds,
     total_hours: api.total_hours,
     shift_count: api.shift_count,
-    completed: api.completed,
-    cancelled: api.cancelled,
+    completed: api.completed_shift_count,
+    cancelled: api.cancelled_shift_count,
     overnight: api.overnight,
   };
 }
@@ -88,6 +91,9 @@ export async function fetchCaregiverHoursSummary(
   return {
     total_hours: data.total_hours,
     avg_hours_per_shift: data.avg_hours_per_shift,
-    period: data.period,
+    period: {
+      start_date: data.period_start,
+      end_date: data.period_end,
+    },
   };
 }

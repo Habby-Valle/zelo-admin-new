@@ -6,7 +6,7 @@ export interface CaregiverWorkLog {
   clinic_name: string;
   date: string;
   total_seconds: number;
-  total_hours: string;
+  total_hours: number;
   shift_count: number;
   completed: number;
   cancelled: number;
@@ -14,8 +14,8 @@ export interface CaregiverWorkLog {
 }
 
 export interface CaregiverHoursSummary {
-  total_hours: string;
-  avg_hours_per_shift: string;
+  total_hours: number;
+  avg_hours_per_shift: number;
   period: {
     start_date: string;
     end_date: string;

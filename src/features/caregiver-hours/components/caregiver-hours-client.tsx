@@ -18,8 +18,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useCaregiverHours, useCaregiverHoursSummary } from "@/features/caregiver-hours/hooks";
 import type { CaregiverWorkLog } from "@/features/caregiver-hours/types";
 
-function formatHours(totalHours: string): string {
-  const num = parseFloat(totalHours);
+function formatHours(totalHours: number | string): string {
+  const num = typeof totalHours === "string" ? parseFloat(totalHours) : totalHours;
   if (isNaN(num)) return "0h";
   const h = Math.floor(num);
   const m = Math.round((num - h) * 60);
