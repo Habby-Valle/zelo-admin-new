@@ -5,3 +5,4 @@ export { useUpdateClinic } from "./use-update-clinic";
 export { useDeactivateClinic } from "./use-deactivate-clinic";
 export { useDeleteClinic } from "./use-delete-clinic";
 export { useClinicSubscription } from "./use-clinic-subscription";
+export { useUpdateClinicSettings } from "./use-update-clinic-settings";

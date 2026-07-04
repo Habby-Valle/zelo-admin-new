@@ -31,6 +31,9 @@ interface ApiClinic {
   status: ClinicStatus;
   media_id: string | null;
   media: ApiMedia | null;
+  weekly_report_enabled?: boolean;
+  monthly_report_enabled?: boolean;
+  quality_config?: Record<string, unknown>;
   created_at: string;
   updated_at: string;
 }
@@ -45,6 +48,9 @@ function mapClinic(api: ApiClinic): Clinic {
     status: api.status,
     media_id: api.media_id ?? undefined,
     media: api.media as Clinic["media"],
+    weekly_report_enabled: api.weekly_report_enabled,
+    monthly_report_enabled: api.monthly_report_enabled,
+    quality_config: api.quality_config,
     created_at: api.created_at,
     updated_at: api.updated_at,
   };
@@ -99,6 +105,8 @@ export async function updateClinicApi(
     phone: string;
     status: string;
     media_id?: string;
+    weekly_report_enabled?: boolean;
+    monthly_report_enabled?: boolean;
   }>
 ): Promise<Clinic> {
   const result = await apiFetchClient<ApiClinic>(`/clinics/${id}/`, {

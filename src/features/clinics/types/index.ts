@@ -13,6 +13,9 @@ export interface Clinic {
   clinic_plan_id?: string | null;
   media_id?: string | null;
   media?: Media | null;
+  weekly_report_enabled?: boolean;
+  monthly_report_enabled?: boolean;
+  quality_config?: Record<string, unknown>;
   created_at: string;
   updated_at?: string;
   deleted_at?: string | null;
