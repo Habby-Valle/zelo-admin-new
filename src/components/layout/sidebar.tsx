@@ -22,6 +22,7 @@ import {
   AlertTriangle,
   MessageSquare,
   Clock,
+  Receipt,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -81,6 +82,7 @@ const navItems = [
   { label: "Pacientes", href: "/patients", icon: UserRound },
   { label: "Turnos", href: "/shifts", icon: CalendarClock },
   { label: "Checklists", href: "/checklists", icon: ClipboardList },
+  { label: "Faturas de Serviço", href: "/service-invoices", icon: Receipt },
   { label: "Horas", href: "/caregiver-hours", icon: Clock },
   { label: "Relatórios", href: "/reports", icon: BarChart3 },
   { label: "Logs de Auditoria", href: "/audit-logs", icon: Shield },
