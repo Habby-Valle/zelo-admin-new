@@ -8,9 +8,10 @@ import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-ki
 
 import { useCreateChecklist, useUpdateChecklist } from "@/features/checklists/hooks";
 import { useClinics } from "@/features/clinics/hooks";
-import type { ChecklistDetail } from "@/features/checklists/types";
+import type { ChecklistDetail, AlertSeverity, Criticality, FrequencyType } from "@/features/checklists/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -37,6 +38,16 @@ interface ItemFormState {
   has_observation: boolean;
   options: { id?: string; label: string; value: string }[];
   order: number;
+  unit: string;
+  expected_min: string;
+  expected_max: string;
+  target_value: string;
+  alert_severity: AlertSeverity;
+  criticality: Criticality;
+  instructions: string;
+  requires_photo: boolean;
+  frequency: FrequencyType;
+  scheduled_times: string[];
 }
 
 function createEmptyItem(order: number): ItemFormState {
@@ -47,6 +58,16 @@ function createEmptyItem(order: number): ItemFormState {
     has_observation: false,
     options: [],
     order,
+    unit: "",
+    expected_min: "",
+    expected_max: "",
+    target_value: "",
+    alert_severity: "",
+    criticality: "medium",
+    instructions: "",
+    requires_photo: false,
+    frequency: "per_shift",
+    scheduled_times: [],
   };
 }
 
@@ -55,6 +76,27 @@ const ITEM_TYPES = [
   { value: "boolean" as const, label: "Sim/Não" },
   { value: "select" as const, label: "Seleção" },
   { value: "number" as const, label: "Número" },
+];
+
+const CRITICALITY_OPTIONS: { value: Criticality; label: string }[] = [
+  { value: "low", label: "Baixa" },
+  { value: "medium", label: "Média" },
+  { value: "high", label: "Alta" },
+];
+
+const SEVERITY_OPTIONS: { value: AlertSeverity; label: string }[] = [
+  { value: "", label: "Nenhum" },
+  { value: "low", label: "Baixa" },
+  { value: "medium", label: "Média" },
+  { value: "high", label: "Alta" },
+  { value: "critical", label: "Crítica" },
+];
+
+const FREQUENCY_OPTIONS: { value: FrequencyType; label: string }[] = [
+  { value: "as_needed", label: "Se necessário" },
+  { value: "per_shift", label: "Por turno" },
+  { value: "daily", label: "Diário" },
+  { value: "fixed_times", label: "Horários fixos" },
 ];
 
 export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
@@ -84,6 +126,16 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
           value: opt.value,
         })),
         order: item.order,
+        unit: item.unit ?? "",
+        expected_min: item.expected_min?.toString() ?? "",
+        expected_max: item.expected_max?.toString() ?? "",
+        target_value: item.target_value?.toString() ?? "",
+        alert_severity: item.alert_severity ?? "",
+        criticality: item.criticality ?? "medium",
+        instructions: item.instructions ?? "",
+        requires_photo: item.requires_photo ?? false,
+        frequency: item.frequency ?? "per_shift",
+        scheduled_times: item.scheduled_times ?? [],
       }));
     }
     return [createEmptyItem(0)];
@@ -158,6 +210,16 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
         required: item.required,
         has_observation: item.has_observation,
         order: idx,
+        unit: item.unit || "",
+        expected_min: item.expected_min || null,
+        expected_max: item.expected_max || null,
+        target_value: item.target_value || null,
+        alert_severity: item.alert_severity || "",
+        criticality: item.criticality,
+        instructions: item.instructions || "",
+        requires_photo: item.requires_photo,
+        frequency: item.frequency,
+        scheduled_times: item.scheduled_times,
         options:
           item.type === "select"
             ? item.options
@@ -384,11 +446,139 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
                       Sim / Não
                     </Badge>
                   )}
+
                   {item.type === "number" && (
-                    <Badge variant="outline" className="mt-3 text-xs">
-                      123
-                    </Badge>
+                    <div className="mt-3 grid grid-cols-4 gap-3">
+                      <div className="space-y-1">
+                        <Label className="text-xs">Unidade</Label>
+                        <Input
+                          value={item.unit}
+                          onChange={(e) => updateItem(index, { unit: e.target.value })}
+                          placeholder="Ex: kg"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Mín. esperado</Label>
+                        <Input
+                          type="number"
+                          step="any"
+                          value={item.expected_min}
+                          onChange={(e) => updateItem(index, { expected_min: e.target.value })}
+                          placeholder="0"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Máx. esperado</Label>
+                        <Input
+                          type="number"
+                          step="any"
+                          value={item.expected_max}
+                          onChange={(e) => updateItem(index, { expected_max: e.target.value })}
+                          placeholder="100"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <Label className="text-xs">Alerta</Label>
+                        <Select
+                          value={item.alert_severity}
+                          onValueChange={(v) => updateItem(index, { alert_severity: v as AlertSeverity })}
+                        >
+                          <SelectTrigger>
+                            <SelectValue placeholder="Nenhum" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {SEVERITY_OPTIONS.map((opt) => (
+                              <SelectItem key={opt.value} value={opt.value}>
+                                {opt.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
                   )}
+
+                  <div className="mt-3 grid grid-cols-3 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-xs">Criticalidade</Label>
+                      <Select
+                        value={item.criticality}
+                        onValueChange={(v) => updateItem(index, { criticality: v as Criticality })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {CRITICALITY_OPTIONS.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs">Frequência</Label>
+                      <Select
+                        value={item.frequency}
+                        onValueChange={(v) => updateItem(index, { frequency: v as FrequencyType })}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {FREQUENCY_OPTIONS.map((opt) => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                              {opt.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="flex items-end pb-1">
+                      <div className="flex items-center gap-2">
+                        <Checkbox
+                          id={`photo-${index}`}
+                          checked={item.requires_photo}
+                          onCheckedChange={(v) => updateItem(index, { requires_photo: v === true })}
+                        />
+                        <Label
+                          htmlFor={`photo-${index}`}
+                          className="cursor-pointer text-sm font-normal"
+                        >
+                          Exige foto
+                        </Label>
+                      </div>
+                    </div>
+                  </div>
+
+                  {item.frequency === "fixed_times" && (
+                    <div className="mt-2 space-y-1">
+                      <Label className="text-xs">Horários (separados por vírgula, ex: 08:00,14:00)</Label>
+                      <Input
+                        value={item.scheduled_times.join(",")}
+                        onChange={(e) =>
+                          updateItem(index, {
+                            scheduled_times: e.target.value
+                              .split(",")
+                              .map((t) => t.trim())
+                              .filter(Boolean),
+                          })
+                        }
+                        placeholder="08:00,14:00,20:00"
+                      />
+                    </div>
+                  )}
+
+                  <div className="mt-2">
+                    <Label className="text-xs">Instruções</Label>
+                    <Textarea
+                      className="mt-1"
+                      value={item.instructions}
+                      onChange={(e) => updateItem(index, { instructions: e.target.value })}
+                      placeholder="Instruções para o cuidador..."
+                    />
+                  </div>
                 </SortableItem>
               ))}
             </div>

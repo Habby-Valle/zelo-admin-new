@@ -6,7 +6,9 @@ import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Calendar,
+  Camera,
   CheckSquare,
+  Clock,
   ListChecks,
   Pencil,
   Settings,
@@ -15,6 +17,7 @@ import {
 import { toast } from "sonner";
 
 import { useChecklist, useDeleteChecklist } from "@/features/checklists/hooks";
+import type { Criticality } from "@/features/checklists/types";
 import { ChecklistDialog } from "./checklist-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -45,6 +48,25 @@ const ITEM_TYPE_LABELS: Record<string, string> = {
   text: "Texto",
   number: "Número",
   select: "Seleção",
+};
+
+const CRITICALITY_LABELS: Record<Criticality, string> = {
+  low: "Baixa",
+  medium: "Média",
+  high: "Alta",
+};
+
+const CRITICALITY_VARIANTS: Record<Criticality, "outline" | "secondary" | "destructive"> = {
+  low: "outline",
+  medium: "secondary",
+  high: "destructive",
+};
+
+const FREQUENCY_LABELS: Record<string, string> = {
+  as_needed: "Se necessário",
+  per_shift: "Por turno",
+  daily: "Diário",
+  fixed_times: "Horários fixos",
 };
 
 interface ChecklistDetailClientProps {
@@ -132,6 +154,9 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
                 <Badge variant="default">Ativo</Badge>
               ) : (
                 <Badge variant="secondary">Inativo</Badge>
+              )}
+              {checklist.version && (
+                <Badge variant="outline">v{checklist.version}</Badge>
               )}
             </div>
             <div className="mt-1 flex items-center gap-4 text-muted-foreground">
@@ -221,6 +246,10 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
                     <TableHead>#</TableHead>
                     <TableHead>Item</TableHead>
                     <TableHead>Tipo</TableHead>
+                    <TableHead>Faixa</TableHead>
+                    <TableHead>Criticalidade</TableHead>
+                    <TableHead>Foto</TableHead>
+                    <TableHead>Frequência</TableHead>
                     <TableHead>Obrigatório</TableHead>
                     <TableHead>Observação</TableHead>
                     <TableHead>Opções</TableHead>
@@ -233,6 +262,42 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
                       <TableCell className="font-medium">{item.name}</TableCell>
                       <TableCell>
                         <Badge variant="outline">{ITEM_TYPE_LABELS[item.type] ?? item.type}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        {item.type === "number" && (item.expected_min !== null || item.expected_max !== null) ? (
+                          <span className="text-xs">
+                            {item.expected_min ?? "—"} – {item.expected_max ?? "—"}
+                            {item.unit && <span className="ml-0.5 text-muted-foreground">{item.unit}</span>}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {item.criticality ? (
+                          <Badge variant={CRITICALITY_VARIANTS[item.criticality as Criticality] ?? "outline"}>
+                            {CRITICALITY_LABELS[item.criticality as Criticality] ?? item.criticality}
+                          </Badge>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {item.requires_photo ? (
+                          <Camera className="h-4 w-4 text-primary" />
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {item.frequency ? (
+                          <span className="inline-flex items-center gap-1 text-xs">
+                            <Clock className="h-3 w-3" />
+                            {FREQUENCY_LABELS[item.frequency] ?? item.frequency}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
                       </TableCell>
                       <TableCell>
                         {item.required ? (
