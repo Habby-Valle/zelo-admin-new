@@ -17,7 +17,7 @@ export function useComplianceList(filters?: ComplianceFilters) {
 
 export function useComplianceStats() {
   return useQuery({
-    queryKey: complianceKeys.stats,
+    queryKey: complianceKeys.stats(),
     queryFn: fetchComplianceStats,
   });
 }
