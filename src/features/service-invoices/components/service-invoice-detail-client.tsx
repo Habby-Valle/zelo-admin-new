@@ -2,7 +2,7 @@
 
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, QrCode } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -98,6 +98,12 @@ export function ServiceInvoiceDetailClient({ invoiceId }: Props) {
         <Badge variant={STATUS_CONFIG[invoice.status]?.variant ?? "outline"} className="ml-auto">
           {STATUS_CONFIG[invoice.status]?.label ?? invoice.status}
         </Badge>
+        {invoice.pix_status && (
+          <Badge variant="outline" className="gap-1 border-emerald-300 text-emerald-700">
+            <QrCode className="h-3 w-3" />
+            PIX
+          </Badge>
+        )}
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
