@@ -23,6 +23,7 @@ const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
   clinic_admin: "Admin de Clínica",
   caregiver: "Cuidador",
+  clinic_nurse: "Enfermeiro(a)",
   family: "Familiar",
 };
 

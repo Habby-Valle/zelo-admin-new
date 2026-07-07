@@ -5,7 +5,7 @@ export type UserRole =
   | "family"
   | "emergency_contact";
 
-export type InviteRole = "super_admin" | "clinic_admin" | "caregiver" | "family";
+export type InviteRole = "super_admin" | "clinic_admin" | "caregiver" | "clinic_nurse" | "family";
 
 export type InviteStatus = "pending" | "accepted" | "expired" | "cancelled";
 

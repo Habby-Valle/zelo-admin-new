@@ -58,6 +58,7 @@ const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
   clinic_admin: "Admin de Clínica",
   caregiver: "Cuidador",
+  clinic_nurse: "Enfermeiro(a)",
   family: "Familiar",
 };
 
@@ -170,6 +171,7 @@ export function UsersPageClient() {
                 <SelectItem value="super_admin">Super Admin</SelectItem>
                 <SelectItem value="clinic_admin">Admin de Clínica</SelectItem>
                 <SelectItem value="caregiver">Cuidador</SelectItem>
+                <SelectItem value="clinic_nurse">Enfermeiro(a)</SelectItem>
                 <SelectItem value="family">Familiar</SelectItem>
               </SelectContent>
             </Select>
@@ -352,6 +354,7 @@ export function UsersPageClient() {
                 <SelectItem value="super_admin">Super Admin</SelectItem>
                 <SelectItem value="clinic_admin">Admin de Clínica</SelectItem>
                 <SelectItem value="caregiver">Cuidador</SelectItem>
+                <SelectItem value="clinic_nurse">Enfermeiro(a)</SelectItem>
                 <SelectItem value="family">Familiar</SelectItem>
               </SelectContent>
             </Select>
