@@ -27,7 +27,6 @@ import { RevenueChart } from "@/features/dashboard/components/revenue-chart";
 
 export function DashboardView() {
   const { data, isLoading, error } = useDashboard();
-  console.log(error);
   if (error) {
     return (
       <div className="space-y-8">
