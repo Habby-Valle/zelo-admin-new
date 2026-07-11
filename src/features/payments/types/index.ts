@@ -10,7 +10,7 @@ export interface PaymentRecord {
   payment_method: string;
   billing_cycle: string;
   paid_at: string | null;
-  stripe_payment_intent_id: string;
+  asaas_payment_id: string;
   created_at: string;
 }
 
@@ -28,7 +28,7 @@ export interface InvoiceRecord {
   owner_id: string;
   owner_name: string;
   owner_type: "clinic";
-  stripe_invoice_id: string;
+  asaas_invoice_id: string;
   amount: number;
   currency: string;
   status: string;

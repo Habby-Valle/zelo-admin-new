@@ -62,7 +62,7 @@ export function InvoicesTable({ invoices }: InvoicesTableProps) {
     return invoices.filter((inv) => {
       const matchesSearch =
         inv.owner_name.toLowerCase().includes(search.toLowerCase()) ||
-        inv.stripe_invoice_id.toLowerCase().includes(search.toLowerCase());
+        inv.asaas_invoice_id.toLowerCase().includes(search.toLowerCase());
       const matchesStatus = statusFilter === "all" || inv.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
@@ -100,7 +100,7 @@ export function InvoicesTable({ invoices }: InvoicesTableProps) {
               <TableHead>Valor</TableHead>
               <TableHead>Status</TableHead>
               <TableHead>Data</TableHead>
-              <TableHead className="text-right">Fatura Stripe</TableHead>
+              <TableHead className="text-right">Fatura</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -132,12 +132,12 @@ export function InvoicesTable({ invoices }: InvoicesTableProps) {
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary"
                       >
-                        {inv.stripe_invoice_id.slice(0, 12)}...
+                        {inv.asaas_invoice_id.slice(0, 12)}...
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     ) : (
                       <span className="text-sm text-muted-foreground">
-                        {inv.stripe_invoice_id.slice(0, 14)}...
+                        {inv.asaas_invoice_id.slice(0, 14)}...
                       </span>
                     )}
                   </TableCell>
