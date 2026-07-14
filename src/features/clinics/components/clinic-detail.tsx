@@ -6,9 +6,12 @@ import Image from "next/image";
 import {
   ArrowLeft,
   Building2,
+  Globe,
+  Mail,
   MapPin,
   Phone,
   Users,
+  User,
   UserCheck,
   CalendarClock,
   Bell,
@@ -37,7 +40,7 @@ import { usePatients } from "@/features/patients/hooks";
 import { useUsers } from "@/features/users/hooks";
 import { useShifts } from "@/features/shifts/hooks";
 import { useSosAlerts } from "@/features/sos/hooks";
-import { formatCnpj, formatDate, formatDateTime, formatCurrency } from "@/lib/format";
+import { formatCnpj, formatDate, formatDateTime, formatCurrency, formatPhone } from "@/lib/format";
 import { InviteDialog } from "@/features/users/components/invite-dialog";
 
 const STATUS_COLORS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -581,10 +584,46 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
                   <Phone className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <span>{clinic.phone}</span>
                 </div>
+                {clinic.email && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <span>{clinic.email}</span>
+                  </div>
+                )}
+                {clinic.whatsapp && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Phone className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <span>{formatPhone(clinic.whatsapp)}</span>
+                  </div>
+                )}
                 <div className="flex items-center gap-2 text-sm">
                   <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
                   <span>CNPJ: {formatCnpj(clinic.cnpj)}</span>
                 </div>
+                {clinic.cnes && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <span>CNES: {clinic.cnes}</span>
+                  </div>
+                )}
+                {clinic.specialty && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Building2 className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <span>{clinic.specialty}</span>
+                  </div>
+                )}
+                {clinic.responsible_name && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <User className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <span>Resp.: {clinic.responsible_name}</span>
+                  </div>
+                )}
+                {clinic.website && (
+                  <div className="flex items-center gap-2 text-sm">
+                    <Globe className="h-4 w-4 shrink-0 text-muted-foreground" />
+                    <a href={clinic.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{clinic.website}</a>
+                  </div>
+                )}
                 <div className="text-sm text-muted-foreground">
                   Criada em {formatDate(clinic.created_at)}
                 </div>

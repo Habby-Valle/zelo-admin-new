@@ -31,6 +31,15 @@ interface ApiClinic {
   status: ClinicStatus;
   media_id: string | null;
   media: ApiMedia | null;
+  email?: string;
+  website?: string;
+  description?: string;
+  responsible_name?: string;
+  whatsapp?: string;
+  business_hours?: Record<string, unknown>;
+  social_media?: Record<string, unknown>;
+  cnes?: string;
+  specialty?: string;
   weekly_report_enabled?: boolean;
   monthly_report_enabled?: boolean;
   quality_config?: Record<string, unknown>;
@@ -48,6 +57,15 @@ function mapClinic(api: ApiClinic): Clinic {
     status: api.status,
     media_id: api.media_id ?? undefined,
     media: api.media as Clinic["media"],
+    email: api.email,
+    website: api.website,
+    description: api.description,
+    responsible_name: api.responsible_name,
+    whatsapp: api.whatsapp,
+    business_hours: api.business_hours,
+    social_media: api.social_media,
+    cnes: api.cnes,
+    specialty: api.specialty,
     weekly_report_enabled: api.weekly_report_enabled,
     monthly_report_enabled: api.monthly_report_enabled,
     quality_config: api.quality_config,
@@ -88,6 +106,15 @@ export async function createClinicApi(data: {
   media_id?: string;
   admin_email?: string;
   plan_id?: string;
+  email?: string;
+  website?: string;
+  description?: string;
+  responsible_name?: string;
+  whatsapp?: string;
+  cnes?: string;
+  specialty?: string;
+  business_hours?: Record<string, unknown>;
+  social_media?: Record<string, unknown>;
 }): Promise<Clinic> {
   const result = await apiFetchClient<ApiClinic>("/clinics/", {
     method: "POST",
@@ -105,6 +132,15 @@ export async function updateClinicApi(
     phone: string;
     status: string;
     media_id?: string;
+    email?: string;
+    website?: string;
+    description?: string;
+    responsible_name?: string;
+    whatsapp?: string;
+    business_hours?: Record<string, unknown>;
+    social_media?: Record<string, unknown>;
+    cnes?: string;
+    specialty?: string;
     weekly_report_enabled?: boolean;
     monthly_report_enabled?: boolean;
   }>

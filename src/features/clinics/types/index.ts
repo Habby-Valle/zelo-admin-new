@@ -13,6 +13,15 @@ export interface Clinic {
   clinic_plan_id?: string | null;
   media_id?: string | null;
   media?: Media | null;
+  email?: string;
+  website?: string;
+  description?: string;
+  responsible_name?: string;
+  whatsapp?: string;
+  business_hours?: Record<string, unknown>;
+  social_media?: Record<string, unknown>;
+  cnes?: string;
+  specialty?: string;
   weekly_report_enabled?: boolean;
   monthly_report_enabled?: boolean;
   quality_config?: Record<string, unknown>;

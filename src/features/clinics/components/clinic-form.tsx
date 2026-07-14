@@ -61,6 +61,13 @@ export function ClinicForm({
       address: EMPTY_ADDRESS,
       phone: "",
       media_id: null,
+      email: "",
+      website: "",
+      description: "",
+      responsible_name: "",
+      whatsapp: "",
+      cnes: "",
+      specialty: "",
       ...defaultValues,
     },
   });
@@ -234,6 +241,78 @@ export function ClinicForm({
         </div>
       </div>
 
+      <div className="rounded-lg border p-3">
+        <p className="mb-2 text-sm font-medium">Informações de Contato</p>
+        <div className="space-y-2">
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <Label className="text-xs">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="contato@clinica.com.br"
+                {...register("email")}
+              />
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+            </div>
+            <div className="space-y-1">
+              <Label className="text-xs">WhatsApp</Label>
+              <Input
+                id="whatsapp"
+                placeholder="(11) 99999-9999"
+                {...register("whatsapp")}
+              />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">Site</Label>
+            <Input
+              id="website"
+              type="url"
+              placeholder="https://www.clinica.com.br"
+              {...register("website")}
+            />
+            {errors.website && <p className="text-xs text-destructive">{errors.website.message}</p>}
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-lg border p-3">
+        <p className="mb-2 text-sm font-medium">Informações Adicionais</p>
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-1">
+            <Label className="text-xs">CNES</Label>
+            <Input id="cnes" placeholder="Código CNES" {...register("cnes")} />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">Especialidade</Label>
+            <Input
+              id="specialty"
+              placeholder="Ex: Home Care, Geriatria"
+              {...register("specialty")}
+            />
+          </div>
+        </div>
+        <div className="mt-2 space-y-1">
+          <Label className="text-xs">Responsável Legal</Label>
+          <Input
+            id="responsible_name"
+            placeholder="Nome do responsável"
+            {...register("responsible_name")}
+          />
+        </div>
+        <div className="mt-2 space-y-1">
+          <Label className="text-xs">Descrição</Label>
+          <textarea
+            id="description"
+            rows={3}
+            placeholder="Breve descrição da clínica..."
+            {...register("description")}
+            className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+          />
+        </div>
+      </div>
+
       {!isEditing && plans && plans.length > 0 && (
         <div className="space-y-2">
           <Label className="text-sm font-semibold">Plano de Assinatura</Label>
@@ -286,6 +365,54 @@ export function ClinicForm({
           )}
         </div>
       )}
+
+      <div className="rounded-lg border p-3">
+        <p className="mb-2 text-sm font-medium">Informações Adicionais</p>
+        <div className="space-y-3">
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label htmlFor="email" className="text-xs">Email de contato</Label>
+              <Input id="email" type="email" placeholder="contato@clinica.com.br" {...register("email")} />
+              {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="website" className="text-xs">Site</Label>
+              <Input id="website" type="url" placeholder="https://clinica.com.br" {...register("website")} />
+              {errors.website && <p className="text-xs text-destructive">{errors.website.message}</p>}
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label htmlFor="whatsapp" className="text-xs">WhatsApp</Label>
+              <Input id="whatsapp" placeholder="(11) 99999-9999" {...register("whatsapp")} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="responsible_name" className="text-xs">Responsável legal</Label>
+              <Input id="responsible_name" placeholder="Nome do responsável" {...register("responsible_name")} />
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-1">
+              <Label htmlFor="cnes" className="text-xs">CNES</Label>
+              <Input id="cnes" placeholder="Código CNES" {...register("cnes")} />
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="specialty" className="text-xs">Especialidade</Label>
+              <Input id="specialty" placeholder="Ex: Home Care, Geriatria" {...register("specialty")} />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <Label htmlFor="description" className="text-xs">Descrição</Label>
+            <textarea
+              id="description"
+              rows={3}
+              className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              placeholder="Breve descrição da clínica..."
+              {...register("description")}
+            />
+          </div>
+        </div>
+      </div>
 
       <Button type="submit" className="w-full" disabled={isLoading}>
         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
