@@ -24,6 +24,7 @@ import {
   Clock,
   Receipt,
   ClipboardCheck,
+  Inbox,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -76,6 +77,7 @@ function EnvironmentBadge() {
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Clínicas", href: "/clinics", icon: Building2 },
+  { label: "Leads", href: "/leads", icon: Inbox },
   { label: "Assinaturas", href: "/subscriptions", icon: CreditCard },
   { label: "Pagamentos", href: "/payments", icon: DollarSign },
   { label: "Planos", href: "/plans", icon: CheckCircle },
