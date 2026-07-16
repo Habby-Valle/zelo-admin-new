@@ -56,7 +56,7 @@ export async function fetchCaregiversReport(
   clinicId?: string
 ): Promise<CaregiverReportData[]> {
   const qs = await buildQuery(dateRange, clinicId);
-  return apiFetchClient<CaregiverReportData[]>(`/caregivers/reports/?${qs}`);
+  return apiFetchClient<CaregiverReportData[]>(`/reports/caregivers/?${qs}`);
 }
 
 export async function fetchSatisfactionReport(
