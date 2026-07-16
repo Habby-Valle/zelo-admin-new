@@ -230,7 +230,7 @@ export async function addEmergencyContactFetch(
     profile_family_name: string;
     profile_family_phone: string;
     priority: number;
-  }>(`/patients/${patientId}/emergency-contacts/`, {
+  }>(`/patients/${patientId}/contacts/internal/`, {
     method: "POST",
     body: JSON.stringify({ profile_family_id: profileFamilyId, priority }),
   });
@@ -247,7 +247,7 @@ export async function removeEmergencyContactFetch(
   patientId: string,
   contactId: string
 ): Promise<void> {
-  await apiFetchClient<void>(`/patients/${patientId}/emergency-contacts/${contactId}/`, {
+  await apiFetchClient<void>(`/patients/${patientId}/contacts/internal/${contactId}/`, {
     method: "DELETE",
   });
 }
