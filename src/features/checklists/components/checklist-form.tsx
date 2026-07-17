@@ -7,7 +7,6 @@ import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy, arrayMove } from "@dnd-kit/sortable";
 
 import { useCreateChecklist, useUpdateChecklist } from "@/features/checklists/hooks";
-import { useClinics } from "@/features/clinics/hooks";
 import type { ChecklistDetail, AlertSeverity, Criticality, FrequencyType } from "@/features/checklists/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -100,17 +99,11 @@ const FREQUENCY_OPTIONS: { value: FrequencyType; label: string }[] = [
 ];
 
 export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
-  const { data: clinicsData } = useClinics({ pageSize: 999 });
-  const clinics = clinicsData?.results ?? [];
-
   const createChecklist = useCreateChecklist();
   const updateChecklist = useUpdateChecklist(checklist?.id ?? "");
 
   const [name, setName] = useState(checklist?.name ?? "");
   const [icon, setIcon] = useState(checklist?.icon ?? "");
-  const [clinicId, setClinicId] = useState<string>(
-    checklist?.clinic_id ?? ""
-  );
   const [isActive, setIsActive] = useState(checklist?.is_active ?? true);
   const [items, setItems] = useState<ItemFormState[]>(() => {
     if (checklist?.items?.length) {
@@ -232,7 +225,6 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
             : [],
       })),
     };
-    if (clinicId) body.clinic_id = clinicId;
 
     try {
       if (checklist?.id) {
@@ -265,28 +257,6 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
         <div className="space-y-1.5">
           <Label>Ícone</Label>
           <MaterialIconPicker value={icon} onChange={setIcon} />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-1.5">
-          <Label>Clínica</Label>
-          <Select
-            value={clinicId || "none"}
-            onValueChange={(v) => setClinicId(v === "none" ? "" : (v ?? ""))}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Global (sem clínica)" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="none">Global (sem clínica)</SelectItem>
-              {clinics.map((c) => (
-                <SelectItem key={c.id} value={String(c.id)}>
-                  {c.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
         </div>
       </div>
 
