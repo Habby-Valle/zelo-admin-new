@@ -12,6 +12,7 @@ import {
   Star,
 } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import { useDashboard } from "@/features/dashboard/hooks";
 import { KpiCard, KpiCardSkeleton } from "@/features/dashboard/components/kpi-card";
 import {
@@ -90,7 +91,12 @@ export function DashboardView() {
         </Link>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div
+        className={cn(
+          "grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+          kpis.activeSosAlerts > 0 && "mt-12!",
+        )}
+      >
         <KpiCard
           title="Clínicas ativas"
           value={kpis.activeClinics}
