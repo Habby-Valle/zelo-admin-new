@@ -1,11 +1,6 @@
 import { apiFetchClient } from "@/lib/api-client";
 import type { PaginatedResponse } from "@/types";
-import type {
-  Patient,
-  PatientDetail,
-  PatientCaregiverAssignment,
-  PatientEmergencyContact,
-} from "@/features/patients/types";
+import type { Patient, PatientDetail } from "@/features/patients/types";
 
 interface ApiPatient {
   id: string;
@@ -184,70 +179,4 @@ export async function updatePatientFetch(
 
 export async function deletePatientFetch(id: string): Promise<void> {
   await apiFetchClient<void>(`/patients/${id}/`, { method: "DELETE" });
-}
-
-export async function addCaregiverFetch(
-  patientId: string,
-  caregiverId: string
-): Promise<PatientCaregiverAssignment> {
-  const result = await apiFetchClient<{
-    id: string;
-    caregiver_id: string;
-    caregiver_name: string;
-    caregiver_email: string | null;
-    caregiver_specialization: string | null;
-    is_active: boolean;
-    assigned_at: string;
-  }>(`/patients/${patientId}/caregivers/`, {
-    method: "POST",
-    body: JSON.stringify({ caregiver_id: caregiverId }),
-  });
-  return {
-    id: result.id,
-    caregiver_id: result.caregiver_id,
-    caregiver_name: result.caregiver_name,
-    caregiver_email: result.caregiver_email,
-    caregiver_specialization: result.caregiver_specialization,
-    is_active: result.is_active,
-    assigned_at: result.assigned_at,
-  };
-}
-
-export async function removeCaregiverFetch(patientId: string, assignmentId: string): Promise<void> {
-  await apiFetchClient<void>(`/patients/${patientId}/caregivers/${assignmentId}/`, {
-    method: "DELETE",
-  });
-}
-
-export async function addEmergencyContactFetch(
-  patientId: string,
-  profileFamilyId: string,
-  priority: number
-): Promise<PatientEmergencyContact> {
-  const result = await apiFetchClient<{
-    id: string;
-    profile_family_id: string;
-    profile_family_name: string;
-    profile_family_phone: string;
-    priority: number;
-  }>(`/patients/${patientId}/contacts/internal/`, {
-    method: "POST",
-    body: JSON.stringify({ profile_family_id: profileFamilyId, priority }),
-  });
-  return {
-    id: result.id,
-    profile_family_id: result.profile_family_id,
-    profile_family_name: result.profile_family_name,
-    profile_family_phone: result.profile_family_phone,
-    priority: result.priority,
-  };
-}
-
-export async function removeEmergencyContactFetch(
-  patientId: string,
-  contactId: string
-): Promise<void> {
-  await apiFetchClient<void>(`/patients/${patientId}/contacts/internal/${contactId}/`, {
-    method: "DELETE",
-  });
 }

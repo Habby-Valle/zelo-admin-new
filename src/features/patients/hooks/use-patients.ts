@@ -8,10 +8,6 @@ import {
   createPatientFetch,
   updatePatientFetch,
   deletePatientFetch,
-  addCaregiverFetch,
-  removeCaregiverFetch,
-  addEmergencyContactFetch,
-  removeEmergencyContactFetch,
 } from "@/features/patients/services";
 
 export function usePatients(params?: {
@@ -67,51 +63,6 @@ export function useDeletePatient() {
     onSuccess: (_data, id) => {
       queryClient.invalidateQueries({ queryKey: patientKeys.lists() });
       queryClient.removeQueries({ queryKey: patientKeys.detail(id) });
-    },
-  });
-}
-
-export function useAddCaregiver(patientId: string) {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (caregiverId: string) => addCaregiverFetch(patientId, caregiverId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: patientKeys.detail(patientId) });
-    },
-  });
-}
-
-export function useRemoveCaregiver(patientId: string) {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (assignmentId: string) => removeCaregiverFetch(patientId, assignmentId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: patientKeys.detail(patientId) });
-    },
-  });
-}
-
-export function useAddEmergencyContact(patientId: string) {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ profileFamilyId, priority }: { profileFamilyId: string; priority: number }) =>
-      addEmergencyContactFetch(patientId, profileFamilyId, priority),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: patientKeys.detail(patientId) });
-    },
-  });
-}
-
-export function useRemoveEmergencyContact(patientId: string) {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (contactId: string) => removeEmergencyContactFetch(patientId, contactId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: patientKeys.detail(patientId) });
     },
   });
 }
