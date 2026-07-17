@@ -30,12 +30,6 @@ export interface SosReportData {
     resolved: number;
     avgResponseTimeMinutes: number | null;
   };
-  byPatient: {
-    patientId: string;
-    patientName: string;
-    total: number;
-    resolved: number;
-  }[];
   byDate: {
     date: string;
     total: number;
