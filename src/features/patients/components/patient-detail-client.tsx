@@ -8,7 +8,6 @@ import {
   Trash2,
   Calendar,
   Phone,
-  Mail,
   Building2,
   User,
   Droplets,
@@ -197,11 +196,6 @@ export function PatientDetailClient({ id }: { id: string }) {
             <Phone className="h-4 w-4 shrink-0 text-muted-foreground" />
             <span className="w-16 font-medium text-muted-foreground">Telefone</span>
             <span>{patient.phone || "—"}</span>
-          </div>
-          <div className="flex items-center gap-3 text-sm">
-            <Mail className="h-4 w-4 shrink-0 text-muted-foreground" />
-            <span className="w-16 font-medium text-muted-foreground">Email</span>
-            <span>{patient.email || "—"}</span>
           </div>
           {patient.cpf && (
             <div className="flex items-center gap-3 text-sm">

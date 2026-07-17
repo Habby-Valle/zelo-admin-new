@@ -10,7 +10,6 @@ interface ApiPatient {
   gender: string;
   cpf: string | null;
   phone: string;
-  email: string | null;
   health_conditions: string;
   allergies: string;
   medications: string;
@@ -57,7 +56,6 @@ function mapPatient(api: ApiPatient): Patient {
     gender: api.gender as Patient["gender"],
     cpf: api.cpf,
     phone: api.phone,
-    email: api.email,
     health_conditions: api.health_conditions,
     allergies: api.allergies,
     medications: api.medications,
@@ -136,7 +134,6 @@ export async function createPatientFetch(data: {
   gender: string;
   cpf?: string | null;
   phone: string;
-  email?: string | null;
   clinic_id?: string | null;
   blood_type?: string | null;
   health_conditions?: string;
@@ -160,7 +157,6 @@ export async function updatePatientFetch(
     gender: string;
     cpf: string | null;
     phone: string;
-    email: string | null;
     clinic_id: string | null;
     blood_type: string | null;
     health_conditions: string;

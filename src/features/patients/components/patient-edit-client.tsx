@@ -36,7 +36,7 @@ export function PatientEditClient({ id }: { id: string }) {
   }
 
   function onSubmit(values: PatientFormValues) {
-    const body = { ...values, email: values.email || null, cpf: values.cpf || null };
+    const body = { ...values, cpf: values.cpf || null };
     updatePatient.mutate(
       { id, data: body },
       {
@@ -54,7 +54,6 @@ export function PatientEditClient({ id }: { id: string }) {
     gender: patient.gender,
     cpf: patient.cpf,
     phone: patient.phone,
-    email: patient.email,
     clinic_id: patient.clinic_id ?? null,
     blood_type: patient.blood_type,
     health_conditions: patient.health_conditions,

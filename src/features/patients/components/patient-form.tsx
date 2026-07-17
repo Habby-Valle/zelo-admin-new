@@ -51,7 +51,6 @@ export function PatientForm({
       gender: undefined,
       cpf: null,
       phone: "",
-      email: null,
       clinic_id: null,
       blood_type: null,
       health_conditions: "",
@@ -119,12 +118,6 @@ export function PatientForm({
           <Label htmlFor="phone">Telefone *</Label>
           <Input id="phone" placeholder="(11) 99999-9999" {...register("phone")} />
           {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
-        </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="email@exemplo.com" {...register("email")} />
-          {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
         </div>
 
         <div className="space-y-1.5">

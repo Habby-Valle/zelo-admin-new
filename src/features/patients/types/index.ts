@@ -30,7 +30,6 @@ export interface Patient {
   gender: PatientGender;
   cpf: string | null;
   phone: string;
-  email: string | null;
   health_conditions: string;
   allergies: string;
   medications: string;

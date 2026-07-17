@@ -13,7 +13,7 @@ export function PatientCreateClient() {
   const createPatient = useCreatePatient();
 
   function onSubmit(values: PatientFormValues) {
-    const body = { ...values, email: values.email || null, cpf: values.cpf || null };
+    const body = { ...values, cpf: values.cpf || null };
     createPatient.mutate(body, {
       onSuccess: (patient) => {
         toast.success("Paciente criado com sucesso");
