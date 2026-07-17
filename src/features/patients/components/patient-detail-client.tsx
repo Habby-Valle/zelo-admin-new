@@ -10,7 +10,6 @@ import {
   Phone,
   Building2,
   User,
-  Droplets,
   CheckCircle2,
   XOctagon,
   UserCheck,
@@ -131,7 +130,6 @@ export function PatientDetailClient({ id }: { id: string }) {
             </div>
             <p className="mt-1 text-sm text-muted-foreground">
               {age} anos · {GENDER_LABELS[patient.gender] ?? patient.gender}
-              {patient.blood_type && ` · ${patient.blood_type}`}
             </p>
           </div>
         </div>
@@ -160,16 +158,6 @@ export function PatientDetailClient({ id }: { id: string }) {
           <CardContent>
             <p className="font-medium">{formatDate(patient.birth_date)}</p>
             <p className="text-sm text-muted-foreground">{age} anos</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="flex items-center gap-2 text-sm font-medium text-muted-foreground">
-              <Droplets className="h-4 w-4" /> Tipo sanguíneo
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{patient.blood_type ?? "—"}</p>
           </CardContent>
         </Card>
         <Card>
@@ -205,43 +193,6 @@ export function PatientDetailClient({ id }: { id: string }) {
           )}
         </CardContent>
       </Card>
-
-      {(patient.health_conditions ||
-        patient.allergies ||
-        patient.medications ||
-        patient.observations) && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-base">Informações de Saúde</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {patient.health_conditions && (
-              <div>
-                <p className="mb-1 text-sm font-medium text-muted-foreground">Condições</p>
-                <p className="text-sm whitespace-pre-line">{patient.health_conditions}</p>
-              </div>
-            )}
-            {patient.allergies && (
-              <div>
-                <p className="mb-1 text-sm font-medium text-muted-foreground">Alergias</p>
-                <p className="text-sm whitespace-pre-line">{patient.allergies}</p>
-              </div>
-            )}
-            {patient.medications && (
-              <div>
-                <p className="mb-1 text-sm font-medium text-muted-foreground">Medicamentos</p>
-                <p className="text-sm whitespace-pre-line">{patient.medications}</p>
-              </div>
-            )}
-            {patient.observations && (
-              <div>
-                <p className="mb-1 text-sm font-medium text-muted-foreground">Observações</p>
-                <p className="text-sm whitespace-pre-line">{patient.observations}</p>
-              </div>
-            )}
-          </CardContent>
-        </Card>
-      )}
 
       <Card>
         <CardHeader>
