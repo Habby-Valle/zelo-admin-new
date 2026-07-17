@@ -1,14 +1,8 @@
 "use client";
 
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { patientKeys } from "@/lib/query-keys";
-import {
-  fetchPatients,
-  fetchPatient,
-  createPatientFetch,
-  updatePatientFetch,
-  deletePatientFetch,
-} from "@/features/patients/services";
+import { fetchPatients, fetchPatient } from "@/features/patients/services";
 
 export function usePatients(params?: {
   search?: string;
@@ -28,41 +22,5 @@ export function usePatient(id: string) {
     queryKey: patientKeys.detail(id),
     queryFn: () => fetchPatient(id),
     enabled: !!id,
-  });
-}
-
-export function useCreatePatient() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (data: Parameters<typeof createPatientFetch>[0]) => createPatientFetch(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: patientKeys.lists() });
-    },
-  });
-}
-
-export function useUpdatePatient() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof updatePatientFetch>[1] }) =>
-      updatePatientFetch(id, data),
-    onSuccess: (_data, { id }) => {
-      queryClient.invalidateQueries({ queryKey: patientKeys.lists() });
-      queryClient.invalidateQueries({ queryKey: patientKeys.detail(id) });
-    },
-  });
-}
-
-export function useDeletePatient() {
-  const queryClient = useQueryClient();
-
-  return useMutation({
-    mutationFn: (id: string) => deletePatientFetch(id),
-    onSuccess: (_data, id) => {
-      queryClient.invalidateQueries({ queryKey: patientKeys.lists() });
-      queryClient.removeQueries({ queryKey: patientKeys.detail(id) });
-    },
   });
 }

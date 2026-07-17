@@ -1,11 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
-  Pencil,
-  Trash2,
   Calendar,
   Phone,
   Building2,
@@ -27,17 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { usePatient, useDeletePatient } from "@/features/patients/hooks";
+import { usePatient } from "@/features/patients/hooks";
 
 const GENDER_LABELS: Record<string, string> = { M: "Masculino", F: "Feminino", O: "Outro" };
 
@@ -68,9 +55,6 @@ function getInitials(name: string) {
 export function PatientDetailClient({ id }: { id: string }) {
   const router = useRouter();
   const { data: patient, isLoading, isError } = usePatient(id);
-  const deletePatient = useDeletePatient();
-
-  const [deleteOpen, setDeleteOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -132,19 +116,6 @@ export function PatientDetailClient({ id }: { id: string }) {
               {age} anos · {GENDER_LABELS[patient.gender] ?? patient.gender}
             </p>
           </div>
-        </div>
-        <div className="flex shrink-0 gap-2">
-          <Button variant="outline" size="sm" onClick={() => router.push(`/patients/${id}/edit`)}>
-            <Pencil className="mr-2 h-4 w-4" /> Editar
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            className="text-destructive hover:text-destructive"
-            onClick={() => setDeleteOpen(true)}
-          >
-            <Trash2 className="mr-2 h-4 w-4" /> Excluir
-          </Button>
         </div>
       </div>
 
@@ -275,30 +246,6 @@ export function PatientDetailClient({ id }: { id: string }) {
         <span>Criado por {patient.created_by_name}</span>
         <span>Atualizado em {new Date(patient.updated_at).toLocaleDateString("pt-BR")}</span>
       </div>
-
-      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Excluir paciente</AlertDialogTitle>
-            <AlertDialogDescription>
-              Tem certeza que deseja excluir <strong>{patient.name}</strong>? Esta ação não pode ser
-              desfeita.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              disabled={deletePatient.isPending}
-              onClick={() =>
-                deletePatient.mutate(id, { onSuccess: () => router.push("/patients") })
-              }
-              className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
-            >
-              {deletePatient.isPending ? "Excluindo..." : "Excluir"}
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }
