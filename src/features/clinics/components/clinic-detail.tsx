@@ -22,9 +22,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -35,7 +33,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { useClinic, useClinicSubscription, useUpdateClinicSettings } from "@/features/clinics/hooks";
+import { useClinic, useClinicSubscription } from "@/features/clinics/hooks";
 import { usePatients } from "@/features/patients/hooks";
 import { useUsers } from "@/features/users/hooks";
 import { useShifts } from "@/features/shifts/hooks";
@@ -142,7 +140,6 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
     page_size: 5,
   });
   const { data: subscription, isLoading: loadingSubscription } = useClinicSubscription(id);
-  const { mutate: updateSettings, isPending: savingSettings } = useUpdateClinicSettings();
 
   if (loadingClinic) {
     return (
@@ -270,7 +267,6 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
           <TabsTrigger value="caregivers">Cuidadores</TabsTrigger>
           <TabsTrigger value="shifts">Turnos</TabsTrigger>
           <TabsTrigger value="sos">SOS</TabsTrigger>
-          <TabsTrigger value="settings">Configurações</TabsTrigger>
           <TabsTrigger value="info">Informações</TabsTrigger>
         </TabsList>
 
@@ -507,50 +503,6 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
               ) : (
                 <p className="p-4 text-sm text-muted-foreground">Nenhum alerta SOS registrado.</p>
               )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* ── Settings Tab ── */}
-        <TabsContent value="settings">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Configurações da Clínica</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="flex items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <Label className="text-base">Relatório Semanal</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Gera e envia relatório semanal consolidado para os administradores
-                    toda segunda-feira às 7h.
-                  </p>
-                </div>
-                <Switch
-                  checked={clinic.weekly_report_enabled ?? true}
-                  onCheckedChange={(checked) =>
-                    updateSettings({ id, settings: { weekly_report_enabled: checked } })
-                  }
-                  disabled={savingSettings}
-                />
-              </div>
-
-              <div className="flex items-center justify-between rounded-lg border p-4">
-                <div className="space-y-0.5">
-                  <Label className="text-base">Relatório Mensal de Performance</Label>
-                  <p className="text-sm text-muted-foreground">
-                    Gera e envia relatório mensal de performance dos cuidadores
-                    no dia 1 de cada mês às 7h.
-                  </p>
-                </div>
-                <Switch
-                  checked={clinic.monthly_report_enabled ?? true}
-                  onCheckedChange={(checked) =>
-                    updateSettings({ id, settings: { monthly_report_enabled: checked } })
-                  }
-                  disabled={savingSettings}
-                />
-              </div>
             </CardContent>
           </Card>
         </TabsContent>
