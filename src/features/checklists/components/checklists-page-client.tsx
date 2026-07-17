@@ -2,12 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ListChecks, Pencil, Trash2, MoreHorizontal } from "lucide-react";
-import { toast } from "sonner";
+import { ListChecks } from "lucide-react";
 
-import { useChecklists, useDeleteChecklist, useChecklist } from "@/features/checklists/hooks";
-import type { Checklist, ChecklistDetail } from "@/features/checklists/types";
-import { ChecklistDialog } from "./checklist-dialog";
+import { useChecklists } from "@/features/checklists/hooks";
 import { Badge } from "@/components/ui/badge";
 import { MaterialIcon } from "@/components/shared/material-icon";
 import { Input } from "@/components/ui/input";
@@ -27,43 +24,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import { DataTablePagination } from "@/components/shared/data-table-pagination";
-
-function EditChecklistDialog({
-  id,
-  open,
-  onOpenChange,
-}: {
-  id: string;
-  open: boolean;
-  onOpenChange: (v: boolean) => void;
-}) {
-  const { data: checklist } = useChecklist(id);
-  return (
-    <ChecklistDialog
-      open={open}
-      onOpenChange={onOpenChange}
-      checklist={checklist as ChecklistDetail | undefined}
-    />
-  );
-}
 
 export function ChecklistsPageClient() {
   const [search, setSearch] = useState("");
@@ -78,32 +39,8 @@ export function ChecklistsPageClient() {
     pageSize,
   });
 
-  const deleteChecklist = useDeleteChecklist();
   const checklists = data?.checklists ?? [];
   const total = data?.total ?? 0;
-
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editId, setEditId] = useState<string | null>(null);
-  const [deleteTarget, setDeleteTarget] = useState<Checklist | null>(null);
-
-  const openEdit = (cl: Checklist) => {
-    setEditId(cl.id);
-    setDialogOpen(true);
-  };
-
-  const handleDelete = () => {
-    if (!deleteTarget) return;
-    deleteChecklist.mutate(deleteTarget.id, {
-      onSuccess: () => {
-        toast.success("Template excluído com sucesso.");
-        setDeleteTarget(null);
-      },
-      onError: () => {
-        toast.error("Erro ao excluir template.");
-        setDeleteTarget(null);
-      },
-    });
-  };
 
   return (
     <div className="space-y-6">
@@ -152,7 +89,7 @@ export function ChecklistsPageClient() {
             <Table>
               <TableHeader>
                 <TableRow>
-                  {["Nome", "Status", "Clínica", "Itens", "Criado em", ""].map((h) => (
+                  {["Nome", "Status", "Clínica", "Itens", "Criado em"].map((h) => (
                     <TableHead key={h}>{h}</TableHead>
                   ))}
                 </TableRow>
@@ -175,9 +112,6 @@ export function ChecklistsPageClient() {
                     <TableCell>
                       <Skeleton className="h-4 w-24" />
                     </TableCell>
-                    <TableCell>
-                      <Skeleton className="h-8 w-8 rounded" />
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -194,79 +128,63 @@ export function ChecklistsPageClient() {
                 <TableHead>Clínica</TableHead>
                 <TableHead>Itens</TableHead>
                 <TableHead>Criado em</TableHead>
-                <TableHead className="w-10" />
               </TableRow>
             </TableHeader>
             <TableBody>
               {checklists.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
+                  <TableCell colSpan={5} className="py-10 text-center text-muted-foreground">
                     Nenhum template encontrado.
                   </TableCell>
                 </TableRow>
               ) : (
-                checklists.map((cl) => (
-                  <TableRow key={cl.id}>
-                    <TableCell className="font-medium">
-                      <Link
-                        href={`/checklists/${cl.id}`}
-                        className="flex items-center gap-2 hover:underline"
-                      >
-                        {cl.icon ? (
-                          <MaterialIcon name={cl.icon} size="md" />
+                checklists.map((cl) => {
+                  const icon = cl.icon ? (
+                    <MaterialIcon name={cl.icon} size="md" />
+                  ) : (
+                    <ListChecks className="h-4 w-4 text-muted-foreground" />
+                  );
+                  return (
+                    <TableRow key={cl.id}>
+                      <TableCell className="font-medium">
+                        {cl.clinic_id === null ? (
+                          <Link
+                            href={`/checklists/${cl.id}`}
+                            className="flex items-center gap-2 hover:underline"
+                          >
+                            {icon}
+                            {cl.name}
+                          </Link>
                         ) : (
-                          <ListChecks className="h-4 w-4 text-muted-foreground" />
+                          <span className="flex items-center gap-2">
+                            {icon}
+                            {cl.name}
+                          </span>
                         )}
-                        {cl.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      {cl.is_active ? (
-                        <Badge variant="default">Ativo</Badge>
-                      ) : (
-                        <Badge variant="secondary">Inativo</Badge>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {cl.clinic_name ? (
-                        <span className="text-sm">{cl.clinic_name}</span>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">—</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline">{cl.items_count}</Badge>
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {new Date(cl.created_at).toLocaleDateString("pt-BR")}
-                    </TableCell>
-                    <TableCell>
-                      {cl.clinic_id === null ? (
-                        <DropdownMenu>
-                          <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-muted hover:text-foreground">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => openEdit(cl)}>
-                              <Pencil className="mr-2 h-4 w-4" />
-                              Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem
-                              className="text-destructive focus:text-destructive"
-                              onClick={() => setDeleteTarget(cl)}
-                            >
-                              <Trash2 className="mr-2 h-4 w-4" />
-                              Excluir
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      ) : (
-                        <span className="text-xs text-muted-foreground">—</span>
-                      )}
-                    </TableCell>
-                  </TableRow>
-                ))
+                      </TableCell>
+                      <TableCell>
+                        {cl.is_active ? (
+                          <Badge variant="default">Ativo</Badge>
+                        ) : (
+                          <Badge variant="secondary">Inativo</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {cl.clinic_name ? (
+                          <span className="text-sm">{cl.clinic_name}</span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{cl.items_count}</Badge>
+                      </TableCell>
+                      <TableCell className="text-sm text-muted-foreground">
+                        {new Date(cl.created_at).toLocaleDateString("pt-BR")}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })
               )}
             </TableBody>
           </Table>
@@ -283,44 +201,6 @@ export function ChecklistsPageClient() {
           setPage(1);
         }}
       />
-
-      {editId && (
-        <EditChecklistDialog
-          id={editId}
-          open={dialogOpen}
-          onOpenChange={(v) => {
-            setDialogOpen(v);
-            if (!v) setEditId(null);
-          }}
-        />
-      )}
-
-      <AlertDialog
-        open={!!deleteTarget}
-        onOpenChange={(open) => {
-          if (!open) setDeleteTarget(null);
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Excluir template?</AlertDialogTitle>
-            <AlertDialogDescription>
-              O template <strong>{deleteTarget?.name}</strong> será excluído permanentemente. Esta
-              ação não pode ser desfeita.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={deleteChecklist.isPending}
-              className="bg-destructive hover:bg-destructive/90"
-            >
-              Excluir
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

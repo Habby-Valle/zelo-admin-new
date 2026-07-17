@@ -1,7 +1,1 @@
-export {
-  fetchChecklists,
-  fetchChecklist,
-  createChecklistFetch,
-  updateChecklistFetch,
-  deleteChecklistFetch,
-} from "./checklists.service";
+export { fetchChecklists, fetchChecklist } from "./checklists.service";

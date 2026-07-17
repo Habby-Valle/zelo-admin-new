@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -10,15 +9,11 @@ import {
   CheckSquare,
   Clock,
   ListChecks,
-  Pencil,
   Settings,
-  Trash2,
 } from "lucide-react";
-import { toast } from "sonner";
 
-import { useChecklist, useDeleteChecklist } from "@/features/checklists/hooks";
+import { useChecklist } from "@/features/checklists/hooks";
 import type { Criticality } from "@/features/checklists/types";
-import { ChecklistDialog } from "./checklist-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MaterialIcon } from "@/components/shared/material-icon";
@@ -32,16 +27,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 const ITEM_TYPE_LABELS: Record<string, string> = {
   boolean: "Sim/Não",
@@ -76,23 +61,6 @@ interface ChecklistDetailClientProps {
 export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
   const router = useRouter();
   const { data: checklist, isLoading } = useChecklist(id);
-  const deleteChecklist = useDeleteChecklist();
-
-  const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-
-  const handleDelete = () => {
-    deleteChecklist.mutate(id, {
-      onSuccess: () => {
-        toast.success("Template excluído.");
-        router.push("/checklists");
-      },
-      onError: () => {
-        toast.error("Erro ao excluir template.");
-        setDeleteOpen(false);
-      },
-    });
-  };
 
   if (isLoading) {
     return (
@@ -124,6 +92,22 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
     return (
       <div className="flex flex-col items-center gap-4 py-20 text-muted-foreground">
         <p>Checklist não encontrado.</p>
+        <Button variant="outline" onClick={() => router.push("/checklists")}>
+          Voltar
+        </Button>
+      </div>
+    );
+  }
+
+  // Checklists de clínica são geridos pela própria clínica; o super admin vê
+  // apenas metadados na listagem, não o detalhe clínico item a item.
+  if (checklist.clinic_id !== null) {
+    return (
+      <div className="flex flex-col items-center gap-4 py-20 text-center text-muted-foreground">
+        <p>
+          O detalhe deste checklist não está disponível — checklists de clínica são geridos
+          pela própria clínica.
+        </p>
         <Button variant="outline" onClick={() => router.push("/checklists")}>
           Voltar
         </Button>
@@ -173,18 +157,6 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
             </div>
           </div>
         </div>
-        {checklist.clinic_id === null && (
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
-              <Pencil className="mr-1.5 h-4 w-4" />
-              Editar
-            </Button>
-            <Button variant="destructive" size="sm" onClick={() => setDeleteOpen(true)}>
-              <Trash2 className="mr-1.5 h-4 w-4" />
-              Excluir
-            </Button>
-          </div>
-        )}
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
@@ -341,30 +313,6 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
           )}
         </CardContent>
       </Card>
-
-      <ChecklistDialog open={editOpen} onOpenChange={setEditOpen} checklist={checklist} />
-
-      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Excluir template?</AlertDialogTitle>
-            <AlertDialogDescription>
-              O template <strong>{checklist.name}</strong> será excluído permanentemente. Esta ação
-              não pode ser desfeita.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={deleteChecklist.isPending}
-              className="bg-destructive hover:bg-destructive/90"
-            >
-              Excluir
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

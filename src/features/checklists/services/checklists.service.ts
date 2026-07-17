@@ -119,28 +119,3 @@ export async function fetchChecklist(id: string): Promise<ChecklistDetail> {
   const data = await apiFetchClient<ApiChecklistDetail>(`/checklists/${id}/`);
   return mapChecklistDetail(data);
 }
-
-export async function createChecklistFetch(
-  data: Record<string, unknown>
-): Promise<ChecklistDetail> {
-  const result = await apiFetchClient<ApiChecklistDetail>("/checklists/", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
-  return mapChecklistDetail(result);
-}
-
-export async function updateChecklistFetch(
-  id: string,
-  data: Record<string, unknown>
-): Promise<ChecklistDetail> {
-  const result = await apiFetchClient<ApiChecklistDetail>(`/checklists/${id}/`, {
-    method: "PATCH",
-    body: JSON.stringify(data),
-  });
-  return mapChecklistDetail(result);
-}
-
-export async function deleteChecklistFetch(id: string): Promise<void> {
-  await apiFetchClient<void>(`/checklists/${id}/`, { method: "DELETE" });
-}
