@@ -10,11 +10,6 @@ interface ApiPatient {
   gender: string;
   cpf: string | null;
   phone: string;
-  health_conditions: string;
-  allergies: string;
-  medications: string;
-  blood_type: string | null;
-  observations: string;
   media_id: string | null;
   media: {
     id: string;
@@ -56,11 +51,6 @@ function mapPatient(api: ApiPatient): Patient {
     gender: api.gender as Patient["gender"],
     cpf: api.cpf,
     phone: api.phone,
-    health_conditions: api.health_conditions,
-    allergies: api.allergies,
-    medications: api.medications,
-    blood_type: api.blood_type as Patient["blood_type"],
-    observations: api.observations,
     media_id: api.media_id,
     media: api.media
       ? {
@@ -135,11 +125,6 @@ export async function createPatientFetch(data: {
   cpf?: string | null;
   phone: string;
   clinic_id?: string | null;
-  blood_type?: string | null;
-  health_conditions?: string;
-  allergies?: string;
-  medications?: string;
-  observations?: string;
   media_id?: string | null;
 }): Promise<Patient> {
   const result = await apiFetchClient<ApiPatient>("/patients/", {
@@ -158,11 +143,6 @@ export async function updatePatientFetch(
     cpf: string | null;
     phone: string;
     clinic_id: string | null;
-    blood_type: string | null;
-    health_conditions: string;
-    allergies: string;
-    medications: string;
-    observations: string;
     media_id: string | null;
   }>
 ): Promise<Patient> {

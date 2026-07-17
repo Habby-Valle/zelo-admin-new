@@ -8,7 +8,6 @@ import { useClinics } from "@/features/clinics/hooks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -26,7 +25,6 @@ interface PatientFormProps {
 }
 
 const GENDER_LABELS: Record<string, string> = { M: "Masculino", F: "Feminino", O: "Outro" };
-const BLOOD_TYPES = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
 export function PatientForm({
   defaultValues,
@@ -52,11 +50,6 @@ export function PatientForm({
       cpf: null,
       phone: "",
       clinic_id: null,
-      blood_type: null,
-      health_conditions: "",
-      allergies: "",
-      medications: "",
-      observations: "",
       media_id: null,
       ...defaultValues,
     },
@@ -153,70 +146,6 @@ export function PatientForm({
           />
         </div>
 
-        <div className="space-y-1.5">
-          <Label>Tipo sanguíneo</Label>
-          <Controller
-            name="blood_type"
-            control={control}
-            render={({ field }) => (
-              <Select
-                value={field.value ?? "none"}
-                onValueChange={(v) => field.onChange(v === "none" ? null : v)}
-              >
-                <SelectTrigger>
-                  <SelectValue>{field.value ?? "Não informado"}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="none">Não informado</SelectItem>
-                  {BLOOD_TYPES.map((bt) => (
-                    <SelectItem key={bt} value={bt}>
-                      {bt}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          />
-        </div>
-      </div>
-
-      <div className="space-y-4">
-        <div className="space-y-1.5">
-          <Label htmlFor="health_conditions">Condições de saúde</Label>
-          <Textarea
-            id="health_conditions"
-            placeholder="Ex: Hipertensão, diabetes..."
-            rows={3}
-            {...register("health_conditions")}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="allergies">Alergias</Label>
-          <Textarea
-            id="allergies"
-            placeholder="Ex: Penicilina, amendoim..."
-            rows={3}
-            {...register("allergies")}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="medications">Medicamentos em uso</Label>
-          <Textarea
-            id="medications"
-            placeholder="Ex: Losartana 50mg, Metformina 500mg..."
-            rows={3}
-            {...register("medications")}
-          />
-        </div>
-        <div className="space-y-1.5">
-          <Label htmlFor="observations">Observações</Label>
-          <Textarea
-            id="observations"
-            placeholder="Observações gerais..."
-            rows={3}
-            {...register("observations")}
-          />
-        </div>
       </div>
 
       <div className="flex justify-end">

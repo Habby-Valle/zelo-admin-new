@@ -2,8 +2,6 @@ import type { Media } from "@/features/users/types";
 
 export type PatientGender = "M" | "F" | "O";
 
-export type PatientBloodType = "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
-
 export interface PatientEmergencyContact {
   id: string;
   profile_family_id: string;
@@ -30,11 +28,6 @@ export interface Patient {
   gender: PatientGender;
   cpf: string | null;
   phone: string;
-  health_conditions: string;
-  allergies: string;
-  medications: string;
-  blood_type: PatientBloodType | null;
-  observations: string;
   media_id?: string | null;
   media?: Media | null;
   clinic_name?: string | null;
