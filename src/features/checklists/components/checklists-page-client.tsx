@@ -2,14 +2,13 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ListChecks, Pencil, Plus, Trash2, MoreHorizontal } from "lucide-react";
+import { ListChecks, Pencil, Trash2, MoreHorizontal } from "lucide-react";
 import { toast } from "sonner";
 
 import { useChecklists, useDeleteChecklist, useChecklist } from "@/features/checklists/hooks";
 import type { Checklist, ChecklistDetail } from "@/features/checklists/types";
 import { ChecklistDialog } from "./checklist-dialog";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { MaterialIcon } from "@/components/shared/material-icon";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -87,11 +86,6 @@ export function ChecklistsPageClient() {
   const [editId, setEditId] = useState<string | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Checklist | null>(null);
 
-  const openCreate = () => {
-    setEditId(null);
-    setDialogOpen(true);
-  };
-
   const openEdit = (cl: Checklist) => {
     setEditId(cl.id);
     setDialogOpen(true);
@@ -115,7 +109,9 @@ export function ChecklistsPageClient() {
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl font-bold tracking-tight">Checklists</h1>
-        <p className="mt-1 text-muted-foreground">Gerencie templates de checklists por clínica.</p>
+        <p className="mt-1 text-muted-foreground">
+          Templates globais da plataforma e checklists das clínicas (somente leitura).
+        </p>
       </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -148,10 +144,6 @@ export function ChecklistsPageClient() {
             </SelectContent>
           </Select>
         </div>
-        <Button onClick={openCreate} size="sm">
-          <Plus className="mr-1.5 h-4 w-4" />
-          Novo template
-        </Button>
       </div>
 
       {isLoading ? (
@@ -291,8 +283,6 @@ export function ChecklistsPageClient() {
           setPage(1);
         }}
       />
-
-      {!editId && <ChecklistDialog open={dialogOpen} onOpenChange={setDialogOpen} />}
 
       {editId && (
         <EditChecklistDialog
