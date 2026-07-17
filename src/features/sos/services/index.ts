@@ -1,7 +1,1 @@
-export {
-  getSosAlertsApi,
-  getSosAlertApi,
-  acknowledgeSosAlertApi,
-  resolveSosAlertApi,
-  getSosSummaryApi,
-} from "./sos.service";
+export { getSosAlertsApi, getSosAlertApi, getSosSummaryApi } from "./sos.service";

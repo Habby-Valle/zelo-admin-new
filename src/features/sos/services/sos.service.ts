@@ -28,19 +28,6 @@ export async function getSosAlertApi(id: string): Promise<SosAlert | null> {
   }
 }
 
-export async function acknowledgeSosAlertApi(id: string): Promise<void> {
-  await apiFetchClient<void>(`/alerts/${id}/acknowledge/`, {
-    method: "PATCH",
-  });
-}
-
-export async function resolveSosAlertApi(id: string, resolution_reason?: string): Promise<void> {
-  await apiFetchClient<void>(`/alerts/${id}/resolve/`, {
-    method: "PATCH",
-    body: JSON.stringify({ resolution_reason: resolution_reason ?? "" }),
-  });
-}
-
 export async function getSosSummaryApi(clinicId?: string): Promise<SosSummary> {
   const qs = new URLSearchParams();
   if (clinicId) qs.set("clinic_id", clinicId);
