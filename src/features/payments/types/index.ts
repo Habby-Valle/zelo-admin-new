@@ -23,16 +23,19 @@ export interface PaymentStats {
   total_revenue: number;
 }
 
-export interface InvoiceRecord {
-  id: string;
-  owner_id: string;
-  owner_name: string;
-  owner_type: "clinic";
-  asaas_invoice_id: string;
-  amount: number;
-  currency: string;
+export interface PlanPaymentRecord {
+  id: number;
+  asaas_payment_id: string;
+  clinic_id: string | number;
+  clinic_name: string | null;
+  plan_name: string | null;
+  billing_cycle: string | null;
+  amount: string;
   status: string;
-  invoice_url: string;
+  status_display: string;
+  payment_method: string;
   paid_at: string | null;
+  due_date: string;
   created_at: string;
+  receipt_number: string | null;
 }

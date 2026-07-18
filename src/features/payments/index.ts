@@ -1,7 +1,7 @@
-export type { PaymentRecord, PaymentStats, InvoiceRecord } from "./types";
-export { fetchInvoices, fetchPayments, fetchPaymentStats } from "./services";
+export type { PaymentRecord, PaymentStats, PlanPaymentRecord } from "./types";
+export { fetchPlanPayments, fetchPayments, fetchPaymentStats } from "./services";
 export {
-  useInvoices,
+  usePlanPayments,
   usePayments,
   usePaymentStats,
   useClinicPayments,

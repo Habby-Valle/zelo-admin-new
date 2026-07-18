@@ -1,17 +1,17 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { fetchInvoices, fetchPayments, fetchPaymentStats } from "@/features/payments/services";
+import { fetchPlanPayments, fetchPayments, fetchPaymentStats } from "@/features/payments/services";
 
-export function useInvoices(params?: {
+export function usePlanPayments(params?: {
   status?: string;
   search?: string;
   page?: number;
   page_size?: number;
 }) {
   return useQuery({
-    queryKey: ["invoices", params],
-    queryFn: () => fetchInvoices(params),
+    queryKey: ["plan-payments", params],
+    queryFn: () => fetchPlanPayments(params),
     staleTime: 60 * 1000,
   });
 }

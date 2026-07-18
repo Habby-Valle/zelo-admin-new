@@ -1,5 +1,5 @@
 export {
-  useInvoices,
+  usePlanPayments,
   usePayments,
   usePaymentStats,
   useClinicPayments,
