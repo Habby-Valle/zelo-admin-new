@@ -68,6 +68,7 @@ function StatusBadge({ status }: { status: string }) {
     free: "outline",
     expired: "destructive",
     cancelled: "outline",
+    pending: "secondary",
   };
 
   const labels: Record<string, string> = {
@@ -76,6 +77,7 @@ function StatusBadge({ status }: { status: string }) {
     free: "Gratuito",
     expired: "Expirado",
     cancelled: "Cancelado",
+    pending: "Pendente",
   };
 
   return <Badge variant={variants[status] ?? "outline"}>{labels[status] ?? status}</Badge>;

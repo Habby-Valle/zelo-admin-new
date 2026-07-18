@@ -35,6 +35,7 @@ const STATUS_LABELS: Record<string, string> = {
   free: "Gratuito",
   expired: "Expirado",
   cancelled: "Cancelado",
+  pending: "Pendente",
 };
 
 const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
@@ -43,6 +44,7 @@ const STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | 
   free: "outline",
   expired: "destructive",
   cancelled: "outline",
+  pending: "secondary",
 };
 
 function StatusBadge({ status }: { status: string }) {
@@ -99,6 +101,7 @@ export function SubscriptionsTable({ subscriptions }: SubscriptionsTableProps) {
             <SelectItem value="free">Gratuito</SelectItem>
             <SelectItem value="expired">Expirado</SelectItem>
             <SelectItem value="cancelled">Cancelado</SelectItem>
+            <SelectItem value="pending">Pendente</SelectItem>
           </SelectContent>
         </Select>
       </div>
