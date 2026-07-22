@@ -2,8 +2,6 @@ import type { Media } from "@/features/users/types";
 
 export type PatientGender = "M" | "F" | "O";
 
-export type PatientBloodType = "A+" | "A-" | "B+" | "B-" | "AB+" | "AB-" | "O+" | "O-";
-
 export interface PatientEmergencyContact {
   id: string;
   profile_family_id: string;
@@ -25,22 +23,14 @@ export interface PatientCaregiverAssignment {
 export interface Patient {
   id: string;
   clinic_id: string | null;
-  guardian_id: string | null;
   name: string;
   birth_date: string;
   gender: PatientGender;
   cpf: string | null;
   phone: string;
-  email: string | null;
-  health_conditions: string;
-  allergies: string;
-  medications: string;
-  blood_type: PatientBloodType | null;
-  observations: string;
   media_id?: string | null;
   media?: Media | null;
   clinic_name?: string | null;
-  guardian_name?: string | null;
   is_active: boolean;
   emergency_contacts: PatientEmergencyContact[];
   caregiver_assignments: PatientCaregiverAssignment[];
@@ -50,6 +40,5 @@ export interface Patient {
 
 export interface PatientDetail extends Patient {
   clinic_name: string | null;
-  guardian_name: string | null;
   created_by_name: string;
 }

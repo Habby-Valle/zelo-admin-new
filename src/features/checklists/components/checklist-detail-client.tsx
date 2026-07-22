@@ -1,21 +1,19 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
   Calendar,
+  Camera,
   CheckSquare,
+  Clock,
   ListChecks,
-  Pencil,
   Settings,
-  Trash2,
 } from "lucide-react";
-import { toast } from "sonner";
 
-import { useChecklist, useDeleteChecklist } from "@/features/checklists/hooks";
-import { ChecklistDialog } from "./checklist-dialog";
+import { useChecklist } from "@/features/checklists/hooks";
+import type { Criticality } from "@/features/checklists/types";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MaterialIcon } from "@/components/shared/material-icon";
@@ -29,22 +27,31 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 const ITEM_TYPE_LABELS: Record<string, string> = {
   boolean: "Sim/Não",
   text: "Texto",
   number: "Número",
   select: "Seleção",
+};
+
+const CRITICALITY_LABELS: Record<Criticality, string> = {
+  low: "Baixa",
+  medium: "Média",
+  high: "Alta",
+};
+
+const CRITICALITY_VARIANTS: Record<Criticality, "outline" | "secondary" | "destructive"> = {
+  low: "outline",
+  medium: "secondary",
+  high: "destructive",
+};
+
+const FREQUENCY_LABELS: Record<string, string> = {
+  as_needed: "Se necessário",
+  per_shift: "Por turno",
+  daily: "Diário",
+  fixed_times: "Horários fixos",
 };
 
 interface ChecklistDetailClientProps {
@@ -54,23 +61,6 @@ interface ChecklistDetailClientProps {
 export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
   const router = useRouter();
   const { data: checklist, isLoading } = useChecklist(id);
-  const deleteChecklist = useDeleteChecklist();
-
-  const [editOpen, setEditOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
-
-  const handleDelete = () => {
-    deleteChecklist.mutate(id, {
-      onSuccess: () => {
-        toast.success("Template excluído.");
-        router.push("/checklists");
-      },
-      onError: () => {
-        toast.error("Erro ao excluir template.");
-        setDeleteOpen(false);
-      },
-    });
-  };
 
   if (isLoading) {
     return (
@@ -109,6 +99,22 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
     );
   }
 
+  // Checklists de clínica são geridos pela própria clínica; o super admin vê
+  // apenas metadados na listagem, não o detalhe clínico item a item.
+  if (checklist.clinic_id !== null) {
+    return (
+      <div className="flex flex-col items-center gap-4 py-20 text-center text-muted-foreground">
+        <p>
+          O detalhe deste checklist não está disponível — checklists de clínica são geridos
+          pela própria clínica.
+        </p>
+        <Button variant="outline" onClick={() => router.push("/checklists")}>
+          Voltar
+        </Button>
+      </div>
+    );
+  }
+
   const items = checklist.items ?? [];
 
   return (
@@ -133,6 +139,9 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
               ) : (
                 <Badge variant="secondary">Inativo</Badge>
               )}
+              {checklist.version && (
+                <Badge variant="outline">v{checklist.version}</Badge>
+              )}
             </div>
             <div className="mt-1 flex items-center gap-4 text-muted-foreground">
               {checklist.clinic_name && (
@@ -147,16 +156,6 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
               </span>
             </div>
           </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={() => setEditOpen(true)}>
-            <Pencil className="mr-1.5 h-4 w-4" />
-            Editar
-          </Button>
-          <Button variant="destructive" size="sm" onClick={() => setDeleteOpen(true)}>
-            <Trash2 className="mr-1.5 h-4 w-4" />
-            Excluir
-          </Button>
         </div>
       </div>
 
@@ -221,6 +220,10 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
                     <TableHead>#</TableHead>
                     <TableHead>Item</TableHead>
                     <TableHead>Tipo</TableHead>
+                    <TableHead>Faixa</TableHead>
+                    <TableHead>Criticalidade</TableHead>
+                    <TableHead>Foto</TableHead>
+                    <TableHead>Frequência</TableHead>
                     <TableHead>Obrigatório</TableHead>
                     <TableHead>Observação</TableHead>
                     <TableHead>Opções</TableHead>
@@ -233,6 +236,42 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
                       <TableCell className="font-medium">{item.name}</TableCell>
                       <TableCell>
                         <Badge variant="outline">{ITEM_TYPE_LABELS[item.type] ?? item.type}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        {item.type === "number" && (item.expected_min !== null || item.expected_max !== null) ? (
+                          <span className="text-xs">
+                            {item.expected_min ?? "—"} – {item.expected_max ?? "—"}
+                            {item.unit && <span className="ml-0.5 text-muted-foreground">{item.unit}</span>}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {item.criticality ? (
+                          <Badge variant={CRITICALITY_VARIANTS[item.criticality as Criticality] ?? "outline"}>
+                            {CRITICALITY_LABELS[item.criticality as Criticality] ?? item.criticality}
+                          </Badge>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {item.requires_photo ? (
+                          <Camera className="h-4 w-4 text-primary" />
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        {item.frequency ? (
+                          <span className="inline-flex items-center gap-1 text-xs">
+                            <Clock className="h-3 w-3" />
+                            {FREQUENCY_LABELS[item.frequency] ?? item.frequency}
+                          </span>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
                       </TableCell>
                       <TableCell>
                         {item.required ? (
@@ -274,30 +313,6 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
           )}
         </CardContent>
       </Card>
-
-      <ChecklistDialog open={editOpen} onOpenChange={setEditOpen} checklist={checklist} />
-
-      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Excluir template?</AlertDialogTitle>
-            <AlertDialogDescription>
-              O template <strong>{checklist.name}</strong> será excluído permanentemente. Esta ação
-              não pode ser desfeita.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDelete}
-              disabled={deleteChecklist.isPending}
-              className="bg-destructive hover:bg-destructive/90"
-            >
-              Excluir
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

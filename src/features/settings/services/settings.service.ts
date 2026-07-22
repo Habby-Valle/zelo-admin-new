@@ -18,7 +18,7 @@ export async function fetchSystemSettings(): Promise<SystemSettings> {
       apk_enabled: boolean;
       extra: Record<string, unknown>;
       updated_at: string;
-    }>("/system-config/");
+    }>("/system/");
 
     const extra = (data.extra ?? {}) as Record<string, string>;
 
@@ -99,7 +99,7 @@ export async function saveSystemSettings(
     body.admin_logo_media_id = data.admin_logo_media_id;
   }
 
-  await apiFetchClient("/system-config/", {
+  await apiFetchClient("/system/", {
     method: "PUT",
     body: JSON.stringify(body),
   });
@@ -146,7 +146,7 @@ export async function fetchLgpdConfig(): Promise<LgpdConfig> {
           encrypted: boolean;
           sample_checked: boolean;
         }[];
-      }>("/system-config/encryption-status/"),
+      }>("/system/encryption-status/"),
       apiFetchClient<
         {
           id: string;

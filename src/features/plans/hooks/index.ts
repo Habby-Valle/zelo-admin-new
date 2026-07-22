@@ -22,7 +22,6 @@ export function usePlans(params?: {
   isActive?: boolean | null;
   page?: number;
   pageSize?: number;
-  scope?: string;
 }) {
   return useQuery({
     queryKey: planKeys.list(params),
@@ -54,7 +53,7 @@ function buildPayload(values: PlanFormValues) {
     description: values.description ?? "",
     monthly_price: values.monthly_price,
     yearly_price: values.yearly_price ?? null,
-    scope: values.scope ?? "clinic",
+    scope: "clinic",
     is_active: values.is_active,
     benefits: (values.benefits ?? []).map((b) => ({
       benefit_id: b.benefit_id,

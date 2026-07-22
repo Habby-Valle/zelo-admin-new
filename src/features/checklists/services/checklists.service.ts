@@ -4,6 +4,9 @@ import type {
   Checklist,
   ChecklistDetail,
   ChecklistItemType,
+  AlertSeverity,
+  Criticality,
+  FrequencyType,
   ChecklistFilters,
 } from "@/features/checklists/types";
 
@@ -21,6 +24,7 @@ interface ApiChecklist {
 }
 
 interface ApiChecklistDetail extends Omit<ApiChecklist, "items_count"> {
+  version: number;
   items: {
     id: string;
     name: string;
@@ -28,6 +32,16 @@ interface ApiChecklistDetail extends Omit<ApiChecklist, "items_count"> {
     required: boolean;
     has_observation: boolean;
     order: number;
+    unit: string;
+    expected_min: string | null;
+    expected_max: string | null;
+    target_value: string | null;
+    alert_severity: string;
+    criticality: string;
+    instructions: string;
+    requires_photo: boolean;
+    frequency: string;
+    scheduled_times: string[];
     options: { id: string; label: string; value: string }[];
   }[];
 }
@@ -58,6 +72,7 @@ function mapChecklistDetail(api: ApiChecklistDetail): ChecklistDetail {
     clinic_name: api.clinic_name,
     created_by_name: api.created_by_name,
     created_at: api.created_at,
+    version: api.version,
     items: (api.items ?? []).map((item) => ({
       id: item.id,
       name: item.name,
@@ -65,6 +80,16 @@ function mapChecklistDetail(api: ApiChecklistDetail): ChecklistDetail {
       required: item.required,
       has_observation: item.has_observation,
       order: item.order,
+      unit: item.unit ?? "",
+      expected_min: item.expected_min ? Number(item.expected_min) : null,
+      expected_max: item.expected_max ? Number(item.expected_max) : null,
+      target_value: item.target_value ? Number(item.target_value) : null,
+      alert_severity: (item.alert_severity ?? "") as AlertSeverity,
+      criticality: (item.criticality ?? "medium") as Criticality,
+      instructions: item.instructions ?? "",
+      requires_photo: item.requires_photo ?? false,
+      frequency: (item.frequency ?? "per_shift") as FrequencyType,
+      scheduled_times: item.scheduled_times ?? [],
       options: (item.options ?? []).map((opt) => ({
         id: opt.id,
         label: opt.label,
@@ -93,29 +118,4 @@ export async function fetchChecklists(
 export async function fetchChecklist(id: string): Promise<ChecklistDetail> {
   const data = await apiFetchClient<ApiChecklistDetail>(`/checklists/${id}/`);
   return mapChecklistDetail(data);
-}
-
-export async function createChecklistFetch(
-  data: Record<string, unknown>
-): Promise<ChecklistDetail> {
-  const result = await apiFetchClient<ApiChecklistDetail>("/checklists/", {
-    method: "POST",
-    body: JSON.stringify(data),
-  });
-  return mapChecklistDetail(result);
-}
-
-export async function updateChecklistFetch(
-  id: string,
-  data: Record<string, unknown>
-): Promise<ChecklistDetail> {
-  const result = await apiFetchClient<ApiChecklistDetail>(`/checklists/${id}/`, {
-    method: "PATCH",
-    body: JSON.stringify(data),
-  });
-  return mapChecklistDetail(result);
-}
-
-export async function deleteChecklistFetch(id: string): Promise<void> {
-  await apiFetchClient<void>(`/checklists/${id}/`, { method: "DELETE" });
 }

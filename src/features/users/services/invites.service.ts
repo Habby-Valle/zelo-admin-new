@@ -9,7 +9,6 @@ interface ApiInvite {
   status: string;
   created_by_name: string;
   clinic_id: string | null;
-  guardian_id: string | null;
   created_at: string;
   expires_at: string;
 }
@@ -22,7 +21,6 @@ function mapInvite(api: ApiInvite): Invite {
     status: api.status as Invite["status"],
     created_by_name: api.created_by_name,
     clinic_id: api.clinic_id,
-    guardian_id: api.guardian_id,
     created_at: api.created_at,
     expires_at: api.expires_at,
   };

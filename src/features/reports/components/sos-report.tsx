@@ -94,38 +94,6 @@ export function SosReport({ data, loading, onExport }: SosReportProps) {
               </div>
             </div>
 
-            {data.byPatient.length > 0 && (
-              <div className="mb-6">
-                <h4 className="mb-2 text-sm font-medium text-muted-foreground">
-                  Alertas por Paciente
-                </h4>
-                <div className="h-48">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={data.byPatient}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="patientName" fontSize={12} tickLine={false} />
-                      <YAxis fontSize={12} tickLine={false} axisLine={false} />
-                      <Tooltip
-                        contentStyle={{
-                          backgroundColor: "hsl(var(--card))",
-                          border: "1px solid hsl(var(--border))",
-                          borderRadius: "8px",
-                        }}
-                      />
-                      <Legend />
-                      <Bar dataKey="total" name="Total" fill="#ef4444" radius={[4, 4, 0, 0]} />
-                      <Bar
-                        dataKey="resolved"
-                        name="Resolvidos"
-                        fill="#22c55e"
-                        radius={[4, 4, 0, 0]}
-                      />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            )}
-
             {data.byDate.length > 0 && (
               <div>
                 <h4 className="mb-2 text-sm font-medium text-muted-foreground">

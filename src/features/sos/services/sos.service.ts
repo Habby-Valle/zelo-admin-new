@@ -15,30 +15,17 @@ export async function getSosAlertsApi(params?: SosFilters): Promise<{
 
   const query = qs.toString();
   const data = await apiFetchClient<PaginatedResponse<SosAlert>>(
-    `/sos-alerts/${query ? `?${query}` : ""}`
+    `/alerts/${query ? `?${query}` : ""}`
   );
   return { alerts: data.results, total: data.count };
 }
 
 export async function getSosAlertApi(id: string): Promise<SosAlert | null> {
   try {
-    return await apiFetchClient<SosAlert>(`/sos-alerts/${id}/`);
+    return await apiFetchClient<SosAlert>(`/alerts/${id}/`);
   } catch {
     return null;
   }
-}
-
-export async function acknowledgeSosAlertApi(id: string): Promise<void> {
-  await apiFetchClient<void>(`/sos-alerts/${id}/acknowledge/`, {
-    method: "PATCH",
-  });
-}
-
-export async function resolveSosAlertApi(id: string, resolution_reason?: string): Promise<void> {
-  await apiFetchClient<void>(`/sos-alerts/${id}/resolve/`, {
-    method: "PATCH",
-    body: JSON.stringify({ resolution_reason: resolution_reason ?? "" }),
-  });
 }
 
 export async function getSosSummaryApi(clinicId?: string): Promise<SosSummary> {
@@ -47,7 +34,7 @@ export async function getSosSummaryApi(clinicId?: string): Promise<SosSummary> {
   qs.set("page_size", "10000");
   const query = qs.toString();
   const allData = await apiFetchClient<PaginatedResponse<SosAlert>>(
-    `/sos-alerts/${query ? `?${query}` : ""}`
+    `/alerts/${query ? `?${query}` : ""}`
   );
   const now = new Date();
   const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate()).toISOString();

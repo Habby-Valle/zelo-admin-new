@@ -1,12 +1,11 @@
 export type UserRole =
   | "super_admin"
   | "clinic_admin"
-  | "guardian"
   | "caregiver"
   | "family"
   | "emergency_contact";
 
-export type InviteRole = "super_admin" | "clinic_admin" | "guardian" | "caregiver" | "family";
+export type InviteRole = "super_admin" | "clinic_admin" | "caregiver" | "clinic_nurse" | "family";
 
 export type InviteStatus = "pending" | "accepted" | "expired" | "cancelled";
 
@@ -53,7 +52,6 @@ export interface Invite {
   status: InviteStatus;
   created_by_name: string;
   clinic_id: string | null;
-  guardian_id: string | null;
   created_at: string;
   expires_at: string;
 }

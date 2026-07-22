@@ -48,6 +48,13 @@ export const clinicSchema = z.object({
   media_id: z.string().optional().nullable(),
   admin_email: z.string().email("Email inválido").optional().or(z.literal("")),
   plan_id: z.string().optional().nullable(),
+  email: z.string().email("Email inválido").optional().or(z.literal("")),
+  website: z.string().url("URL inválida").optional().or(z.literal("")),
+  description: z.string().optional(),
+  responsible_name: z.string().optional(),
+  whatsapp: z.string().optional(),
+  cnes: z.string().optional(),
+  specialty: z.string().optional(),
 });
 
 export type AddressFormValues = z.infer<typeof addressSchema>;

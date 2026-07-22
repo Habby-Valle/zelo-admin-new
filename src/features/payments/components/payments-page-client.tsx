@@ -1,11 +1,11 @@
 "use client";
 
-import { useInvoices } from "@/features/payments/hooks";
-import { InvoicesTable } from "./invoices-table";
+import { usePlanPayments } from "@/features/payments/hooks";
+import { PlanPaymentsTable } from "./plan-payments-table";
 import { PaymentStatsCards } from "./payment-stats-cards";
 
 export function PaymentsPageClient() {
-  const { data, isLoading } = useInvoices({ page_size: 100 });
+  const { data, isLoading } = usePlanPayments({ page_size: 100 });
 
   if (isLoading) {
     return (
@@ -20,8 +20,8 @@ export function PaymentsPageClient() {
     );
   }
 
-  const invoices = data?.invoices ?? [];
-  const paid = invoices.filter((i) => i.status === "paid").length;
+  const payments = data?.payments ?? [];
+  const paid = payments.filter((p) => p.status === "paid").length;
 
   return (
     <>
@@ -33,7 +33,7 @@ export function PaymentsPageClient() {
           totalRevenue: data?.total_revenue ?? 0,
         }}
       />
-      <InvoicesTable invoices={invoices} />
+      <PlanPaymentsTable payments={payments} />
     </>
   );
 }

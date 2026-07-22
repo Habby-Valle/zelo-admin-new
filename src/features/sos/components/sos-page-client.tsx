@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { AlertTriangle, CheckCircle2, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -21,23 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  AlertDialog,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  useSosAlerts,
-  useSosSummary,
-  useAcknowledgeSosAlert,
-  useResolveSosAlert,
-} from "@/features/sos/hooks";
+import { useSosAlerts, useSosSummary } from "@/features/sos/hooks";
 import { useClinics } from "@/features/clinics/hooks";
 import type { SosStatus } from "@/features/sos/types";
 
@@ -85,16 +69,9 @@ export function SosPageClient() {
   const { data: clinicsData } = useClinics({ pageSize: 999 });
   const clinics = clinicsData?.results ?? [];
 
-  const acknowledgeMutation = useAcknowledgeSosAlert();
-  const resolveMutation = useResolveSosAlert();
-
   const alerts = alertsData?.alerts ?? [];
   const total = alertsData?.total ?? 0;
   const totalPages = Math.ceil(total / pageSize);
-
-  const [acknowledgeTarget, setAcknowledgeTarget] = useState<string | null>(null);
-  const [resolveTarget, setResolveTarget] = useState<string | null>(null);
-  const [resolveReason, setResolveReason] = useState("");
 
   const updateParams = useCallback(
     (updates: Record<string, string>) => {
@@ -233,19 +210,18 @@ export function SosPageClient() {
                 <TableHead>Status</TableHead>
                 <TableHead>Data/Hora</TableHead>
                 <TableHead>Confirmado por</TableHead>
-                <TableHead>Ações</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {alertsLoading ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
+                  <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
                     Carregando...
                   </TableCell>
                 </TableRow>
               ) : alerts.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="py-10 text-center text-muted-foreground">
+                  <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
                     Nenhum alerta SOS encontrado.
                   </TableCell>
                 </TableRow>
@@ -278,41 +254,6 @@ export function SosPageClient() {
                     <TableCell className="text-sm text-muted-foreground">
                       {alert.acknowledged_by_name ?? <span className="text-xs">—</span>}
                     </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        {alert.status === "active" && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-7 px-2 text-xs"
-                            onClick={() => setAcknowledgeTarget(alert.id)}
-                          >
-                            <Clock className="mr-1 h-3 w-3" />
-                            Confirmar
-                          </Button>
-                        )}
-                        {alert.status !== "resolved" && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            className="h-7 px-2 text-xs text-green-600 hover:text-green-600"
-                            onClick={() => {
-                              setResolveTarget(alert.id);
-                              setResolveReason("");
-                            }}
-                          >
-                            <CheckCircle2 className="mr-1 h-3 w-3" />
-                            Resolver
-                          </Button>
-                        )}
-                        {alert.status === "resolved" && (
-                          <span className="flex items-center gap-1 text-xs text-muted-foreground">
-                            <CheckCircle2 className="h-3.5 w-3.5 text-green-600" />
-                            Resolvido
-                          </span>
-                        )}
-                      </div>
-                    </TableCell>
                   </TableRow>
                 ))
               )}
@@ -344,90 +285,6 @@ export function SosPageClient() {
           </div>
         )}
       </div>
-
-      <AlertDialog
-        open={!!acknowledgeTarget}
-        onOpenChange={(open) => {
-          if (!open) setAcknowledgeTarget(null);
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Confirmar alerta SOS?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Você está ciente do alerta e está tomando as providências necessárias.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={acknowledgeMutation.isPending}>Cancelar</AlertDialogCancel>
-            <Button
-              onClick={() => {
-                if (acknowledgeTarget) {
-                  acknowledgeMutation.mutate(String(acknowledgeTarget), {
-                    onSettled: () => setAcknowledgeTarget(null),
-                  });
-                }
-              }}
-              disabled={acknowledgeMutation.isPending}
-            >
-              Confirmar
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-
-      <AlertDialog
-        open={!!resolveTarget}
-        onOpenChange={(open) => {
-          if (!open) {
-            setResolveTarget(null);
-            setResolveReason("");
-          }
-        }}
-      >
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Resolver alerta SOS?</AlertDialogTitle>
-            <AlertDialogDescription>
-              Marcar o alerta como resolvido. Esta ação não pode ser desfeita.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <div className="px-1 pb-2">
-            <Label htmlFor="resolve-reason" className="text-sm">
-              Observações (opcional)
-            </Label>
-            <Textarea
-              id="resolve-reason"
-              className="mt-1.5"
-              rows={3}
-              placeholder="Descreva como o alerta foi resolvido..."
-              value={resolveReason}
-              onChange={(e) => setResolveReason(e.target.value)}
-            />
-          </div>
-          <AlertDialogFooter>
-            <AlertDialogCancel disabled={resolveMutation.isPending}>Cancelar</AlertDialogCancel>
-            <Button
-              onClick={() => {
-                if (resolveTarget) {
-                  resolveMutation.mutate(
-                    { id: String(resolveTarget), reason: resolveReason || undefined },
-                    {
-                      onSettled: () => {
-                        setResolveTarget(null);
-                        setResolveReason("");
-                      },
-                    }
-                  );
-                }
-              }}
-              disabled={resolveMutation.isPending}
-            >
-              Resolver
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   );
 }

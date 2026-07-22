@@ -19,6 +19,13 @@ export function useCreateClinic() {
         media_id: values.media_id ?? undefined,
         admin_email: values.admin_email || undefined,
         plan_id: values.plan_id ?? undefined,
+        email: values.email || undefined,
+        website: values.website || undefined,
+        description: values.description || undefined,
+        responsible_name: values.responsible_name || undefined,
+        whatsapp: values.whatsapp || undefined,
+        cnes: values.cnes || undefined,
+        specialty: values.specialty || undefined,
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: clinicKeys.lists() });

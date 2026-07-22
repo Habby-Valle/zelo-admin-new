@@ -168,7 +168,6 @@ export function ReportsPageClient() {
                 resolved: 0,
                 avgResponseTimeMinutes: null,
               },
-              byPatient: [],
               byDate: [],
             }
           }

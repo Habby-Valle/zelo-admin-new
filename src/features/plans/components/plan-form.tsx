@@ -10,13 +10,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 interface PlanFormProps {
   defaultValues?: Partial<PlanFormValues>;
@@ -39,7 +32,6 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
       description: "",
       monthly_price: 0,
       yearly_price: null,
-      scope: "clinic" as const,
       is_active: true,
       benefits: [],
       ...defaultValues,
@@ -115,27 +107,6 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
           </p>
         </div>
         <div className="space-y-5 p-6">
-          <div className="space-y-1.5">
-            <Label htmlFor="scope">Escopo do plano *</Label>
-            <Select
-              value={watch("scope") ?? "clinic"}
-              onValueChange={(v) =>
-                setValue("scope", v as "clinic" | "guardian", { shouldValidate: true })
-              }
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue>
-                  {watch("scope") === "clinic" ? "Clínica" : "Guardião (individual)"}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="clinic">Clínica</SelectItem>
-                <SelectItem value="guardian">Guardião (individual)</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors.scope && <p className="text-xs text-destructive">{errors.scope.message}</p>}
-          </div>
-
           <div className="grid gap-5 md:grid-cols-2">
             <div className="space-y-1.5">
               <Label htmlFor="monthly_price">Preço mensal (R$) *</Label>

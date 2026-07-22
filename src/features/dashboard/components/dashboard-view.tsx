@@ -9,10 +9,10 @@ import {
   ClipboardCheck,
   Activity,
   AlertTriangle,
-  ShieldCheck,
   Star,
 } from "lucide-react";
 
+import { cn } from "@/lib/utils";
 import { useDashboard } from "@/features/dashboard/hooks";
 import { KpiCard, KpiCardSkeleton } from "@/features/dashboard/components/kpi-card";
 import {
@@ -28,7 +28,6 @@ import { RevenueChart } from "@/features/dashboard/components/revenue-chart";
 
 export function DashboardView() {
   const { data, isLoading, error } = useDashboard();
-  console.log(error);
   if (error) {
     return (
       <div className="space-y-8">
@@ -92,7 +91,12 @@ export function DashboardView() {
         </Link>
       )}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div
+        className={cn(
+          "grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
+          kpis.activeSosAlerts > 0 && "mt-12!",
+        )}
+      >
         <KpiCard
           title="Clínicas ativas"
           value={kpis.activeClinics}
@@ -140,12 +144,6 @@ export function DashboardView() {
           value={kpis.totalAdmins}
           description="Contas com role clinic_admin"
           icon={UserCheck}
-        />
-        <KpiCard
-          title="Responsáveis"
-          value={kpis.totalGuardians}
-          description="Contas com role guardian"
-          icon={ShieldCheck}
         />
         <KpiCard
           title="Alertas SOS"

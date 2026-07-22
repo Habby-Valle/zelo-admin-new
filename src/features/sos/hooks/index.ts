@@ -1,8 +1,1 @@
-export {
-  sosKeys,
-  useSosAlerts,
-  useSosAlert,
-  useSosSummary,
-  useAcknowledgeSosAlert,
-  useResolveSosAlert,
-} from "./use-sos";
+export { sosKeys, useSosAlerts, useSosAlert, useSosSummary } from "./use-sos";

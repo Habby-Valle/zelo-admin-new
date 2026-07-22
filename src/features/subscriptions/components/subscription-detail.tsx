@@ -68,6 +68,7 @@ function StatusBadge({ status }: { status: string }) {
     free: "outline",
     expired: "destructive",
     cancelled: "outline",
+    pending: "secondary",
   };
 
   const labels: Record<string, string> = {
@@ -76,6 +77,7 @@ function StatusBadge({ status }: { status: string }) {
     free: "Gratuito",
     expired: "Expirado",
     cancelled: "Cancelado",
+    pending: "Pendente",
   };
 
   return <Badge variant={variants[status] ?? "outline"}>{labels[status] ?? status}</Badge>;
@@ -572,32 +574,32 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
         </Card>
       </div>
 
-      {/* Stripe */}
-      {subscription.stripeSubscriptionId && (
+      {/* Asaas */}
+      {subscription.asaasSubscriptionId && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CreditCard className="h-5 w-5" />
-              Stripe
+              Asaas
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <p className="text-muted-foreground">Subscription ID</p>
+                <p className="text-muted-foreground">ID da Assinatura</p>
                 <a
-                  href={`https://dashboard.stripe.com/test/subscriptions/${subscription.stripeSubscriptionId}`}
+                  href={`https://sandbox.asaas.com/subscriptions/${subscription.asaasSubscriptionId}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 font-mono text-xs hover:text-primary"
                 >
-                  {subscription.stripeSubscriptionId}
+                  {subscription.asaasSubscriptionId}
                   <ExternalLink className="h-3 w-3" />
                 </a>
               </div>
               <div>
-                <p className="text-muted-foreground">Status Stripe</p>
-                <p className="font-medium capitalize">{subscription.stripeStatus ?? "—"}</p>
+                <p className="text-muted-foreground">Status Asaas</p>
+                <p className="font-medium capitalize">{subscription.asaasStatus ?? "—"}</p>
               </div>
               <div>
                 <p className="text-muted-foreground">Início do período</p>

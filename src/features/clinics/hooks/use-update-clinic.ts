@@ -17,6 +17,13 @@ export function useUpdateClinic() {
         phone: values.phone,
         status: values.status,
         media_id: values.media_id ?? undefined,
+        email: values.email || undefined,
+        website: values.website || undefined,
+        description: values.description || undefined,
+        responsible_name: values.responsible_name || undefined,
+        whatsapp: values.whatsapp || undefined,
+        cnes: values.cnes || undefined,
+        specialty: values.specialty || undefined,
       }),
     onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: clinicKeys.lists() });

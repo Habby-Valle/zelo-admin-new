@@ -74,7 +74,7 @@ export function ClinicPaymentsTable({ payments }: { payments: PaymentRecord[] })
     return payments.filter((payment) => {
       const matchesSearch =
         (payment.plan_name ?? "").toLowerCase().includes(search.toLowerCase()) ||
-        payment.stripe_payment_intent_id.toLowerCase().includes(search.toLowerCase());
+        payment.asaas_payment_id.toLowerCase().includes(search.toLowerCase());
 
       const matchesStatus = statusFilter === "all" || payment.status === statusFilter;
 
@@ -116,7 +116,7 @@ export function ClinicPaymentsTable({ payments }: { payments: PaymentRecord[] })
               <TableHead>Método</TableHead>
               <TableHead>Ciclo</TableHead>
               <TableHead>Data</TableHead>
-              <TableHead className="text-right">ID Stripe</TableHead>
+              <TableHead className="text-right">ID Asaas</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -138,14 +138,14 @@ export function ClinicPaymentsTable({ payments }: { payments: PaymentRecord[] })
                   <TableCell>{formatBillingCycle(payment.billing_cycle)}</TableCell>
                   <TableCell>{formatDate(payment.paid_at) || "-"}</TableCell>
                   <TableCell className="text-right">
-                    {payment.stripe_payment_intent_id ? (
+                    {payment.asaas_payment_id ? (
                       <a
-                        href={`https://dashboard.stripe.com/test/payments/${payment.stripe_payment_intent_id}`}
+                        href={`https://sandbox.asaas.com/payments/${payment.asaas_payment_id}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary"
                       >
-                        {payment.stripe_payment_intent_id.slice(0, 12)}...
+                        {payment.asaas_payment_id.slice(0, 12)}...
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     ) : (

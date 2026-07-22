@@ -1,14 +1,14 @@
 import { apiFetchClient } from "@/lib/api-client";
 import type { PaginatedResponse } from "@/types";
-import type { InvoiceRecord, PaymentRecord, PaymentStats } from "@/features/payments/types";
+import type { PlanPaymentRecord, PaymentRecord, PaymentStats } from "@/features/payments/types";
 
-export async function fetchInvoices(params?: {
+export async function fetchPlanPayments(params?: {
   status?: string;
   search?: string;
   page?: number;
   page_size?: number;
 }): Promise<{
-  invoices: InvoiceRecord[];
+  payments: PlanPaymentRecord[];
   total: number;
   total_revenue: number;
 }> {
@@ -18,11 +18,11 @@ export async function fetchInvoices(params?: {
   if (params?.page) searchParams.set("page", String(params.page));
   if (params?.page_size) searchParams.set("page_size", String(params.page_size));
   const query = searchParams.toString();
-  const data = await apiFetchClient<PaginatedResponse<InvoiceRecord> & { total_revenue: number }>(
-    `/management/invoices/${query ? `?${query}` : ""}`
-  );
+  const data = await apiFetchClient<
+    PaginatedResponse<PlanPaymentRecord> & { total_revenue: number }
+  >(`/asaas/plan-payments/${query ? `?${query}` : ""}`);
   return {
-    invoices: data.results,
+    payments: data.results,
     total: data.count,
     total_revenue: data.total_revenue,
   };

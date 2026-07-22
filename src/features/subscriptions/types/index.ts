@@ -12,7 +12,7 @@ export interface SubscriptionListItem {
   end_date: string | null;
   trial_ends_at: string | null;
   payment_failed_at: string | null;
-  stripe_status: string | null;
+  asaas_status: string | null;
   current_period_end: string | null;
   created_at: string;
   patient_count: number;
@@ -33,28 +33,6 @@ export interface SubscriptionStats {
   expired: number;
   cancelled: number;
   plan_distribution: PlanDistributionItem[];
-  guardian_total: number;
-  guardian_active: number;
-  guardian_free: number;
-  guardian_trial: number;
-  guardian_cancelled: number;
-}
-
-export interface GuardianSubscriptionListItem {
-  id: string;
-  guardian_id: string;
-  guardian_name: string;
-  guardian_email: string | null;
-  plan_name: string;
-  plan_price: number;
-  status: string;
-  start_date: string;
-  end_date: string | null;
-  trial_ends_at: string | null;
-  payment_failed_at: string | null;
-  stripe_status: string | null;
-  current_period_end: string | null;
-  created_at: string;
 }
 
 export interface SubscriptionDetails {
@@ -75,8 +53,8 @@ export interface SubscriptionDetails {
   maxUsers: number;
   maxPatients: number;
   features: string[];
-  stripeSubscriptionId: string | null;
-  stripeStatus: string | null;
+  asaasSubscriptionId: string | null;
+  asaasStatus: string | null;
   currentPeriodStart: string | null;
   currentPeriodEnd: string | null;
 }

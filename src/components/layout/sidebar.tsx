@@ -21,6 +21,9 @@ import {
   Megaphone,
   AlertTriangle,
   MessageSquare,
+  Clock,
+  ClipboardCheck,
+  Inbox,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -73,6 +76,7 @@ function EnvironmentBadge() {
 const navItems = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Clínicas", href: "/clinics", icon: Building2 },
+  { label: "Leads", href: "/leads", icon: Inbox },
   { label: "Assinaturas", href: "/subscriptions", icon: CreditCard },
   { label: "Pagamentos", href: "/payments", icon: DollarSign },
   { label: "Planos", href: "/plans", icon: CheckCircle },
@@ -80,7 +84,9 @@ const navItems = [
   { label: "Pacientes", href: "/patients", icon: UserRound },
   { label: "Turnos", href: "/shifts", icon: CalendarClock },
   { label: "Checklists", href: "/checklists", icon: ClipboardList },
+  { label: "Horas", href: "/caregiver-hours", icon: Clock },
   { label: "Relatórios", href: "/reports", icon: BarChart3 },
+  { label: "Conformidade", href: "/quality", icon: ClipboardCheck },
   { label: "Logs de Auditoria", href: "/audit-logs", icon: Shield },
   { label: "Broadcast", href: "/broadcast", icon: Megaphone },
   { label: "Feedbacks", href: "/feedback", icon: MessageSquare },
