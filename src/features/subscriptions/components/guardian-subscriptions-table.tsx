@@ -29,7 +29,7 @@ interface GuardianSubscriptionsTableProps {
 const STATUS_LABELS: Record<string, string> = {
   all: "Todos",
   active: "Ativo",
-  free: "Gratuito",
+  free: "Sem plano",
   trial: "Trial",
   expired: "Expirado",
   cancelled: "Cancelado",
@@ -85,7 +85,7 @@ export function GuardianSubscriptionsTable({ subscriptions }: GuardianSubscripti
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="active">Ativo</SelectItem>
-            <SelectItem value="free">Gratuito</SelectItem>
+            <SelectItem value="free">Sem plano</SelectItem>
             <SelectItem value="trial">Trial</SelectItem>
             <SelectItem value="expired">Expirado</SelectItem>
             <SelectItem value="cancelled">Cancelado</SelectItem>

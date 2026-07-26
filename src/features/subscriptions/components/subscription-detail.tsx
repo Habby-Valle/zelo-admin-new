@@ -72,8 +72,8 @@ function StatusBadge({ status }: { status: string }) {
 
   const labels: Record<string, string> = {
     active: "Ativo",
-    trial: "Trial",
-    free: "Gratuito",
+        trial: "Trial",
+        free: "Sem plano",
     expired: "Expirado",
     cancelled: "Cancelado",
   };

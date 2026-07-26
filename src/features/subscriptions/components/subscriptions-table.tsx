@@ -31,8 +31,8 @@ interface SubscriptionsTableProps {
 const STATUS_LABELS: Record<string, string> = {
   all: "Todos",
   active: "Ativo",
-  trial: "Trial",
-  free: "Gratuito",
+        trial: "Trial",
+        free: "Sem plano",
   expired: "Expirado",
   cancelled: "Cancelado",
 };
@@ -96,7 +96,7 @@ export function SubscriptionsTable({ subscriptions }: SubscriptionsTableProps) {
             <SelectItem value="all">Todos</SelectItem>
             <SelectItem value="active">Ativo</SelectItem>
             <SelectItem value="trial">Trial</SelectItem>
-            <SelectItem value="free">Gratuito</SelectItem>
+            <SelectItem value="free">Sem plano</SelectItem>
             <SelectItem value="expired">Expirado</SelectItem>
             <SelectItem value="cancelled">Cancelado</SelectItem>
           </SelectContent>
