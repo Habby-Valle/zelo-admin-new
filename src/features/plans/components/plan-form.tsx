@@ -202,7 +202,10 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
                   className="rounded-lg border bg-muted/30 p-4 transition-colors hover:bg-muted/50"
                 >
                   <div className="flex items-center gap-3">
-                    <Switch checked={enabled} onCheckedChange={(v) => toggleBenefit(benefitId, v)} />
+                    <Switch
+                      checked={enabled}
+                      onCheckedChange={(v) => toggleBenefit(benefitId, v)}
+                    />
                     <div className="flex-1">
                       <p className="text-sm font-medium">{benefit.label}</p>
                       {benefit.description && (

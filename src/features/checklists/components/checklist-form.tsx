@@ -66,9 +66,7 @@ export function ChecklistForm({ checklist, onSuccess }: ChecklistFormProps) {
 
   const [name, setName] = useState(checklist?.name ?? "");
   const [icon, setIcon] = useState(checklist?.icon ?? "");
-  const [clinicId, setClinicId] = useState<string>(
-    checklist?.clinic_id ?? ""
-  );
+  const [clinicId, setClinicId] = useState<string>(checklist?.clinic_id ?? "");
   const [isActive, setIsActive] = useState(checklist?.is_active ?? true);
   const [items, setItems] = useState<ItemFormState[]>(() => {
     if (checklist?.items?.length) {

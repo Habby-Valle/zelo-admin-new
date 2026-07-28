@@ -31,8 +31,8 @@ interface SubscriptionsTableProps {
 const STATUS_LABELS: Record<string, string> = {
   all: "Todos",
   active: "Ativo",
-        trial: "Trial",
-        free: "Sem plano",
+  trial: "Trial",
+  free: "Sem plano",
   expired: "Expirado",
   cancelled: "Cancelado",
 };
