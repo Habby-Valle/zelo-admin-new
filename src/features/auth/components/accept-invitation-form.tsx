@@ -224,9 +224,7 @@ export function AcceptInvitationForm() {
           <CardTitle className="text-2xl">Criar conta</CardTitle>
           <CardDescription className="mt-1">
             {inviteInfo?.email && (
-              <span className="block text-sm font-medium text-foreground">
-                {inviteInfo.email}
-              </span>
+              <span className="block text-sm font-medium text-foreground">{inviteInfo.email}</span>
             )}
             {inviteInfo?.role && (
               <span className="mt-1 block text-xs text-muted-foreground">
@@ -257,9 +255,7 @@ export function AcceptInvitationForm() {
                   aria-invalid={!!errors.name}
                   {...register("name")}
                 />
-                {errors.name && (
-                  <p className="text-xs text-destructive">{errors.name.message}</p>
-                )}
+                {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
               </div>
 
               <div className="space-y-1.5">
@@ -274,9 +270,7 @@ export function AcceptInvitationForm() {
                   value={formatPhone(watch("phone") ?? "")}
                   onChange={(e) => setValue("phone", e.target.value, { shouldValidate: true })}
                 />
-                {errors.phone && (
-                  <p className="text-xs text-destructive">{errors.phone.message}</p>
-                )}
+                {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
               </div>
             </>
           )}

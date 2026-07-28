@@ -1,10 +1,6 @@
 import { apiFetchClient } from "@/lib/api-client";
 import type { PaginatedResponse } from "@/types";
-import type {
-  SystemSettings,
-  LgpdConfig,
-  UserSearchResult,
-} from "@/features/settings/types";
+import type { SystemSettings, LgpdConfig, UserSearchResult } from "@/features/settings/types";
 
 export async function fetchSystemSettings(): Promise<SystemSettings> {
   try {
@@ -71,7 +67,7 @@ export async function fetchSystemSettings(): Promise<SystemSettings> {
 }
 
 export async function saveSystemSettings(
-  data: Partial<SystemSettings & {   admin_logo_media_id?: string | null }>
+  data: Partial<SystemSettings & { admin_logo_media_id?: string | null }>
 ): Promise<void> {
   const body: Record<string, unknown> = {
     app_name: data.app_name,

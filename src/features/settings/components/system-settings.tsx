@@ -399,5 +399,5 @@ export function SystemSettingsTab() {
     return null;
   }
 
-  return <SystemSettingsForm settings={settings} saveMutation={saveMutation} />
+  return <SystemSettingsForm settings={settings} saveMutation={saveMutation} />;
 }

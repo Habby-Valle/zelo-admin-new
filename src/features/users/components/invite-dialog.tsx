@@ -33,11 +33,7 @@ interface InviteDialogProps {
   defaultRole?: SendInviteValues["role"];
 }
 
-export function InviteDialog({
-  open,
-  onOpenChange,
-  defaultRole,
-}: InviteDialogProps) {
+export function InviteDialog({ open, onOpenChange, defaultRole }: InviteDialogProps) {
   const sendInvite = useSendInvite();
   const { data: clinicsData } = useClinics({ status: "active", pageSize: 100 });
   const clinics = clinicsData?.results ?? [];
