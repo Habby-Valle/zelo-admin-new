@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/select";
 import { useUpdateUser } from "@/features/users/hooks";
 import type { UserProfile } from "@/features/users/types";
+import { formatPhone, formatCpf } from "@/lib/format";
 
 interface UserEditDialogProps {
   open: boolean;
@@ -100,14 +101,19 @@ export function UserEditDialog({ open, onOpenChange, user }: UserEditDialogProps
 
           <div className="space-y-2">
             <Label htmlFor="phone">Telefone</Label>
-            <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+            <Input
+              id="phone"
+              value={formatPhone(phone)}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="(11) 99999-9999"
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="cpf">CPF</Label>
             <Input
               id="cpf"
-              value={cpf}
+              value={formatCpf(cpf)}
               onChange={(e) => setCpf(e.target.value)}
               placeholder="000.000.000-00"
             />
