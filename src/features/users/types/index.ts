@@ -37,11 +37,19 @@ export interface UserProfile {
   email: string;
   name: string;
   phone: string;
+  cpf?: string;
   role: string;
   media_id: string | null;
   media: Media | null;
   is_active: boolean;
   verification_status?: string | null;
+  family_mode?: string;
+  relationship_to_patient?: string;
+  is_companion?: boolean;
+  professional_register?: string;
+  specialization?: string;
+  birth_date?: string;
+  gender?: string;
   created_at: string;
 }
 

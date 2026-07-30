@@ -25,25 +25,42 @@ interface UserEditDialogProps {
 
 export function UserEditDialog({ open, onOpenChange, user }: UserEditDialogProps) {
   const updateMutation = useUpdateUser();
+
+  const [email, setEmail] = useState(user.email);
   const [name, setName] = useState(user.name);
   const [phone, setPhone] = useState(user.phone);
+  const [cpf, setCpf] = useState(user.cpf ?? "");
   const [isActive, setIsActive] = useState(user.is_active);
 
   const isFamily = user.role === "family";
-  const [familyMode, setFamilyMode] = useState<string | null>(null);
-  const [relationship, setRelationship] = useState("");
+  const [familyMode, setFamilyMode] = useState<string | null>(user.family_mode ?? null);
+  const [relationship, setRelationship] = useState(user.relationship_to_patient ?? "");
 
   const isCaregiver = user.role === "caregiver";
-  const [professionalRegister, setProfessionalRegister] = useState("");
+  const [professionalRegister, setProfessionalRegister] = useState(
+    user.professional_register ?? ""
+  );
+  const [specialization, setSpecialization] = useState(user.specialization ?? "");
+  const [birthDate, setBirthDate] = useState(user.birth_date ?? "");
+  const [gender, setGender] = useState(user.gender ?? "");
 
   const isLoading = updateMutation.isPending;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const payload: Record<string, unknown> = { name, phone, is_active: isActive };
+    const payload: Record<string, unknown> = {
+      email,
+      name,
+      phone,
+      is_active: isActive,
+    };
+    if (cpf) payload.cpf = cpf;
     if (isFamily && familyMode !== null) payload.family_mode = familyMode;
     if (isFamily && relationship) payload.relationship_to_patient = relationship;
     if (isCaregiver && professionalRegister) payload.professional_register = professionalRegister;
+    if (isCaregiver && specialization) payload.specialization = specialization;
+    if (isCaregiver && birthDate) payload.birth_date = birthDate;
+    if (isCaregiver && gender) payload.gender = gender;
 
     updateMutation.mutate(
       { id: user.id, data: payload },
@@ -61,11 +78,16 @@ export function UserEditDialog({ open, onOpenChange, user }: UserEditDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>Editar usuário</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          </div>
+
           <div className="space-y-2">
             <Label htmlFor="name">Nome</Label>
             <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
@@ -74,6 +96,11 @@ export function UserEditDialog({ open, onOpenChange, user }: UserEditDialogProps
           <div className="space-y-2">
             <Label htmlFor="phone">Telefone</Label>
             <Input id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="cpf">CPF</Label>
+            <Input id="cpf" value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="000.000.000-00" />
           </div>
 
           <div className="flex items-center gap-3">
@@ -109,14 +136,49 @@ export function UserEditDialog({ open, onOpenChange, user }: UserEditDialogProps
           )}
 
           {isCaregiver && (
-            <div className="space-y-2">
-              <Label htmlFor="professional_register">Registro profissional</Label>
-              <Input
-                id="professional_register"
-                value={professionalRegister}
-                onChange={(e) => setProfessionalRegister(e.target.value)}
-              />
-            </div>
+            <>
+              <div className="space-y-2">
+                <Label htmlFor="professional_register">Registro profissional</Label>
+                <Input
+                  id="professional_register"
+                  value={professionalRegister}
+                  onChange={(e) => setProfessionalRegister(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="specialization">Especialização</Label>
+                <Input
+                  id="specialization"
+                  value={specialization}
+                  onChange={(e) => setSpecialization(e.target.value)}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="birth_date">Data de nascimento</Label>
+                <Input
+                  id="birth_date"
+                  value={birthDate}
+                  onChange={(e) => setBirthDate(e.target.value)}
+                  placeholder="AAAA-MM-DD"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="gender">Sexo</Label>
+                <Select value={gender} onValueChange={(v) => setGender(v ?? "")}>
+                  <SelectTrigger id="gender">
+                    <SelectValue placeholder="Selecionar" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="M">Masculino</SelectItem>
+                    <SelectItem value="F">Feminino</SelectItem>
+                    <SelectItem value="O">Outro</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </>
           )}
 
           <div className="flex justify-end gap-3 pt-2">
