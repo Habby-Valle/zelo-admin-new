@@ -71,7 +71,9 @@ export function PlanAssignmentDialog({
             <Label htmlFor="plan">Plano</Label>
             <Select value={selectedPlanId ?? ""} onValueChange={(v) => setSelectedPlanId(v)}>
               <SelectTrigger id="plan">
-                <SelectValue placeholder="Selecionar plano" />
+                <SelectValue placeholder="Selecionar plano">
+                  {selectedPlanId ? plans.find((p) => p.id === selectedPlanId)?.name : ""}
+                </SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {plans.map((plan) => (

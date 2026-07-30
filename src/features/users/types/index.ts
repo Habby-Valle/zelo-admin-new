@@ -50,6 +50,15 @@ export interface UserProfile {
   specialization?: string;
   birth_date?: string;
   gender?: string;
+  family_plan?: {
+    id: string;
+    plan_id: string;
+    plan_name: string;
+    status: string;
+    start_date: string | null;
+    max_patients: number;
+    max_caregivers: number;
+  } | null;
   created_at: string;
 }
 

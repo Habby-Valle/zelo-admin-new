@@ -19,6 +19,15 @@ interface ApiProfile {
   specialization?: string;
   birth_date?: string;
   gender?: string;
+  family_plan?: {
+    id: string;
+    plan_id: string;
+    plan_name: string;
+    status: string;
+    start_date: string | null;
+    max_patients: number;
+    max_caregivers: number;
+  } | null;
   created_at: string;
 }
 
@@ -55,6 +64,7 @@ function mapProfile(api: ApiProfile): UserProfile {
     specialization: api.specialization,
     birth_date: api.birth_date,
     gender: api.gender,
+    family_plan: api.family_plan,
     created_at: api.created_at,
   };
 }

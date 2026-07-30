@@ -186,12 +186,51 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
               Atribuir plano
             </Button>
           </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              {user.family_mode === "direct"
-                ? "Familiar em modo direto — plano gerenciado pelo admin."
-                : "Familiar vinculado a clínica."}
-            </p>
+          <CardContent className="space-y-3">
+            {user.family_plan ? (
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Plano</span>
+                  <span className="font-medium">{user.family_plan.plan_name}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Status</span>
+                  <span className="font-medium capitalize">{user.family_plan.status}</span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Pacientes</span>
+                  <span>
+                    {user.family_plan.max_patients === -1
+                      ? "Ilimitado"
+                      : `Até ${user.family_plan.max_patients}`}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">Cuidadores</span>
+                  <span>
+                    {user.family_plan.max_caregivers === -1
+                      ? "Ilimitado"
+                      : `Até ${user.family_plan.max_caregivers}`}
+                  </span>
+                </div>
+                {user.family_plan.start_date && (
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Início</span>
+                    <span>
+                      {new Date(user.family_plan.start_date).toLocaleDateString("pt-BR")}
+                    </span>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                {user.family_mode === "direct"
+                  ? "Familiar em modo direto sem plano atribuído."
+                  : user.family_mode === "clinic"
+                    ? "Familiar vinculado a uma clínica."
+                    : "Familiar sem modo definido."}
+              </p>
+            )}
           </CardContent>
         </Card>
       )}
