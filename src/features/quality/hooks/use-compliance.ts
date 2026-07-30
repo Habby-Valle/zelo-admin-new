@@ -2,10 +2,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { complianceKeys } from "@/lib/query-keys";
-import {
-  fetchComplianceList,
-  fetchComplianceStats,
-} from "@/features/quality/services";
+import { fetchComplianceList, fetchComplianceStats } from "@/features/quality/services";
 import type { ComplianceFilters } from "@/features/quality/types";
 
 export function useComplianceList(filters?: ComplianceFilters) {

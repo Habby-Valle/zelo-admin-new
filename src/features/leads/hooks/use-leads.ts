@@ -32,8 +32,7 @@ export function useLead(id: string) {
 export function useUpdateLeadStatus() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ id, status }: { id: string; status: string }) =>
-      updateLeadStatusApi(id, status),
+    mutationFn: ({ id, status }: { id: string; status: string }) => updateLeadStatusApi(id, status),
     onSuccess: () => {
       toast.success("Status atualizado.");
       queryClient.invalidateQueries({ queryKey: leadKeys.all });

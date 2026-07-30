@@ -108,8 +108,7 @@ export function HealthAlertsSection({ patientId }: HealthAlertsSectionProps) {
   const resolve = useResolveHealthAlert();
 
   const sortedAlerts = [...(alerts ?? [])].sort(
-    (a, b) =>
-      (SEVERITY_ORDER[a.severity] ?? 99) - (SEVERITY_ORDER[b.severity] ?? 99)
+    (a, b) => (SEVERITY_ORDER[a.severity] ?? 99) - (SEVERITY_ORDER[b.severity] ?? 99)
   );
 
   const openCount = alerts?.filter((a) => a.status === "open").length ?? 0;
@@ -137,10 +136,7 @@ export function HealthAlertsSection({ patientId }: HealthAlertsSectionProps) {
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span>Severidade:</span>
-            <Select
-              value={severityFilter}
-              onValueChange={(v) => setSeverityFilter(v ?? "")}
-            >
+            <Select value={severityFilter} onValueChange={(v) => setSeverityFilter(v ?? "")}>
               <SelectTrigger className="h-8 w-32 text-xs">
                 <SelectValue placeholder="Todas" />
               </SelectTrigger>
@@ -155,10 +151,7 @@ export function HealthAlertsSection({ patientId }: HealthAlertsSectionProps) {
           </div>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <span>Status:</span>
-            <Select
-              value={statusFilter}
-              onValueChange={(v) => setStatusFilter(v ?? "")}
-            >
+            <Select value={statusFilter} onValueChange={(v) => setStatusFilter(v ?? "")}>
               <SelectTrigger className="h-8 w-32 text-xs">
                 <SelectValue placeholder="Todos" />
               </SelectTrigger>
@@ -199,16 +192,11 @@ export function HealthAlertsSection({ patientId }: HealthAlertsSectionProps) {
                         <AlertTypeLabel type={alert.alert_type} />
                       </span>
                       {alert.indicator && (
-                        <span className="text-xs text-muted-foreground">
-                          — {alert.indicator}
-                        </span>
+                        <span className="text-xs text-muted-foreground">— {alert.indicator}</span>
                       )}
                     </div>
                     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-                      <Badge
-                        variant={SEVERITY_VARIANTS[alert.severity]}
-                        className="text-[10px]"
-                      >
+                      <Badge variant={SEVERITY_VARIANTS[alert.severity]} className="text-[10px]">
                         {alert.severity_display}
                       </Badge>
                       <AlertStatusBadge status={alert.status} />
@@ -228,14 +216,13 @@ export function HealthAlertsSection({ patientId }: HealthAlertsSectionProps) {
                         )}
                         {alert.expected_range && (
                           <span>
-                            <span className="font-medium">Esperado:</span>{" "}
-                            {alert.expected_range}
+                            <span className="font-medium">Esperado:</span> {alert.expected_range}
                           </span>
                         )}
                       </div>
                     )}
                     {alert.ai_insight && (
-                      <p className="pt-1 text-[11px] italic text-muted-foreground">
+                      <p className="pt-1 text-[11px] text-muted-foreground italic">
                         IA: {alert.ai_insight}
                       </p>
                     )}

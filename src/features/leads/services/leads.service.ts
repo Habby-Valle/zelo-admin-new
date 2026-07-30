@@ -1,9 +1,7 @@
 import { apiFetchClient } from "@/lib/api-client";
 import type { Lead, LeadFilters } from "@/features/leads/types";
 
-export async function fetchLeads(
-  params: LeadFilters
-): Promise<{ leads: Lead[]; total: number }> {
+export async function fetchLeads(params: LeadFilters): Promise<{ leads: Lead[]; total: number }> {
   const qs = new URLSearchParams();
   if (params.status && params.status !== "all") qs.set("status", params.status);
   if (params.search) qs.set("search", params.search);

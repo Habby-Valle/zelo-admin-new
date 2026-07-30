@@ -71,17 +71,15 @@ export async function fetchHealthAlerts(filters: HealthAlertFilters): Promise<He
 }
 
 export async function acknowledgeHealthAlert(alertId: string): Promise<HealthAlert> {
-  const data = await apiFetchClient<ApiHealthAlert>(
-    `/ai/health-alerts/${alertId}/acknowledge/`,
-    { method: "POST" }
-  );
+  const data = await apiFetchClient<ApiHealthAlert>(`/ai/health-alerts/${alertId}/acknowledge/`, {
+    method: "POST",
+  });
   return mapHealthAlert(data);
 }
 
 export async function resolveHealthAlert(alertId: string): Promise<HealthAlert> {
-  const data = await apiFetchClient<ApiHealthAlert>(
-    `/ai/health-alerts/${alertId}/resolve/`,
-    { method: "POST" }
-  );
+  const data = await apiFetchClient<ApiHealthAlert>(`/ai/health-alerts/${alertId}/resolve/`, {
+    method: "POST",
+  });
   return mapHealthAlert(data);
 }

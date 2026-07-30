@@ -59,12 +59,16 @@ export function ComplianceListClient() {
   const { data: records, isLoading } = useComplianceList();
   const { data: stats } = useComplianceStats();
 
-  const totalShifts = stats?.reduce((acc: number, s: ComplianceStats) => acc + s.total_shifts, 0) ?? 0;
+  const totalShifts =
+    stats?.reduce((acc: number, s: ComplianceStats) => acc + s.total_shifts, 0) ?? 0;
   const totalCaregivers = stats?.length ?? 0;
-  const avgCompliance = stats && stats.length > 0
-    ? stats.reduce((acc: number, s: ComplianceStats) => acc + s.avg_compliance_pct, 0) / stats.length
-    : null;
-  const lowCaregivers = stats?.filter((s: ComplianceStats) => s.avg_compliance_pct < 70).length ?? 0;
+  const avgCompliance =
+    stats && stats.length > 0
+      ? stats.reduce((acc: number, s: ComplianceStats) => acc + s.avg_compliance_pct, 0) /
+        stats.length
+      : null;
+  const lowCaregivers =
+    stats?.filter((s: ComplianceStats) => s.avg_compliance_pct < 70).length ?? 0;
 
   return (
     <div className="space-y-6">
@@ -112,7 +116,11 @@ export function ComplianceListClient() {
             <AlertTriangle className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className={lowCaregivers > 0 ? "text-2xl font-bold text-amber-600" : "text-2xl font-bold"}>
+            <div
+              className={
+                lowCaregivers > 0 ? "text-2xl font-bold text-amber-600" : "text-2xl font-bold"
+              }
+            >
               {lowCaregivers}
             </div>
             <p className="text-xs text-muted-foreground">Cuidadores com &lt;70% de conformidade</p>

@@ -2,7 +2,12 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userKeys } from "@/lib/query-keys";
-import { fetchUser, fetchUsers, updateUserApi, assignFamilyPlanApi } from "@/features/users/services";
+import {
+  fetchUser,
+  fetchUsers,
+  updateUserApi,
+  assignFamilyPlanApi,
+} from "@/features/users/services";
 
 export function useUser(id: string) {
   return useQuery({
@@ -29,13 +34,8 @@ export function useUsers(params?: {
 export function useUpdateUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({
-      id,
-      data,
-    }: {
-      id: string;
-      data: Parameters<typeof updateUserApi>[1];
-    }) => updateUserApi(id, data),
+    mutationFn: ({ id, data }: { id: string; data: Parameters<typeof updateUserApi>[1] }) =>
+      updateUserApi(id, data),
     onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: userKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });

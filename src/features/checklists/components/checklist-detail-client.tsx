@@ -105,8 +105,8 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
     return (
       <div className="flex flex-col items-center gap-4 py-20 text-center text-muted-foreground">
         <p>
-          O detalhe deste checklist não está disponível — checklists de clínica são geridos
-          pela própria clínica.
+          O detalhe deste checklist não está disponível — checklists de clínica são geridos pela
+          própria clínica.
         </p>
         <Button variant="outline" onClick={() => router.push("/checklists")}>
           Voltar
@@ -139,9 +139,7 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
               ) : (
                 <Badge variant="secondary">Inativo</Badge>
               )}
-              {checklist.version && (
-                <Badge variant="outline">v{checklist.version}</Badge>
-              )}
+              {checklist.version && <Badge variant="outline">v{checklist.version}</Badge>}
             </div>
             <div className="mt-1 flex items-center gap-4 text-muted-foreground">
               {checklist.clinic_name && (
@@ -238,10 +236,13 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
                         <Badge variant="outline">{ITEM_TYPE_LABELS[item.type] ?? item.type}</Badge>
                       </TableCell>
                       <TableCell>
-                        {item.type === "number" && (item.expected_min !== null || item.expected_max !== null) ? (
+                        {item.type === "number" &&
+                        (item.expected_min !== null || item.expected_max !== null) ? (
                           <span className="text-xs">
                             {item.expected_min ?? "—"} – {item.expected_max ?? "—"}
-                            {item.unit && <span className="ml-0.5 text-muted-foreground">{item.unit}</span>}
+                            {item.unit && (
+                              <span className="ml-0.5 text-muted-foreground">{item.unit}</span>
+                            )}
                           </span>
                         ) : (
                           <span className="text-xs text-muted-foreground">—</span>
@@ -249,8 +250,13 @@ export function ChecklistDetailClient({ id }: ChecklistDetailClientProps) {
                       </TableCell>
                       <TableCell>
                         {item.criticality ? (
-                          <Badge variant={CRITICALITY_VARIANTS[item.criticality as Criticality] ?? "outline"}>
-                            {CRITICALITY_LABELS[item.criticality as Criticality] ?? item.criticality}
+                          <Badge
+                            variant={
+                              CRITICALITY_VARIANTS[item.criticality as Criticality] ?? "outline"
+                            }
+                          >
+                            {CRITICALITY_LABELS[item.criticality as Criticality] ??
+                              item.criticality}
                           </Badge>
                         ) : (
                           <span className="text-xs text-muted-foreground">—</span>

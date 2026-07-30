@@ -112,17 +112,14 @@ export default function InviteRedirectPage() {
         <Button
           size="lg"
           className="min-w-[260px] bg-white text-base font-semibold text-[#1a1a2e] hover:bg-gray-100"
-          onClick={() => { window.location.href = appUrl; }}
+          onClick={() => {
+            window.location.href = appUrl;
+          }}
         >
           Abrir no App
         </Button>
 
-        <Button
-          variant="secondary"
-          size="lg"
-          className="min-w-[260px]"
-          onClick={copyLink}
-        >
+        <Button variant="secondary" size="lg" className="min-w-[260px]" onClick={copyLink}>
           {copied ? (
             <>
               <Check className="mr-2 h-4 w-4" />
@@ -139,9 +136,7 @@ export default function InviteRedirectPage() {
 
       <div className="space-y-3 rounded-lg border border-white/10 bg-white/5 p-6">
         <p className="text-sm font-medium text-white">App n&atilde;o encontrado?</p>
-        <p className="text-xs text-gray-400">
-          Baixe o aplicativo Zelo na loja do seu dispositivo:
-        </p>
+        <p className="text-xs text-gray-400">Baixe o aplicativo Zelo na loja do seu dispositivo:</p>
         <div className="flex justify-center gap-3">
           <a
             href={PLAY_STORE_URL}

@@ -573,7 +573,14 @@ export function ClinicDetailView({ id }: ClinicDetailViewProps) {
                 {clinic.website && (
                   <div className="flex items-center gap-2 text-sm">
                     <Globe className="h-4 w-4 shrink-0 text-muted-foreground" />
-                    <a href={clinic.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{clinic.website}</a>
+                    <a
+                      href={clinic.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      {clinic.website}
+                    </a>
                   </div>
                 )}
                 <div className="text-sm text-muted-foreground">

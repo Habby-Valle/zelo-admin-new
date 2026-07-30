@@ -94,7 +94,7 @@ export function DashboardView() {
       <div
         className={cn(
           "grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
-          kpis.activeSosAlerts > 0 && "mt-12!",
+          kpis.activeSosAlerts > 0 && "mt-12!"
         )}
       >
         <KpiCard

@@ -15,10 +15,7 @@ export function useCaregiverHours(filters: CaregiverHoursFilters) {
   });
 }
 
-export function useCaregiverHoursSummary(
-  startDate?: string,
-  endDate?: string
-) {
+export function useCaregiverHoursSummary(startDate?: string, endDate?: string) {
   return useQuery({
     queryKey: caregiverHoursKeys.summary({ startDate, endDate }),
     queryFn: () => fetchCaregiverHoursSummary(startDate, endDate),

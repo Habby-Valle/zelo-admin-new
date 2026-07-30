@@ -127,11 +127,11 @@ export function PlanPaymentsTable({ payments }: PlanPaymentsTableProps) {
                   <TableCell className="font-medium">{p.clinic_name ?? "—"}</TableCell>
                   <TableCell>{p.plan_name ?? "—"}</TableCell>
                   <TableCell>
-                    {p.billing_cycle ? (BILLING_CYCLE_LABELS[p.billing_cycle] ?? p.billing_cycle) : "—"}
+                    {p.billing_cycle
+                      ? (BILLING_CYCLE_LABELS[p.billing_cycle] ?? p.billing_cycle)
+                      : "—"}
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {formatCurrency(Number(p.amount))}
-                  </TableCell>
+                  <TableCell className="font-medium">{formatCurrency(Number(p.amount))}</TableCell>
                   <TableCell>
                     <StatusBadge status={p.status} label={p.status_display} />
                   </TableCell>
@@ -139,9 +139,7 @@ export function PlanPaymentsTable({ payments }: PlanPaymentsTableProps) {
                     {p.paid_at ? formatDate(p.paid_at) : formatDate(p.due_date)}
                   </TableCell>
                   <TableCell className="text-right">
-                    <span className="text-sm text-muted-foreground">
-                      {p.receipt_number ?? "—"}
-                    </span>
+                    <span className="text-sm text-muted-foreground">{p.receipt_number ?? "—"}</span>
                   </TableCell>
                 </TableRow>
               ))

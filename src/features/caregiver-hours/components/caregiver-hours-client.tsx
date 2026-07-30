@@ -57,14 +57,20 @@ export function CaregiverHoursClient() {
   const { data: pageData, isLoading } = useCaregiverHours(filters);
   const { data: summary } = useCaregiverHoursSummary(startDate, endDate);
 
-  const totalPages = useMemo(
-    () => (pageData ? Math.ceil(pageData.count / 365) : 0),
-    [pageData]
-  );
+  const totalPages = useMemo(() => (pageData ? Math.ceil(pageData.count / 365) : 0), [pageData]);
 
   const handleExport = useCallback(() => {
     if (!pageData?.results?.length) return;
-    const headers = ["Data", "Clínica", "Cuidador", "Horas", "Turnos", "Completados", "Cancelados", "Noturno"];
+    const headers = [
+      "Data",
+      "Clínica",
+      "Cuidador",
+      "Horas",
+      "Turnos",
+      "Completados",
+      "Cancelados",
+      "Noturno",
+    ];
     const rows = pageData.results.map((w: CaregiverWorkLog) => [
       w.date,
       w.clinic_name,
@@ -146,7 +152,10 @@ export function CaregiverHoursClient() {
                 id="start-date"
                 type="date"
                 value={startDate}
-                onChange={(e) => { setStartDate(e.target.value); setPage(1); }}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                  setPage(1);
+                }}
                 className="w-44"
               />
             </div>
@@ -156,7 +165,10 @@ export function CaregiverHoursClient() {
                 id="end-date"
                 type="date"
                 value={endDate}
-                onChange={(e) => { setEndDate(e.target.value); setPage(1); }}
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                  setPage(1);
+                }}
                 className="w-44"
               />
             </div>
@@ -212,7 +224,9 @@ export function CaregiverHoursClient() {
                       <TableCell className="text-right text-red-600">{w.cancelled}</TableCell>
                       <TableCell className="text-center">
                         {w.overnight ? (
-                          <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">Sim</span>
+                          <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+                            Sim
+                          </span>
                         ) : (
                           <span className="text-xs text-muted-foreground">—</span>
                         )}
@@ -228,11 +242,21 @@ export function CaregiverHoursClient() {
                     Página {page} de {totalPages}
                   </p>
                   <div className="flex gap-2">
-                    <Button variant="outline" size="sm" disabled={page <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page <= 1}
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    >
                       <ChevronLeft className="h-4 w-4" />
                       Anterior
                     </Button>
-                    <Button variant="outline" size="sm" disabled={page >= totalPages} onClick={() => setPage((p) => p + 1)}>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      disabled={page >= totalPages}
+                      onClick={() => setPage((p) => p + 1)}
+                    >
                       Próxima
                       <ChevronRight className="h-4 w-4" />
                     </Button>

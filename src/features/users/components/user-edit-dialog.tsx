@@ -85,7 +85,12 @@ export function UserEditDialog({ open, onOpenChange, user }: UserEditDialogProps
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
 
           <div className="space-y-2">
@@ -100,7 +105,12 @@ export function UserEditDialog({ open, onOpenChange, user }: UserEditDialogProps
 
           <div className="space-y-2">
             <Label htmlFor="cpf">CPF</Label>
-            <Input id="cpf" value={cpf} onChange={(e) => setCpf(e.target.value)} placeholder="000.000.000-00" />
+            <Input
+              id="cpf"
+              value={cpf}
+              onChange={(e) => setCpf(e.target.value)}
+              placeholder="000.000.000-00"
+            />
           </div>
 
           <div className="flex items-center gap-3">

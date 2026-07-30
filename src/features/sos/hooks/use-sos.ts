@@ -1,11 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import {
-  getSosAlertsApi,
-  getSosAlertApi,
-  getSosSummaryApi,
-} from "@/features/sos/services";
+import { getSosAlertsApi, getSosAlertApi, getSosSummaryApi } from "@/features/sos/services";
 import type { SosFilters } from "@/features/sos/types";
 
 export const sosKeys = {

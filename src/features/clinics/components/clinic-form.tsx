@@ -257,11 +257,7 @@ export function ClinicForm({
             </div>
             <div className="space-y-1">
               <Label className="text-xs">WhatsApp</Label>
-              <Input
-                id="whatsapp"
-                placeholder="(11) 99999-9999"
-                {...register("whatsapp")}
-              />
+              <Input id="whatsapp" placeholder="(11) 99999-9999" {...register("whatsapp")} />
             </div>
           </div>
           <div className="space-y-1">
@@ -308,7 +304,7 @@ export function ClinicForm({
             rows={3}
             placeholder="Breve descrição da clínica..."
             {...register("description")}
-            className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            className="w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-xs placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
           />
         </div>
       </div>
@@ -371,42 +367,76 @@ export function ClinicForm({
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label htmlFor="email" className="text-xs">Email de contato</Label>
-              <Input id="email" type="email" placeholder="contato@clinica.com.br" {...register("email")} />
+              <Label htmlFor="email" className="text-xs">
+                Email de contato
+              </Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="contato@clinica.com.br"
+                {...register("email")}
+              />
               {errors.email && <p className="text-xs text-destructive">{errors.email.message}</p>}
             </div>
             <div className="space-y-1">
-              <Label htmlFor="website" className="text-xs">Site</Label>
-              <Input id="website" type="url" placeholder="https://clinica.com.br" {...register("website")} />
-              {errors.website && <p className="text-xs text-destructive">{errors.website.message}</p>}
+              <Label htmlFor="website" className="text-xs">
+                Site
+              </Label>
+              <Input
+                id="website"
+                type="url"
+                placeholder="https://clinica.com.br"
+                {...register("website")}
+              />
+              {errors.website && (
+                <p className="text-xs text-destructive">{errors.website.message}</p>
+              )}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label htmlFor="whatsapp" className="text-xs">WhatsApp</Label>
+              <Label htmlFor="whatsapp" className="text-xs">
+                WhatsApp
+              </Label>
               <Input id="whatsapp" placeholder="(11) 99999-9999" {...register("whatsapp")} />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="responsible_name" className="text-xs">Responsável legal</Label>
-              <Input id="responsible_name" placeholder="Nome do responsável" {...register("responsible_name")} />
+              <Label htmlFor="responsible_name" className="text-xs">
+                Responsável legal
+              </Label>
+              <Input
+                id="responsible_name"
+                placeholder="Nome do responsável"
+                {...register("responsible_name")}
+              />
             </div>
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1">
-              <Label htmlFor="cnes" className="text-xs">CNES</Label>
+              <Label htmlFor="cnes" className="text-xs">
+                CNES
+              </Label>
               <Input id="cnes" placeholder="Código CNES" {...register("cnes")} />
             </div>
             <div className="space-y-1">
-              <Label htmlFor="specialty" className="text-xs">Especialidade</Label>
-              <Input id="specialty" placeholder="Ex: Home Care, Geriatria" {...register("specialty")} />
+              <Label htmlFor="specialty" className="text-xs">
+                Especialidade
+              </Label>
+              <Input
+                id="specialty"
+                placeholder="Ex: Home Care, Geriatria"
+                {...register("specialty")}
+              />
             </div>
           </div>
           <div className="space-y-1">
-            <Label htmlFor="description" className="text-xs">Descrição</Label>
+            <Label htmlFor="description" className="text-xs">
+              Descrição
+            </Label>
             <textarea
               id="description"
               rows={3}
-              className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+              className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-none"
               placeholder="Breve descrição da clínica..."
               {...register("description")}
             />

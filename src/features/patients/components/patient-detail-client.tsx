@@ -210,8 +210,8 @@ export function PatientDetailClient({ id }: { id: string }) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2 text-base">
-            <Phone className="h-4 w-4" /> Contatos de Emergência ({patient.emergency_contacts.length}
-            )
+            <Phone className="h-4 w-4" /> Contatos de Emergência (
+            {patient.emergency_contacts.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
