@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter, notFound } from "next/navigation";
 import {
   ArrowLeft,
@@ -10,6 +11,7 @@ import {
   XOctagon,
   CalendarDays,
   Shield,
+  Pencil,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -17,6 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUser } from "@/features/users/hooks";
+import { UserEditDialog } from "@/features/users/components/user-edit-dialog";
 
 const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
@@ -32,6 +35,7 @@ interface UserDetailClientProps {
 export default function UserDetailClient({ id }: UserDetailClientProps) {
   const router = useRouter();
   const { data: user, isLoading, isError } = useUser(id);
+  const [editOpen, setEditOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -105,6 +109,9 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
             )}
           </div>
         </div>
+        <Button variant="outline" size="icon" onClick={() => setEditOpen(true)}>
+          <Pencil className="h-4 w-4" />
+        </Button>
       </div>
 
       {/* Info card */}
@@ -166,6 +173,8 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
           </div>
         </CardContent>
       </Card>
+
+      <UserEditDialog open={editOpen} onOpenChange={setEditOpen} user={user} />
     </div>
   );
 }

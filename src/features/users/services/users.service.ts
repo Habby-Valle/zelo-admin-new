@@ -48,6 +48,27 @@ export async function fetchUser(id: string): Promise<UserProfile> {
   return mapProfile(data);
 }
 
+export async function updateUserApi(
+  id: string,
+  data: Partial<{
+    name: string;
+    phone: string;
+    is_active: boolean;
+    family_mode: string;
+    relationship_to_patient: string;
+    is_companion: boolean;
+    clinic_id: string | null;
+    professional_register: string;
+    specialization: string;
+  }>
+): Promise<UserProfile> {
+  const result = await apiFetchClient<ApiProfile>(`/users/${id}/`, {
+    method: "PATCH",
+    body: JSON.stringify(data),
+  });
+  return mapProfile(result);
+}
+
 export async function fetchUsers(params?: {
   search?: string;
   role?: string;
