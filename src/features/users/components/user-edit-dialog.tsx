@@ -33,6 +33,11 @@ export function UserEditDialog({ open, onOpenChange, user }: UserEditDialogProps
   const [cpf, setCpf] = useState(user.cpf ?? "");
   const [isActive, setIsActive] = useState(user.is_active);
 
+  const FAMILY_MODE_LABELS: Record<string, string> = {
+    clinic: "Clínica",
+    direct: "Direto",
+  };
+
   const isFamily = user.role === "family";
   const [familyMode, setFamilyMode] = useState<string | null>(user.family_mode ?? null);
   const [relationship, setRelationship] = useState(user.relationship_to_patient ?? "");
@@ -130,7 +135,9 @@ export function UserEditDialog({ open, onOpenChange, user }: UserEditDialogProps
                 <Label htmlFor="family_mode">Modo</Label>
                 <Select value={familyMode ?? ""} onValueChange={(v) => setFamilyMode(v)}>
                   <SelectTrigger id="family_mode">
-                    <SelectValue placeholder="Selecionar modo" />
+                    <SelectValue placeholder="Selecionar modo">
+                      {familyMode ? FAMILY_MODE_LABELS[familyMode] : ""}
+                    </SelectValue>
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="clinic">Clínica</SelectItem>
