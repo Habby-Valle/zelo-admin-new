@@ -21,6 +21,7 @@ interface PlanAssignmentDialogProps {
   onOpenChange: (open: boolean) => void;
   userId: string;
   userName: string;
+  currentPlanId?: string | null;
 }
 
 export function PlanAssignmentDialog({
@@ -28,18 +29,20 @@ export function PlanAssignmentDialog({
   onOpenChange,
   userId,
   userName,
+  currentPlanId,
 }: PlanAssignmentDialogProps) {
   const assignMutation = useAssignFamilyPlan();
   const [plans, setPlans] = useState<PlanOption[]>([]);
-  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(null);
+  const [selectedPlanId, setSelectedPlanId] = useState<string | null>(currentPlanId ?? null);
 
   useEffect(() => {
     if (open) {
       getPlansApi({ scope: "family" })
         .then(setPlans)
         .catch(() => toast.error("Erro ao carregar planos"));
+      if (currentPlanId) setSelectedPlanId(currentPlanId);
     }
-  }, [open]);
+  }, [open, currentPlanId]);
 
   const handleAssign = () => {
     if (!selectedPlanId) {

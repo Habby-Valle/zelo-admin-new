@@ -242,6 +242,7 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
           onOpenChange={setPlanOpen}
           userId={user.id}
           userName={user.name}
+          currentPlanId={user.family_plan?.plan_id}
         />
       )}
     </div>
