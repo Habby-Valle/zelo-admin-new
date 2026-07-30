@@ -12,6 +12,7 @@ import {
   CalendarDays,
   Shield,
   Pencil,
+  CreditCard,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -20,6 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUser } from "@/features/users/hooks";
 import { UserEditDialog } from "@/features/users/components/user-edit-dialog";
+import { PlanAssignmentDialog } from "@/features/users/components/plan-assignment-dialog";
 
 const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
@@ -36,6 +38,7 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
   const router = useRouter();
   const { data: user, isLoading, isError } = useUser(id);
   const [editOpen, setEditOpen] = useState(false);
+  const [planOpen, setPlanOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -174,7 +177,34 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
         </CardContent>
       </Card>
 
+      {user.role === "family" && (
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-base">Plano</CardTitle>
+            <Button variant="outline" size="sm" onClick={() => setPlanOpen(true)}>
+              <CreditCard className="mr-1 h-4 w-4" />
+              Atribuir plano
+            </Button>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              {user.family_mode === "direct"
+                ? "Familiar em modo direto — plano gerenciado pelo admin."
+                : "Familiar vinculado a clínica."}
+            </p>
+          </CardContent>
+        </Card>
+      )}
+
       <UserEditDialog open={editOpen} onOpenChange={setEditOpen} user={user} />
+      {user.role === "family" && (
+        <PlanAssignmentDialog
+          open={planOpen}
+          onOpenChange={setPlanOpen}
+          userId={user.id}
+          userName={user.name}
+        />
+      )}
     </div>
   );
 }

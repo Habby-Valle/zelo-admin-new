@@ -2,7 +2,7 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userKeys } from "@/lib/query-keys";
-import { fetchUser, fetchUsers, updateUserApi } from "@/features/users/services";
+import { fetchUser, fetchUsers, updateUserApi, assignFamilyPlanApi } from "@/features/users/services";
 
 export function useUser(id: string) {
   return useQuery({
@@ -39,6 +39,18 @@ export function useUpdateUser() {
     onSuccess: (_data, { id }) => {
       queryClient.invalidateQueries({ queryKey: userKeys.detail(id) });
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+    },
+  });
+}
+
+export function useAssignFamilyPlan() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ familyId, planId }: { familyId: string; planId: string }) =>
+      assignFamilyPlanApi(familyId, planId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: userKeys.details() });
     },
   });
 }

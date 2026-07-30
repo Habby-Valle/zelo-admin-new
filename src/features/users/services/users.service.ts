@@ -89,6 +89,16 @@ export async function updateUserApi(
   return mapProfile(result);
 }
 
+export async function assignFamilyPlanApi(
+  familyId: string,
+  planId: string
+): Promise<{ family_id: string; plan_id: string; plan_name: string; status: string }> {
+  return apiFetchClient(`/admin/family-plan/`, {
+    method: "POST",
+    body: JSON.stringify({ family_id: familyId, plan_id: planId }),
+  });
+}
+
 export async function fetchUsers(params?: {
   search?: string;
   role?: string;
