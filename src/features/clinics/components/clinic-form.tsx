@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, type Resolver } from "react-hook-form";
+import { useForm, useWatch, type Resolver } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Search } from "lucide-react";
 import { useState } from "react";
@@ -50,7 +50,7 @@ export function ClinicForm({
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     formState: { errors },
   } = useForm<ClinicFormValues>({
     resolver: zodResolver(clinicSchema) as unknown as Resolver<ClinicFormValues>,
@@ -72,10 +72,11 @@ export function ClinicForm({
     },
   });
 
-  const cnpjValue = watch("cnpj") ?? "";
-  const statusValue = watch("status");
-  const cepValue = watch("address.zip_code") ?? "";
-  const selectedPlanId = watch("plan_id");
+  const cnpjValue = useWatch({ control, name: "cnpj" }) ?? "";
+  const statusValue = useWatch({ control, name: "status" });
+  const cepValue = useWatch({ control, name: "address.zip_code" }) ?? "";
+  const selectedPlanId = useWatch({ control, name: "plan_id" });
+  const phoneValue = useWatch({ control, name: "phone" }) ?? "";
 
   async function handleFormSubmit(values: ClinicFormValues) {
     await onSubmit(values);
@@ -125,7 +126,7 @@ export function ClinicForm({
           <Input
             id="phone"
             placeholder="(11) 99999-9999"
-            value={formatPhone(watch("phone") ?? "")}
+            value={formatPhone(phoneValue)}
             onChange={(e) => setValue("phone", e.target.value, { shouldValidate: true })}
           />
           {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}

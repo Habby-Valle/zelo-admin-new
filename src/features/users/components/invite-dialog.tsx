@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { sendInviteSchema, type SendInviteValues } from "@/lib/validations/invite";
@@ -41,7 +41,7 @@ export function InviteDialog({ open, onOpenChange, defaultRole }: InviteDialogPr
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setValue,
     reset,
     formState: { errors },
@@ -50,7 +50,8 @@ export function InviteDialog({ open, onOpenChange, defaultRole }: InviteDialogPr
     defaultValues: { email: "", role: defaultRole ?? "super_admin", clinic_id: null },
   });
 
-  const role = watch("role");
+  const role = useWatch({ control, name: "role" });
+  const clinicId = useWatch({ control, name: "clinic_id" });
 
   useEffect(() => {
     if (open) reset({ email: "", role: defaultRole ?? "super_admin", clinic_id: null });
@@ -123,7 +124,7 @@ export function InviteDialog({ open, onOpenChange, defaultRole }: InviteDialogPr
             <div className="space-y-1.5">
               <Label>Clínica vinculada</Label>
               <Select
-                value={watch("clinic_id") ?? ""}
+                value={clinicId ?? ""}
                 onValueChange={(v) =>
                   setValue("clinic_id", v || null, {
                     shouldValidate: true,
@@ -132,9 +133,8 @@ export function InviteDialog({ open, onOpenChange, defaultRole }: InviteDialogPr
               >
                 <SelectTrigger>
                   <SelectValue>
-                    {watch("clinic_id") != null
-                      ? (clinics.find((c) => c.id === watch("clinic_id"))?.name ??
-                        String(watch("clinic_id")))
+                    {clinicId != null
+                      ? (clinics.find((c) => c.id === clinicId)?.name ?? String(clinicId))
                       : "Selecionar clínica..."}
                   </SelectValue>
                 </SelectTrigger>

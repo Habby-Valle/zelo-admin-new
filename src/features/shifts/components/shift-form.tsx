@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -44,7 +44,7 @@ export function ShiftForm({ shift }: ShiftFormProps) {
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<CreateShiftInput>({
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,8 +60,8 @@ export function ShiftForm({ shift }: ShiftFormProps) {
       : { notes: "" },
   });
 
-  const watchedCaregiver = watch("caregiver_id");
-  const watchedClinic = watch("clinic_id");
+  const watchedCaregiver = useWatch({ control, name: "caregiver_id" });
+  const watchedClinic = useWatch({ control, name: "clinic_id" });
 
   const onSubmit = async (data: CreateShiftInput) => {
     const body: Record<string, unknown> = {

@@ -216,9 +216,7 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
                 {user.family_plan.start_date && (
                   <div className="flex items-center justify-between">
                     <span className="text-muted-foreground">Início</span>
-                    <span>
-                      {new Date(user.family_plan.start_date).toLocaleDateString("pt-BR")}
-                    </span>
+                    <span>{new Date(user.family_plan.start_date).toLocaleDateString("pt-BR")}</span>
                   </div>
                 )}
               </div>

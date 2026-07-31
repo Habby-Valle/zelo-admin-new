@@ -35,14 +35,20 @@ export function PlanAssignmentDialog({
   const [plans, setPlans] = useState<PlanOption[]>([]);
   const [selectedPlanId, setSelectedPlanId] = useState<string | null>(currentPlanId ?? null);
 
+  // Sincroniza a seleção com o plano atual sem setState em effect (evita cascading renders).
+  const [prevCurrentPlanId, setPrevCurrentPlanId] = useState(currentPlanId);
+  if (currentPlanId !== prevCurrentPlanId) {
+    setPrevCurrentPlanId(currentPlanId);
+    if (currentPlanId) setSelectedPlanId(currentPlanId);
+  }
+
   useEffect(() => {
     if (open) {
       getPlansApi({ scope: "family" })
         .then(setPlans)
         .catch(() => toast.error("Erro ao carregar planos"));
-      if (currentPlanId) setSelectedPlanId(currentPlanId);
     }
-  }, [open, currentPlanId]);
+  }, [open]);
 
   const handleAssign = () => {
     if (!selectedPlanId) {

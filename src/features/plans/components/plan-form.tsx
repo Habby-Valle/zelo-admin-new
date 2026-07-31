@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { planSchema, type PlanFormValues } from "@/lib/validations/plan";
@@ -23,7 +23,7 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
     register,
     handleSubmit,
     setValue,
-    watch,
+    control,
     formState: { errors },
   } = useForm<PlanFormValues>({
     resolver: zodResolver(planSchema),
@@ -38,7 +38,10 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
     },
   });
 
-  const currentBenefits = watch("benefits") ?? [];
+  const currentBenefits = useWatch({ control, name: "benefits" }) ?? [];
+  const monthlyPrice = useWatch({ control, name: "monthly_price" });
+  const yearlyPrice = useWatch({ control, name: "yearly_price" });
+  const isActive = useWatch({ control, name: "is_active" });
 
   function getBenefitValue(benefitId: string): string {
     return currentBenefits.find((b) => b.benefit_id === benefitId)?.value ?? "";
@@ -116,7 +119,7 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
                 step="0.01"
                 min="0"
                 placeholder="0,00"
-                value={watch("monthly_price") ?? ""}
+                value={monthlyPrice ?? ""}
                 onChange={(e) =>
                   setValue("monthly_price", parseFloat(e.target.value) || 0, {
                     shouldValidate: true,
@@ -135,7 +138,7 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
                 step="0.01"
                 min="0"
                 placeholder="Opcional"
-                value={watch("yearly_price") ?? ""}
+                value={yearlyPrice ?? ""}
                 onChange={(e) => {
                   const val = e.target.value;
                   setValue("yearly_price", val === "" ? null : parseFloat(val) || 0, {
@@ -147,8 +150,8 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
                 <p className="text-xs text-destructive">{errors.yearly_price.message}</p>
               )}
               <p className="text-xs text-muted-foreground">
-                12× {watch("yearly_price") ? (Number(watch("yearly_price")) / 12).toFixed(2) : "—"}{" "}
-                por mês no plano anual
+                12× {yearlyPrice ? (Number(yearlyPrice) / 12).toFixed(2) : "—"} por mês no plano
+                anual
               </p>
             </div>
           </div>
@@ -211,7 +214,7 @@ export function PlanForm({ defaultValues, benefits, onSubmit, isLoading }: PlanF
           <div className="flex items-center gap-3">
             <Switch
               id="is_active"
-              checked={watch("is_active")}
+              checked={isActive}
               onCheckedChange={(checked) => setValue("is_active", checked)}
             />
             <div>

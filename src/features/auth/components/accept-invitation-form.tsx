@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { UserPlus, Loader2, Eye, EyeOff } from "lucide-react";
@@ -52,14 +52,14 @@ export function AcceptInvitationForm() {
   const [serverError, setServerError] = useState<string | null>(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [inviteInfo, setInviteInfo] = useState<InviteInfo | null>(null);
-  const [loadingInvite, setLoadingInvite] = useState(true);
+  const [loadingInvite, setLoadingInvite] = useState(!!token);
 
   const needsProfile = inviteInfo?.role === "super_admin";
 
   const {
     register,
     handleSubmit,
-    watch,
+    control,
     setValue,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
@@ -67,11 +67,10 @@ export function AcceptInvitationForm() {
     defaultValues: { name: "", phone: "", password: "", confirmPassword: "" },
   });
 
+  const phoneValue = useWatch({ control, name: "phone" });
+
   useEffect(() => {
-    if (!token) {
-      setLoadingInvite(false);
-      return;
-    }
+    if (!token) return;
 
     fetch(`/api/proxy/invites/accept/${token}/`)
       .then((res) => {
@@ -267,7 +266,7 @@ export function AcceptInvitationForm() {
                   autoComplete="tel"
                   disabled={isSubmitting}
                   aria-invalid={!!errors.phone}
-                  value={formatPhone(watch("phone") ?? "")}
+                  value={formatPhone(phoneValue ?? "")}
                   onChange={(e) => setValue("phone", e.target.value, { shouldValidate: true })}
                 />
                 {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
