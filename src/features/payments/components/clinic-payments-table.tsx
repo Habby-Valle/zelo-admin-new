@@ -20,28 +20,32 @@ import {
 } from "@/components/ui/select";
 import { Filter, ExternalLink } from "lucide-react";
 import { formatDate, formatCurrency } from "@/lib/format";
-import type { PaymentRecord } from "@/features/payments/types";
+import type { PlanPaymentRecord } from "@/features/payments/types";
 
 const PAYMENT_STATUS_LABELS: Record<string, string> = {
   all: "Todos",
-  succeeded: "Sucesso",
-  processing: "Processando",
-  requires_action: "Ação necessária",
-  failed: "Falhou",
+  pending: "Pendente",
+  paid: "Pago",
+  overdue: "Vencido",
+  cancelled: "Cancelado",
+  refunded: "Estornado",
+  chargeback: "Chargeback",
 };
 
 const PAYMENT_STATUS_VARIANTS: Record<string, "default" | "secondary" | "destructive" | "outline"> =
   {
-    succeeded: "default",
-    processing: "secondary",
-    requires_action: "secondary",
-    failed: "destructive",
+    paid: "default",
+    pending: "secondary",
+    overdue: "destructive",
+    cancelled: "outline",
+    refunded: "secondary",
+    chargeback: "destructive",
   };
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status, label }: { status: string; label?: string }) {
   return (
     <Badge variant={PAYMENT_STATUS_VARIANTS[status] ?? "outline"}>
-      {PAYMENT_STATUS_LABELS[status] ?? status}
+      {label ?? PAYMENT_STATUS_LABELS[status] ?? status}
     </Badge>
   );
 }
@@ -66,7 +70,7 @@ function formatPaymentMethod(method: string) {
   return map[method] ?? method;
 }
 
-export function ClinicPaymentsTable({ payments }: { payments: PaymentRecord[] }) {
+export function ClinicPaymentsTable({ payments }: { payments: PlanPaymentRecord[] }) {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
@@ -98,10 +102,12 @@ export function ClinicPaymentsTable({ payments }: { payments: PaymentRecord[] })
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Todos</SelectItem>
-            <SelectItem value="succeeded">Sucesso</SelectItem>
-            <SelectItem value="processing">Processando</SelectItem>
-            <SelectItem value="requires_action">Ação necessária</SelectItem>
-            <SelectItem value="failed">Falhou</SelectItem>
+            <SelectItem value="paid">Pago</SelectItem>
+            <SelectItem value="pending">Pendente</SelectItem>
+            <SelectItem value="overdue">Vencido</SelectItem>
+            <SelectItem value="cancelled">Cancelado</SelectItem>
+            <SelectItem value="refunded">Estornado</SelectItem>
+            <SelectItem value="chargeback">Chargeback</SelectItem>
           </SelectContent>
         </Select>
       </div>
@@ -130,13 +136,17 @@ export function ClinicPaymentsTable({ payments }: { payments: PaymentRecord[] })
               filtered.map((payment) => (
                 <TableRow key={payment.id}>
                   <TableCell className="font-medium">{payment.plan_name ?? "-"}</TableCell>
-                  <TableCell className="font-medium">{formatCurrency(payment.amount)}</TableCell>
+                  <TableCell className="font-medium">{formatCurrency(Number(payment.amount))}</TableCell>
                   <TableCell>
-                    <StatusBadge status={payment.status} />
+                    <StatusBadge status={payment.status} label={payment.status_display} />
                   </TableCell>
                   <TableCell>{formatPaymentMethod(payment.payment_method)}</TableCell>
-                  <TableCell>{formatBillingCycle(payment.billing_cycle)}</TableCell>
-                  <TableCell>{formatDate(payment.paid_at) || "-"}</TableCell>
+                  <TableCell>
+                    {payment.billing_cycle ? formatBillingCycle(payment.billing_cycle) : "-"}
+                  </TableCell>
+                  <TableCell>
+                    {payment.paid_at ? formatDate(payment.paid_at) : formatDate(payment.due_date)}
+                  </TableCell>
                   <TableCell className="text-right">
                     {payment.asaas_payment_id ? (
                       <a

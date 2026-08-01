@@ -1,1 +1,1 @@
-export { fetchPlanPayments, fetchPayments, fetchPaymentStats } from "./payments.service";
+export { fetchPlanPayments } from "./payments.service";

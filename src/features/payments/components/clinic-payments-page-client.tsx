@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import { useClinicPayments, useClinicPaymentStats } from "@/features/payments/hooks";
+import { useClinicPayments } from "@/features/payments/hooks";
 import { ClinicPaymentsTable } from "./clinic-payments-table";
 import { ClinicPaymentStatsCards } from "./clinic-payment-stats-cards";
 
@@ -15,7 +15,6 @@ export function ClinicPaymentsPageClient({ clinicId }: ClinicPaymentsPageClientP
   const { data: paymentsData, isLoading: paymentsLoading } = useClinicPayments(clinicId, {
     page_size: 100,
   });
-  const { data: stats } = useClinicPaymentStats(clinicId);
 
   if (paymentsLoading) {
     return (
@@ -30,21 +29,32 @@ export function ClinicPaymentsPageClient({ clinicId }: ClinicPaymentsPageClientP
     );
   }
 
-  const clinicName =
-    paymentsData?.payments && paymentsData.payments.length > 0
-      ? paymentsData.payments[0].clinic_name
-      : "Clínica";
+  const payments = paymentsData?.payments ?? [];
+  const clinicName = payments.length > 0 ? (payments[0].clinic_name ?? "Clínica") : "Clínica";
+  const total = payments.length;
+  const succeeded = payments.filter((p) => p.status === "paid").length;
+  const failed = payments.filter(
+    (p) => p.status === "failed" || p.status === "refunded" || p.status === "chargeback"
+  ).length;
+  const pending = payments.filter(
+    (p) =>
+      p.status !== "paid" &&
+      p.status !== "failed" &&
+      p.status !== "refunded" &&
+      p.status !== "chargeback"
+  ).length;
+  const totalRevenue = paymentsData?.total_revenue ?? 0;
 
   return (
     <>
       <ClinicPaymentStatsCards
         stats={{
-          total: stats?.total ?? 0,
-          succeeded: stats?.succeeded ?? 0,
-          failed: stats?.failed ?? 0,
-          pending: stats?.pending ?? 0,
-          refunded: stats?.refunded ?? 0,
-          totalRevenue: stats?.total_revenue ?? 0,
+          total,
+          succeeded,
+          failed,
+          pending,
+          refunded: 0,
+          totalRevenue,
         }}
       />
 
@@ -58,7 +68,7 @@ export function ClinicPaymentsPageClient({ clinicId }: ClinicPaymentsPageClientP
         <h2 className="text-lg font-semibold">{clinicName}</h2>
       </div>
 
-      <ClinicPaymentsTable payments={paymentsData?.payments ?? []} />
+      <ClinicPaymentsTable payments={payments} />
     </>
   );
 }

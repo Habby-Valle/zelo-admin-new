@@ -1,7 +1,1 @@
-export {
-  usePlanPayments,
-  usePayments,
-  usePaymentStats,
-  useClinicPayments,
-  useClinicPaymentStats,
-} from "./use-payments";
+export { usePlanPayments, useClinicPayments } from "./use-payments";

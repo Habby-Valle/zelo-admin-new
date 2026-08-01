@@ -1,11 +1,12 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlanPayments, fetchPayments, fetchPaymentStats } from "@/features/payments/services";
+import { fetchPlanPayments } from "@/features/payments/services";
 
 export function usePlanPayments(params?: {
   status?: string;
   search?: string;
+  clinic_id?: string;
   page?: number;
   page_size?: number;
 }) {
@@ -16,43 +17,13 @@ export function usePlanPayments(params?: {
   });
 }
 
-export function usePayments(params?: {
-  status?: string;
-  search?: string;
-  clinic_id?: string;
-  page?: number;
-  page_size?: number;
-}) {
-  return useQuery({
-    queryKey: ["payments", params],
-    queryFn: () => fetchPayments(params),
-    staleTime: 60 * 1000,
-  });
-}
-
-export function usePaymentStats(clinicId?: string) {
-  return useQuery({
-    queryKey: ["payment-stats", clinicId],
-    queryFn: () => fetchPaymentStats(clinicId),
-    staleTime: 60 * 1000,
-  });
-}
-
 export function useClinicPayments(
   clinicId: string,
   params?: { page?: number; page_size?: number }
 ) {
   return useQuery({
     queryKey: ["payments", "clinic", clinicId, params],
-    queryFn: () => fetchPayments({ ...params, clinic_id: clinicId }),
-    staleTime: 60 * 1000,
-  });
-}
-
-export function useClinicPaymentStats(clinicId: string) {
-  return useQuery({
-    queryKey: ["payment-stats", "clinic", clinicId],
-    queryFn: () => fetchPaymentStats(clinicId),
+    queryFn: () => fetchPlanPayments({ ...params, clinic_id: clinicId }),
     staleTime: 60 * 1000,
   });
 }
