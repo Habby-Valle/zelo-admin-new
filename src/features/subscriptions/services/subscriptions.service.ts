@@ -47,8 +47,8 @@ interface DjangoSubscription {
   trial_ends_at: string | null;
   payment_failed_at: string | null;
   created_at: string;
-  asaas_subscription_id: string | null;
-  asaas_status: string | null;
+  gateway_subscription_id: string | null;
+  gateway_status: string | null;
   current_period_start: string | null;
   current_period_end: string | null;
 }
@@ -72,8 +72,8 @@ function mapSubscriptionDetails(data: DjangoSubscription): SubscriptionDetails {
     maxUsers: 0,
     maxPatients: 0,
     features: [],
-    asaasSubscriptionId: data.asaas_subscription_id ?? null,
-    asaasStatus: data.asaas_status ?? null,
+    gatewaySubscriptionId: data.gateway_subscription_id ?? null,
+    gatewayStatus: data.gateway_status ?? null,
     currentPeriodStart: data.current_period_start ?? null,
     currentPeriodEnd: data.current_period_end ?? null,
   };

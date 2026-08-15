@@ -70,7 +70,7 @@ export function PlanPaymentsTable({ payments }: PlanPaymentsTableProps) {
       const matchesSearch =
         (p.clinic_name ?? "").toLowerCase().includes(term) ||
         (p.plan_name ?? "").toLowerCase().includes(term) ||
-        p.asaas_payment_id.toLowerCase().includes(term);
+        p.gateway_payment_id.toLowerCase().includes(term);
       const matchesStatus = statusFilter === "all" || p.status === statusFilter;
       return matchesSearch && matchesStatus;
     });
