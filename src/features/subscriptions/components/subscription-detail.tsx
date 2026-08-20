@@ -11,7 +11,6 @@ import {
   Clock,
   Zap,
   History,
-  ExternalLink,
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -574,32 +573,27 @@ export function SubscriptionDetailView({ id }: SubscriptionDetailViewProps) {
         </Card>
       </div>
 
-      {/* Asaas */}
-      {subscription.asaasSubscriptionId && (
+      {/* Cobrança */}
+      {subscription.gatewaySubscriptionId && (
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <CreditCard className="h-5 w-5" />
-              Asaas
+              Cobrança
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
                 <p className="text-muted-foreground">ID da Assinatura</p>
-                <a
-                  href={`https://sandbox.asaas.com/subscriptions/${subscription.asaasSubscriptionId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 font-mono text-xs hover:text-primary"
-                >
-                  {subscription.asaasSubscriptionId}
-                  <ExternalLink className="h-3 w-3" />
-                </a>
+                {/* Sem link para o painel do gateway: a URL muda entre teste e
+                    produção, e um link quebrado é pior do que nenhum. O id é
+                    o que serve para buscar lá. */}
+                <p className="font-mono text-xs">{subscription.gatewaySubscriptionId}</p>
               </div>
               <div>
-                <p className="text-muted-foreground">Status Asaas</p>
-                <p className="font-medium capitalize">{subscription.asaasStatus ?? "—"}</p>
+                <p className="text-muted-foreground">Status no gateway</p>
+                <p className="font-medium capitalize">{subscription.gatewayStatus ?? "—"}</p>
               </div>
               <div>
                 <p className="text-muted-foreground">Início do período</p>

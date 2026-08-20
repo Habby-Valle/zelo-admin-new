@@ -12,7 +12,7 @@ export interface SubscriptionListItem {
   end_date: string | null;
   trial_ends_at: string | null;
   payment_failed_at: string | null;
-  asaas_status: string | null;
+  gateway_status: string | null;
   current_period_end: string | null;
   created_at: string;
   patient_count: number;
@@ -53,8 +53,8 @@ export interface SubscriptionDetails {
   maxUsers: number;
   maxPatients: number;
   features: string[];
-  asaasSubscriptionId: string | null;
-  asaasStatus: string | null;
+  gatewaySubscriptionId: string | null;
+  gatewayStatus: string | null;
   currentPeriodStart: string | null;
   currentPeriodEnd: string | null;
 }

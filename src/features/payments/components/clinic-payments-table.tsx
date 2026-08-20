@@ -78,7 +78,7 @@ export function ClinicPaymentsTable({ payments }: { payments: PlanPaymentRecord[
     return payments.filter((payment) => {
       const matchesSearch =
         (payment.plan_name ?? "").toLowerCase().includes(search.toLowerCase()) ||
-        payment.asaas_payment_id.toLowerCase().includes(search.toLowerCase());
+        payment.gateway_payment_id.toLowerCase().includes(search.toLowerCase());
 
       const matchesStatus = statusFilter === "all" || payment.status === statusFilter;
 
@@ -122,7 +122,7 @@ export function ClinicPaymentsTable({ payments }: { payments: PlanPaymentRecord[
               <TableHead>Método</TableHead>
               <TableHead>Ciclo</TableHead>
               <TableHead>Data</TableHead>
-              <TableHead className="text-right">ID Asaas</TableHead>
+              <TableHead className="text-right">Fatura</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -148,18 +148,22 @@ export function ClinicPaymentsTable({ payments }: { payments: PlanPaymentRecord[
                     {payment.paid_at ? formatDate(payment.paid_at) : formatDate(payment.due_date)}
                   </TableCell>
                   <TableCell className="text-right">
-                    {payment.asaas_payment_id ? (
+                    {payment.hosted_invoice_url ? (
                       <a
-                        href={`https://sandbox.asaas.com/payments/${payment.asaas_payment_id}`}
+                        href={payment.hosted_invoice_url}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center gap-1 text-muted-foreground hover:text-primary"
                       >
-                        {payment.asaas_payment_id.slice(0, 12)}...
+                        {payment.gateway_payment_id.slice(0, 12)}...
                         <ExternalLink className="h-3 w-3" />
                       </a>
                     ) : (
-                      "-"
+                      <span className="font-mono text-xs text-muted-foreground">
+                        {payment.gateway_payment_id
+                          ? `${payment.gateway_payment_id.slice(0, 12)}...`
+                          : "-"}
+                      </span>
                     )}
                   </TableCell>
                 </TableRow>

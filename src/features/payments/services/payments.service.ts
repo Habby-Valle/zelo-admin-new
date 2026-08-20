@@ -22,7 +22,7 @@ export async function fetchPlanPayments(params?: {
   const query = searchParams.toString();
   const data = await apiFetchClient<
     PaginatedResponse<PlanPaymentRecord> & { total_revenue: number }
-  >(`/asaas/plan-payments/${query ? `?${query}` : ""}`);
+  >(`/stripe/admin/plan-payments/${query ? `?${query}` : ""}`);
   return {
     payments: data.results,
     total: data.count,
