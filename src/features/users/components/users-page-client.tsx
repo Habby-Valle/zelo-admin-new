@@ -125,6 +125,7 @@ export function UsersPageClient() {
   const invitesTotalPages = Math.ceil(invitesTotal / pageSize);
 
   const users = usersQuery.data?.users ?? [];
+  const deleteTarget = users.find((u) => u.id === deleteId);
   const usersTotal = usersQuery.data?.total ?? 0;
   const usersTotalPages = Math.ceil(usersTotal / pageSize);
 
@@ -145,8 +146,14 @@ export function UsersPageClient() {
     router.push(`${pathname}?${params.toString()}`);
   }
 
+  function userRoles(user: UserProfile) {
+    return user.roles?.length ? user.roles : [user.role];
+  }
+
   function canDeleteUser(user: UserProfile) {
-    return user.role !== "super_admin" && user.email !== currentAdminEmail;
+    // Excluir qualquer perfil apaga a pessoa inteira, então basta um perfil de
+    // super admin para a linha ficar protegida.
+    return !userRoles(user).includes("super_admin") && user.email !== currentAdminEmail;
   }
 
   function toggleSelect(userId: string) {
@@ -376,7 +383,15 @@ export function UsersPageClient() {
                           </span>
                         </TableCell>
                         <TableCell className="text-muted-foreground">{user.email}</TableCell>
-                        <TableCell>{ROLE_LABELS[user.role] ?? user.role}</TableCell>
+                        <TableCell>
+                          <div className="flex flex-wrap gap-1">
+                            {userRoles(user).map((r) => (
+                              <Badge key={r} variant="outline" className="font-normal">
+                                {ROLE_LABELS[r] ?? r}
+                              </Badge>
+                            ))}
+                          </div>
+                        </TableCell>
                         <TableCell>
                           {user.is_active ? (
                             <Badge variant="secondary" className="gap-1">
@@ -709,8 +724,14 @@ export function UsersPageClient() {
             <AlertDialogTitle>Excluir usuário?</AlertDialogTitle>
             <AlertDialogDescription>
               Esta ação exclui definitivamente o usuário e todos os dados vinculados (turnos,
-              execuções, planos, vínculos). Esta ação não pode ser desfeita. Para preservar o
-              histórico, use a anonimização (LGPD) em Configurações.
+              execuções, planos, vínculos)
+              {deleteTarget && deleteTarget.profiles && deleteTarget.profiles.length > 1
+                ? `, incluindo os ${deleteTarget.profiles.length} perfis desta pessoa (${deleteTarget.profiles
+                    .map((p) => ROLE_LABELS[p.role] ?? p.role)
+                    .join(", ")})`
+                : ""}
+              . Esta ação não pode ser desfeita. Para preservar o histórico, use a anonimização
+              (LGPD) em Configurações.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

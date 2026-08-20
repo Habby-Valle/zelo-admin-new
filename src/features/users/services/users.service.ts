@@ -1,5 +1,5 @@
 import { apiFetchClient } from "@/lib/api-client";
-import type { BulkDeleteResult, UserProfile } from "@/features/users/types";
+import type { BulkDeleteResult, ProfileRef, UserProfile } from "@/features/users/types";
 
 interface ApiProfile {
   id: string;
@@ -29,6 +29,8 @@ interface ApiProfile {
     max_caregivers: number;
   } | null;
   created_at: string;
+  roles?: string[];
+  profiles?: ProfileRef[];
 }
 
 interface ApiUsersResponse {
@@ -66,6 +68,8 @@ function mapProfile(api: ApiProfile): UserProfile {
     gender: api.gender,
     family_plan: api.family_plan,
     created_at: api.created_at,
+    roles: api.roles,
+    profiles: api.profiles,
   };
 }
 
@@ -129,6 +133,9 @@ export async function fetchUsers(params?: {
   pageSize?: number;
 }): Promise<{ users: UserProfile[]; total: number }> {
   const searchParams = new URLSearchParams();
+  // Uma linha por pessoa: quem tem mais de um perfil (ex.: familiar que também
+  // é cuidador) aparecia duplicado, já que a API lista perfis.
+  searchParams.set("group_by_user", "true");
   if (params?.search) searchParams.set("search", params.search);
   if (params?.role) searchParams.set("role", params.role);
   if (params?.isActive) searchParams.set("is_active", params.isActive);

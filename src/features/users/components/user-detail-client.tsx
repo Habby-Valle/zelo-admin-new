@@ -40,6 +40,7 @@ import { PlanAssignmentDialog } from "@/features/users/components/plan-assignmen
 const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
   clinic_admin: "Admin de Clínica",
+  clinic_nurse: "Enfermeiro(a)",
   caregiver: "Cuidador",
   family: "Familiar",
 };
@@ -162,6 +163,28 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
           )}
         </div>
       </div>
+
+      {/* Seletor de perfis — a mesma pessoa pode ter mais de um papel */}
+      {user.profiles && user.profiles.length > 1 && (
+        <Card>
+          <CardContent className="flex flex-wrap items-center gap-2 py-4">
+            <span className="text-sm text-muted-foreground">
+              Esta pessoa tem {user.profiles.length} perfis:
+            </span>
+            {user.profiles.map((p) => (
+              <Button
+                key={p.id}
+                variant={p.id === user.id ? "default" : "outline"}
+                size="sm"
+                disabled={p.id === user.id}
+                onClick={() => router.push(`/users/${p.id}`)}
+              >
+                {ROLE_LABELS[p.role] ?? p.role}
+              </Button>
+            ))}
+          </CardContent>
+        </Card>
+      )}
 
       {/* Info card */}
       <Card>
