@@ -9,6 +9,7 @@ export {
   useUpdateClinic,
   useDeactivateClinic,
   useDeleteClinic,
+  useClinicDeletionImpact,
   useClinicSubscription,
 } from "./hooks";
 export {
@@ -17,7 +18,14 @@ export {
   createClinicApi,
   updateClinicApi,
   deleteClinicApi,
+  getClinicDeletionImpactApi,
   getPlansApi,
 } from "./services/clinics.service";
 export { getClinicSubscriptionApi } from "./services/subscription.service";
-export type { Clinic, ClinicStatus, SubscriptionInfo, PlanOption } from "./types";
+export type {
+  Clinic,
+  ClinicDeletionImpact,
+  ClinicStatus,
+  SubscriptionInfo,
+  PlanOption,
+} from "./types";

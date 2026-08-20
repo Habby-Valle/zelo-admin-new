@@ -64,3 +64,9 @@ export async function cancelInviteFetch(id: string): Promise<Invite> {
   });
   return mapInvite(result);
 }
+
+export async function deleteInviteFetch(id: string): Promise<void> {
+  await apiFetchClient<void>(`/invites/${id}/`, {
+    method: "DELETE",
+  });
+}

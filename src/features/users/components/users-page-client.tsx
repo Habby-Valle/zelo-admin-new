@@ -56,6 +56,7 @@ import { InviteDialog } from "./invite-dialog";
 import {
   useInvites,
   useCancelInvite,
+  useDeleteInvite,
   useDeleteUser,
   useBulkDeleteUsers,
 } from "@/features/users/hooks";
@@ -100,9 +101,11 @@ export function UsersPageClient() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cancelId, setCancelId] = useState<string | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [deleteInviteId, setDeleteInviteId] = useState<string | null>(null);
   const [bulkOpen, setBulkOpen] = useState(false);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const cancelInvite = useCancelInvite();
+  const deleteInvite = useDeleteInvite();
   const deleteUser = useDeleteUser();
   const bulkDeleteUsers = useBulkDeleteUsers();
 
@@ -180,6 +183,20 @@ export function UsersPageClient() {
       onError: (err) => {
         toast.error(err.message ?? "Erro ao excluir usuário");
         setDeleteId(null);
+      },
+    });
+  }
+
+  function handleDeleteInvite() {
+    if (!deleteInviteId) return;
+    deleteInvite.mutate(deleteInviteId, {
+      onSuccess: () => {
+        toast.success("Convite excluído");
+        setDeleteInviteId(null);
+      },
+      onError: (err) => {
+        toast.error(err.message ?? "Erro ao excluir convite");
+        setDeleteInviteId(null);
       },
     });
   }
@@ -575,12 +592,12 @@ export function UsersPageClient() {
                           </div>
                         </TableCell>
                         <TableCell>
-                          {invite.status === "pending" && (
-                            <DropdownMenu>
-                              <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-muted hover:text-foreground">
-                                <MoreHorizontal className="h-4 w-4" />
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-muted hover:text-foreground">
+                              <MoreHorizontal className="h-4 w-4" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              {invite.status === "pending" && (
                                 <DropdownMenuItem
                                   onClick={() => setCancelId(invite.id)}
                                   className="text-destructive focus:text-destructive"
@@ -588,9 +605,16 @@ export function UsersPageClient() {
                                   <XCircle className="mr-2 h-4 w-4" />
                                   Cancelar convite
                                 </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          )}
+                              )}
+                              <DropdownMenuItem
+                                onClick={() => setDeleteInviteId(invite.id)}
+                                className="text-destructive focus:text-destructive"
+                              >
+                                <Trash2 className="mr-2 h-4 w-4" />
+                                Excluir convite
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
                         </TableCell>
                       </TableRow>
                     ))
@@ -652,6 +676,28 @@ export function UsersPageClient() {
               className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
             >
               {cancelInvite.isPending ? "Cancelando..." : "Cancelar convite"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={!!deleteInviteId} onOpenChange={() => setDeleteInviteId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir convite?</AlertDialogTitle>
+            <AlertDialogDescription>
+              O convite some da listagem de vez, sem deixar registro de cancelamento. Quem já
+              aceitou continua com a conta e os vínculos criados — só o convite é apagado.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Voltar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleteInvite.isPending}
+              onClick={handleDeleteInvite}
+              className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
+            >
+              {deleteInvite.isPending ? "Excluindo..." : "Excluir convite"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

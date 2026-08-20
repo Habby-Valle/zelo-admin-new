@@ -2,7 +2,12 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { inviteKeys } from "@/lib/query-keys";
-import { fetchInvites, createInviteFetch, cancelInviteFetch } from "@/features/users/services";
+import {
+  fetchInvites,
+  createInviteFetch,
+  cancelInviteFetch,
+  deleteInviteFetch,
+} from "@/features/users/services";
 
 export function useInvites(params?: {
   search?: string;
@@ -34,6 +39,21 @@ export function useCancelInvite() {
 
   return useMutation({
     mutationFn: (id: string) => cancelInviteFetch(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: inviteKeys.lists() });
+    },
+  });
+}
+
+/**
+ * Apaga o convite de vez. Diferente de cancelar, que mantém a linha com
+ * status `cancelled` para dar rastro na listagem.
+ */
+export function useDeleteInvite() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (id: string) => deleteInviteFetch(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: inviteKeys.lists() });
     },

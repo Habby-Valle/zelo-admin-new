@@ -6,4 +6,9 @@ export {
   deleteUserApi,
   bulkDeleteUsersApi,
 } from "./users.service";
-export { fetchInvites, createInviteFetch, cancelInviteFetch } from "./invites.service";
+export {
+  fetchInvites,
+  createInviteFetch,
+  cancelInviteFetch,
+  deleteInviteFetch,
+} from "./invites.service";
