@@ -72,3 +72,15 @@ export interface Invite {
   created_at: string;
   expires_at: string;
 }
+
+export type BulkDeleteReason = "super_admin" | "self" | "has_linked_data" | "not_found";
+
+export interface BulkDeleteSkipped {
+  id: string;
+  reason: BulkDeleteReason;
+}
+
+export interface BulkDeleteResult {
+  deleted: string[];
+  skipped: BulkDeleteSkipped[];
+}

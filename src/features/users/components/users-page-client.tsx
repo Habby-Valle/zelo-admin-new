@@ -11,6 +11,7 @@ import {
   Users,
   CheckCircle2,
   XOctagon,
+  Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -49,10 +50,25 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
 import { InviteDialog } from "./invite-dialog";
-import { useInvites, useCancelInvite } from "@/features/users/hooks";
+import {
+  useInvites,
+  useCancelInvite,
+  useDeleteUser,
+  useBulkDeleteUsers,
+} from "@/features/users/hooks";
 import { useUsers } from "@/features/users/hooks";
-import type { InviteStatus } from "@/features/users/types";
+import { useAuthStore } from "@/store/authStore";
+import type { InviteStatus, UserProfile } from "@/features/users/types";
+
+const BULK_SKIP_LABELS: Record<string, string> = {
+  super_admin: "Super Admin (protegido)",
+  self: "usuário logado (protegido)",
+  has_linked_data: "possui dados vinculados (contrato/fatura)",
+  not_found: "não encontrado",
+};
 
 const ROLE_LABELS: Record<string, string> = {
   super_admin: "Super Admin",
@@ -80,9 +96,15 @@ export function UsersPageClient() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const currentAdminEmail = useAuthStore((s) => s.user?.email);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [cancelId, setCancelId] = useState<string | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [bulkOpen, setBulkOpen] = useState(false);
+  const [selected, setSelected] = useState<Set<string>>(new Set());
   const cancelInvite = useCancelInvite();
+  const deleteUser = useDeleteUser();
+  const bulkDeleteUsers = useBulkDeleteUsers();
 
   const tab = searchParams.get("tab") ?? "users";
   const search = searchParams.get("search") ?? "";
@@ -109,13 +131,85 @@ export function UsersPageClient() {
       if (v) current.set(k, v);
       else current.delete(k);
     }
+    setSelected(new Set());
     router.push(`${pathname}?${current.toString()}`);
   }
 
   function onTabChange(value: string) {
     const params = new URLSearchParams();
     params.set("tab", value);
+    setSelected(new Set());
     router.push(`${pathname}?${params.toString()}`);
+  }
+
+  function canDeleteUser(user: UserProfile) {
+    return user.role !== "super_admin" && user.email !== currentAdminEmail;
+  }
+
+  function toggleSelect(userId: string) {
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(userId)) next.delete(userId);
+      else next.add(userId);
+      return next;
+    });
+  }
+
+  function toggleSelectAll() {
+    const deletable = users.filter(canDeleteUser).map((u) => u.id);
+    const allSelected = deletable.every((id) => selected.has(id)) && deletable.length > 0;
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allSelected) deletable.forEach((id) => next.delete(id));
+      else deletable.forEach((id) => next.add(id));
+      return next;
+    });
+  }
+
+  function openBulkDelete() {
+    if (selected.size > 0) setBulkOpen(true);
+  }
+
+  function handleDelete() {
+    if (!deleteId) return;
+    deleteUser.mutate(deleteId, {
+      onSuccess: () => {
+        toast.success("Usuário excluído");
+        setDeleteId(null);
+      },
+      onError: (err) => {
+        toast.error(err.message ?? "Erro ao excluir usuário");
+        setDeleteId(null);
+      },
+    });
+  }
+
+  function handleBulkDelete() {
+    const ids = Array.from(selected);
+    bulkDeleteUsers.mutate(ids, {
+      onSuccess: (result) => {
+        const deleted = result.deleted.length;
+        const skipped = result.skipped.length;
+        if (skipped > 0) {
+          const details = result.skipped
+            .slice(0, 3)
+            .map((s) => BULK_SKIP_LABELS[s.reason] ?? s.reason)
+            .join("; ");
+          toast.warning(
+            `${deleted} excluído(s). ${skipped} ignorado(s): ${details}${
+              skipped > 3 ? "…" : ""
+            }. Super Admins não podem ser excluídos.`
+          );
+        } else if (deleted > 0) {
+          toast.success(`${deleted} usuário(s) excluído(s)`);
+        }
+        setSelected(new Set());
+        setBulkOpen(false);
+      },
+      onError: (err) => {
+        toast.error(err.message ?? "Erro ao excluir usuários");
+      },
+    });
   }
 
   return (
@@ -147,7 +241,7 @@ export function UsersPageClient() {
 
         {/* ── Usuários tab ─────────────────────────────────────────────── */}
         <TabsContent value="users" className="mt-4 space-y-4">
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <Input
               placeholder="Buscar por nome ou email..."
               value={search}
@@ -175,6 +269,17 @@ export function UsersPageClient() {
                 <SelectItem value="family">Familiar</SelectItem>
               </SelectContent>
             </Select>
+            {selected.size > 0 && (
+              <Button
+                variant="destructive"
+                size="sm"
+                onClick={openBulkDelete}
+                disabled={bulkDeleteUsers.isPending}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                Deletar selecionados ({selected.size})
+              </Button>
+            )}
           </div>
 
           <Card>
@@ -182,18 +287,32 @@ export function UsersPageClient() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead className="w-[50px]">
+                      <Checkbox
+                        aria-label="Selecionar todos"
+                        checked={
+                          users.filter(canDeleteUser).length > 0 &&
+                          users.filter(canDeleteUser).every((u) => selected.has(u.id))
+                        }
+                        onCheckedChange={toggleSelectAll}
+                      />
+                    </TableHead>
                     <TableHead>Nome</TableHead>
                     <TableHead>Email</TableHead>
                     <TableHead>Perfil</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Verificação</TableHead>
                     <TableHead>Criado em</TableHead>
+                    <TableHead className="w-[60px]"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {usersQuery.isLoading ? (
                     Array.from({ length: 6 }).map((_, i) => (
                       <TableRow key={i}>
+                        <TableCell>
+                          <Skeleton className="h-4 w-4" />
+                        </TableCell>
                         <TableCell>
                           <Skeleton className="h-4 w-36" />
                         </TableCell>
@@ -213,7 +332,7 @@ export function UsersPageClient() {
                     ))
                   ) : users.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={6} className="h-32 text-center">
+                      <TableCell colSpan={8} className="h-32 text-center">
                         <div className="flex flex-col items-center gap-2 text-muted-foreground">
                           <Users className="h-8 w-8" />
                           <p>Nenhum usuário encontrado</p>
@@ -223,6 +342,14 @@ export function UsersPageClient() {
                   ) : (
                     users.map((user) => (
                       <TableRow key={user.id}>
+                        <TableCell>
+                          <Checkbox
+                            aria-label={`Selecionar ${user.name}`}
+                            checked={selected.has(user.id)}
+                            onCheckedChange={() => toggleSelect(user.id)}
+                            disabled={!canDeleteUser(user)}
+                          />
+                        </TableCell>
                         <TableCell className="font-medium">
                           <span
                             className="cursor-pointer hover:underline"
@@ -269,6 +396,24 @@ export function UsersPageClient() {
                         </TableCell>
                         <TableCell className="text-sm text-muted-foreground">
                           {new Date(user.created_at).toLocaleDateString("pt-BR")}
+                        </TableCell>
+                        <TableCell>
+                          {canDeleteUser(user) && (
+                            <DropdownMenu>
+                              <DropdownMenuTrigger className="inline-flex size-8 items-center justify-center rounded-lg transition-colors hover:bg-muted hover:text-foreground">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent align="end">
+                                <DropdownMenuItem
+                                  onClick={() => setDeleteId(user.id)}
+                                  className="text-destructive focus:text-destructive"
+                                >
+                                  <Trash2 className="mr-2 h-4 w-4" />
+                                  Deletar
+                                </DropdownMenuItem>
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          )}
                         </TableCell>
                       </TableRow>
                     ))
@@ -507,6 +652,53 @@ export function UsersPageClient() {
               className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
             >
               {cancelInvite.isPending ? "Cancelando..." : "Cancelar convite"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={!!deleteId} onOpenChange={() => setDeleteId(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir usuário?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação exclui definitivamente o usuário e todos os dados vinculados (turnos,
+              execuções, planos, vínculos). Esta ação não pode ser desfeita. Para preservar o
+              histórico, use a anonimização (LGPD) em Configurações.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Voltar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleteUser.isPending}
+              onClick={handleDelete}
+              className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
+            >
+              {deleteUser.isPending ? "Excluindo..." : "Excluir definitivamente"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={bulkOpen} onOpenChange={setBulkOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir {selected.size} usuário(s)?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação exclui definitivamente os usuários selecionados e todos os dados vinculados.
+              Esta ação não pode ser desfeita. Super Admins e o usuário logado são ignorados.
+              Usuários com contratos/faturas vinculados também serão ignorados — use a anonimização
+              (LGPD) para esses casos.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Voltar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={bulkDeleteUsers.isPending}
+              onClick={handleBulkDelete}
+              className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
+            >
+              {bulkDeleteUsers.isPending ? "Excluindo..." : "Excluir definitivamente"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

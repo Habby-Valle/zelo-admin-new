@@ -1,5 +1,5 @@
 import { apiFetchClient } from "@/lib/api-client";
-import type { UserProfile } from "@/features/users/types";
+import type { BulkDeleteResult, UserProfile } from "@/features/users/types";
 
 interface ApiProfile {
   id: string;
@@ -72,6 +72,17 @@ function mapProfile(api: ApiProfile): UserProfile {
 export async function fetchUser(id: string): Promise<UserProfile> {
   const data = await apiFetchClient<ApiProfile>(`/users/${id}/`);
   return mapProfile(data);
+}
+
+export async function deleteUserApi(id: string): Promise<void> {
+  await apiFetchClient<void>(`/users/${id}/`, { method: "DELETE" });
+}
+
+export async function bulkDeleteUsersApi(ids: string[]): Promise<BulkDeleteResult> {
+  return apiFetchClient<BulkDeleteResult>(`/users/bulk-delete/`, {
+    method: "POST",
+    body: JSON.stringify({ user_ids: ids }),
+  });
 }
 
 export async function updateUserApi(

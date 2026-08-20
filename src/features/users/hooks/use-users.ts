@@ -7,6 +7,8 @@ import {
   fetchUsers,
   updateUserApi,
   assignFamilyPlanApi,
+  deleteUserApi,
+  bulkDeleteUsersApi,
 } from "@/features/users/services";
 
 export function useUser(id: string) {
@@ -48,6 +50,28 @@ export function useAssignFamilyPlan() {
   return useMutation({
     mutationFn: ({ familyId, planId }: { familyId: string; planId: string }) =>
       assignFamilyPlanApi(familyId, planId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: userKeys.details() });
+    },
+  });
+}
+
+export function useDeleteUser() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => deleteUserApi(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: userKeys.lists() });
+      queryClient.invalidateQueries({ queryKey: userKeys.details() });
+    },
+  });
+}
+
+export function useBulkDeleteUsers() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (ids: string[]) => bulkDeleteUsersApi(ids),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: userKeys.lists() });
       queryClient.invalidateQueries({ queryKey: userKeys.details() });

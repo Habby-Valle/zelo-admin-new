@@ -13,13 +13,27 @@ import {
   Shield,
   Pencil,
   CreditCard,
+  Trash2,
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useUser } from "@/features/users/hooks";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
+import { useUser, useDeleteUser } from "@/features/users/hooks";
+import type { UserProfile } from "@/features/users/types";
+import { useAuthStore } from "@/store/authStore";
 import { UserEditDialog } from "@/features/users/components/user-edit-dialog";
 import { PlanAssignmentDialog } from "@/features/users/components/plan-assignment-dialog";
 
@@ -36,9 +50,12 @@ interface UserDetailClientProps {
 
 export default function UserDetailClient({ id }: UserDetailClientProps) {
   const router = useRouter();
+  const currentAdminEmail = useAuthStore((s) => s.user?.email);
   const { data: user, isLoading, isError } = useUser(id);
+  const deleteUser = useDeleteUser();
   const [editOpen, setEditOpen] = useState(false);
   const [planOpen, setPlanOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -57,6 +74,23 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
 
   if (isError || !user) {
     notFound();
+  }
+
+  function canDeleteUser(target: UserProfile) {
+    return target.role !== "super_admin" && target.email !== currentAdminEmail;
+  }
+
+  function handleDelete() {
+    if (!user) return;
+    deleteUser.mutate(user.id, {
+      onSuccess: () => {
+        toast.success("Usuário excluído");
+        router.push("/users?tab=users");
+      },
+      onError: (err) => {
+        toast.error(err.message ?? "Erro ao excluir usuário");
+      },
+    });
   }
 
   return (
@@ -112,9 +146,21 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
             )}
           </div>
         </div>
-        <Button variant="outline" size="icon" onClick={() => setEditOpen(true)}>
-          <Pencil className="h-4 w-4" />
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon" onClick={() => setEditOpen(true)}>
+            <Pencil className="h-4 w-4" />
+          </Button>
+          {canDeleteUser(user) && (
+            <Button
+              variant="outline"
+              size="icon"
+              className="text-destructive hover:text-destructive"
+              onClick={() => setDeleteOpen(true)}
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Info card */}
@@ -243,6 +289,29 @@ export default function UserDetailClient({ id }: UserDetailClientProps) {
           currentPlanId={user.family_plan?.plan_id}
         />
       )}
+
+      <AlertDialog open={deleteOpen} onOpenChange={setDeleteOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Excluir usuário?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Esta ação exclui definitivamente {user.name} e todos os dados vinculados (turnos,
+              execuções, planos, vínculos). Esta ação não pode ser desfeita. Para preservar o
+              histórico, use a anonimização (LGPD) em Configurações.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Voltar</AlertDialogCancel>
+            <AlertDialogAction
+              disabled={deleteUser.isPending}
+              onClick={handleDelete}
+              className="text-destructive-foreground bg-destructive hover:bg-destructive/90"
+            >
+              {deleteUser.isPending ? "Excluindo..." : "Excluir definitivamente"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
