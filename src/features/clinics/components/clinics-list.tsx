@@ -9,6 +9,7 @@ import {
   Pencil,
   PowerOff,
   Trash2,
+  Flame,
   LogIn,
   Building2,
   ChevronLeft,
@@ -19,6 +20,7 @@ import {
 import { useClinics, useDeactivateClinic, useDeleteClinic } from "@/features/clinics/hooks";
 import type { Clinic, ClinicStatus } from "@/features/clinics/types";
 import { ClinicDialog } from "./clinic-dialog";
+import { ClinicHardDeleteDialog } from "./clinic-hard-delete-dialog";
 import { InviteDialog } from "@/features/users/components/invite-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -89,6 +91,7 @@ export function ClinicsList() {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [deactivateTarget, setDeactivateTarget] = useState<Clinic | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<Clinic | null>(null);
+  const [hardDeleteTarget, setHardDeleteTarget] = useState<Clinic | null>(null);
 
   const openEdit = (clinic: Clinic) => {
     setEditClinic(clinic);
@@ -111,16 +114,19 @@ export function ClinicsList() {
 
   const handleDelete = useCallback(() => {
     if (!deleteTarget) return;
-    deleteMutation.mutate(deleteTarget.id, {
-      onSuccess: () => {
-        toast.success(`Clínica "${deleteTarget.name}" excluída.`);
-        setDeleteTarget(null);
-      },
-      onError: (err) => {
-        toast.error(err.message ?? "Erro ao excluir");
-        setDeleteTarget(null);
-      },
-    });
+    deleteMutation.mutate(
+      { id: deleteTarget.id },
+      {
+        onSuccess: () => {
+          toast.success(`Clínica "${deleteTarget.name}" excluída.`);
+          setDeleteTarget(null);
+        },
+        onError: (err) => {
+          toast.error(err.message ?? "Erro ao excluir");
+          setDeleteTarget(null);
+        },
+      }
+    );
   }, [deleteTarget, deleteMutation]);
 
   if (error) {
@@ -300,6 +306,13 @@ export function ClinicsList() {
                             <Trash2 className="mr-2 h-4 w-4" />
                             Excluir
                           </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="text-destructive focus:text-destructive"
+                            onClick={() => setHardDeleteTarget(clinic)}
+                          >
+                            <Flame className="mr-2 h-4 w-4" />
+                            Excluir permanentemente
+                          </DropdownMenuItem>
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </TableCell>
@@ -394,6 +407,13 @@ export function ClinicsList() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      {/* Confirm excluir permanentemente */}
+      <ClinicHardDeleteDialog
+        key={hardDeleteTarget?.id}
+        clinic={hardDeleteTarget}
+        onOpenChange={(open) => !open && setHardDeleteTarget(null)}
+      />
     </div>
   );
 }

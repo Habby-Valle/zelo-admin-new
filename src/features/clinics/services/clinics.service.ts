@@ -1,6 +1,11 @@
 import { apiFetchClient } from "@/lib/api-client";
 import type { PaginatedResponse, Address } from "@/types";
-import type { Clinic, ClinicStatus, PlanOption } from "@/features/clinics/types";
+import type {
+  Clinic,
+  ClinicDeletionImpact,
+  ClinicStatus,
+  PlanOption,
+} from "@/features/clinics/types";
 
 interface ApiAddress {
   zip_code: string;
@@ -152,10 +157,18 @@ export async function updateClinicApi(
   return mapClinic(result);
 }
 
-export async function deleteClinicApi(id: string): Promise<void> {
-  await apiFetchClient<void>(`/clinics/${id}/`, {
+export async function deleteClinicApi(
+  id: string,
+  options?: { permanent?: boolean }
+): Promise<ClinicDeletionImpact | void> {
+  const query = options?.permanent ? "?permanent=true" : "";
+  return apiFetchClient<ClinicDeletionImpact | void>(`/clinics/${id}/${query}`, {
     method: "DELETE",
   });
+}
+
+export async function getClinicDeletionImpactApi(id: string): Promise<ClinicDeletionImpact> {
+  return apiFetchClient<ClinicDeletionImpact>(`/clinics/${id}/deletion-impact/`);
 }
 
 export async function getPlansApi(params?: { scope?: string }): Promise<PlanOption[]> {

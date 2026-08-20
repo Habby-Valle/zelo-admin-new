@@ -6,4 +6,4 @@ export {
   useDeleteUser,
   useBulkDeleteUsers,
 } from "./use-users";
-export { useInvites, useSendInvite, useCancelInvite } from "./use-invites";
+export { useInvites, useSendInvite, useCancelInvite, useDeleteInvite } from "./use-invites";

@@ -50,3 +50,29 @@ export interface PlanOption {
   yearly_price: string | null;
   benefits: { benefit_key: string; benefit_label: string; value: string }[];
 }
+
+/**
+ * O que a exclusão permanente de uma clínica leva junto.
+ *
+ * `deleted` some do banco; `unlinked` continua existindo, apenas perde o
+ * vínculo com a clínica (cuidadores e familiares não são apagados).
+ */
+export interface ClinicDeletionImpact {
+  deleted: {
+    patients: number;
+    shifts: number;
+    care_plans: number;
+    checklists: number;
+    invites: number;
+    sos_alerts: number;
+    service_contracts: number;
+    service_invoices: number;
+    clinic_admins: number;
+    nurses: number;
+    users: number;
+  };
+  unlinked: {
+    caregivers: number;
+    family_members: number;
+  };
+}
