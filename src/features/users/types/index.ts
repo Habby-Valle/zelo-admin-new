@@ -32,6 +32,12 @@ export interface User {
   last_sign_in_at?: string;
 }
 
+export interface ProfileRef {
+  id: string;
+  role: string;
+  name: string;
+}
+
 export interface UserProfile {
   id: string;
   email: string;
@@ -60,6 +66,10 @@ export interface UserProfile {
     max_caregivers: number;
   } | null;
   created_at: string;
+  /** Papéis de todos os perfis da mesma pessoa (listagem agrupada). */
+  roles?: string[];
+  /** Perfis da mesma pessoa — o item desta linha é sempre um deles. */
+  profiles?: ProfileRef[];
 }
 
 export interface Invite {
