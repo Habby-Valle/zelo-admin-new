@@ -7,7 +7,7 @@ import { Eye, EyeOff, ShieldCheck, Loader2 } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
 
-import { useLogin } from "@/features/auth/hooks";
+import { useLogin, isMfaChallengeResult } from "@/features/auth/hooks";
 import { useAuthStore } from "@/store/authStore";
 import { loginSchema, type LoginSchema } from "@/lib/validations/auth";
 import { Button } from "@/components/ui/button";
@@ -44,8 +44,14 @@ export function LoginForm({
     login.mutate(
       { email: data.email, password: data.password },
       {
-        onSuccess: ({ user }) => {
-          setUser(user);
+        onSuccess: (result) => {
+          // Com 2FA, a senha não abre sessão nenhuma: o próximo passo é o
+          // código (ou o cadastro do app autenticador, no primeiro acesso).
+          if (isMfaChallengeResult(result)) {
+            router.push(result.mfa_setup_required ? "/mfa-setup" : "/mfa");
+            return;
+          }
+          setUser(result.user);
           router.push(redirectTo);
           router.refresh();
         },

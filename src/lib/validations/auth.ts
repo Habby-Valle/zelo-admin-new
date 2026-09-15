@@ -60,3 +60,30 @@ export const acceptInvitationWithProfileSchema = z
   });
 
 export type AcceptInvitationWithProfileSchema = z.infer<typeof acceptInvitationWithProfileSchema>;
+
+/** Código de 6 dígitos do app autenticador. */
+export const mfaCodeSchema = z.object({
+  code: z
+    .string()
+    .min(1, "Código obrigatório")
+    .length(6, "Código deve ter 6 dígitos")
+    .regex(/^\d{6}$/, "Código deve conter apenas números"),
+});
+
+export type MfaCodeSchema = z.infer<typeof mfaCodeSchema>;
+
+/**
+ * Na tela de login, o mesmo campo aceita o código do app (6 dígitos) ou um
+ * código de recuperação (10 caracteres, com ou sem hífen).
+ */
+export const mfaChallengeSchema = z.object({
+  code: z
+    .string()
+    .min(1, "Código obrigatório")
+    .refine((value) => {
+      const clean = value.trim().replace(/-/g, "").toUpperCase();
+      return /^\d{6}$/.test(clean) || /^[A-Z0-9]{10}$/.test(clean);
+    }, "Informe o código de 6 dígitos do app ou um código de recuperação"),
+});
+
+export type MfaChallengeSchema = z.infer<typeof mfaChallengeSchema>;

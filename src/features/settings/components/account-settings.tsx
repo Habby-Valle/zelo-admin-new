@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useChangePassword } from "@/features/settings/hooks";
+import { MfaSettings } from "./mfa-settings";
 
 const passwordSchema = z
   .object({
@@ -61,6 +62,8 @@ export function AccountSettings() {
 
   return (
     <div className="space-y-6">
+      <MfaSettings />
+
       <Card className="max-w-lg">
         <CardHeader>
           <CardTitle>Alterar Senha</CardTitle>

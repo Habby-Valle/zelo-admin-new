@@ -11,12 +11,16 @@ import {
   exportPatientDataFetch,
   anonymizeUserFetch,
   anonymizePatientFetch,
+  fetchMfaStatus,
+  disableMfaFetch,
+  regenerateRecoveryCodesFetch,
 } from "@/features/settings/services";
 
 export const settingsKeys = {
   all: ["settings"] as const,
   system: () => [...settingsKeys.all, "system"] as const,
   lgpd: () => [...settingsKeys.all, "lgpd"] as const,
+  mfa: () => [...settingsKeys.all, "mfa"] as const,
 };
 
 export function useSystemSettings() {
@@ -89,5 +93,30 @@ export function useAnonymizeUser() {
 export function useAnonymizePatient() {
   return useMutation({
     mutationFn: (patientId: string) => anonymizePatientFetch(patientId),
+  });
+}
+
+export function useMfaStatus() {
+  return useQuery({
+    queryKey: settingsKeys.mfa(),
+    queryFn: fetchMfaStatus,
+  });
+}
+
+export function useDisableMfa() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ password, code }: { password: string; code: string }) =>
+      disableMfaFetch(password, code),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: settingsKeys.mfa() });
+    },
+  });
+}
+
+export function useRegenerateRecoveryCodes() {
+  return useMutation({
+    mutationFn: ({ password, code }: { password: string; code: string }) =>
+      regenerateRecoveryCodesFetch(password, code),
   });
 }

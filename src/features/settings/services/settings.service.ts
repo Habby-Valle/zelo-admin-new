@@ -261,3 +261,32 @@ export async function anonymizePatientFetch(
     return { success: false, error: err instanceof Error ? err.message : "Erro ao anonimizar" };
   }
 }
+
+export interface MfaStatus {
+  enabled: boolean;
+  /** Papéis como super_admin não podem desativar. */
+  required: boolean;
+}
+
+export async function fetchMfaStatus(): Promise<MfaStatus> {
+  const data = await apiFetchClient<{ mfa_enabled: boolean; mfa_required: boolean }>("/auth/me/");
+  return { enabled: data.mfa_enabled, required: data.mfa_required };
+}
+
+export async function disableMfaFetch(password: string, code: string): Promise<void> {
+  await apiFetchClient<{ success: boolean }>("/auth/mfa/disable/", {
+    method: "POST",
+    body: JSON.stringify({ password, code }),
+  });
+}
+
+export async function regenerateRecoveryCodesFetch(
+  password: string,
+  code: string
+): Promise<string[]> {
+  const data = await apiFetchClient<{ recovery_codes: string[] }>("/auth/mfa/recovery-codes/", {
+    method: "POST",
+    body: JSON.stringify({ password, code }),
+  });
+  return data.recovery_codes;
+}
