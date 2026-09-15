@@ -8,4 +8,7 @@ export {
   useExportPatientData,
   useAnonymizeUser,
   useAnonymizePatient,
+  useMfaStatus,
+  useDisableMfa,
+  useRegenerateRecoveryCodes,
 } from "./use-settings";
