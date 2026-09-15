@@ -8,7 +8,7 @@ interface LoginVariables {
   password: string;
 }
 
-interface LoginResult {
+interface LoginSession {
   role: "super_admin";
   user: {
     id: string;
@@ -17,6 +17,18 @@ interface LoginResult {
     role: "super_admin";
     clinic_id: string | null;
   };
+}
+
+/** Senha aceita, mas a sessão só nasce depois do segundo fator. */
+interface LoginMfaChallenge {
+  mfa_required: true;
+  mfa_setup_required: boolean;
+}
+
+export type LoginResult = LoginSession | LoginMfaChallenge;
+
+export function isMfaChallengeResult(result: LoginResult): result is LoginMfaChallenge {
+  return "mfa_required" in result;
 }
 
 async function loginRequest(variables: LoginVariables): Promise<LoginResult> {

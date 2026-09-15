@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { loginApi } from "@/features/auth";
+import { isMfaChallenge, loginApi, toPanelSession } from "@/features/auth";
 import { ApiError } from "@/lib/api";
-import { decodeJwt } from "@/lib/jwt";
+import { setMfaCookie, setSessionCookies } from "@/lib/session-cookies";
 
 export async function POST(request: NextRequest) {
   const body = await request.json().catch(() => null);
@@ -21,45 +21,25 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Ocorreu um erro. Tente novamente." }, { status: 500 });
   }
 
-  const role = data.user.profile?.role;
-  if (role !== "super_admin") {
+  // Segundo fator pendente: nenhum cookie de sessão é gravado aqui. O bilhete
+  // vai num cookie httpOnly de 5 minutos, fora do alcance do JavaScript da
+  // página, e a checagem de papel fica para depois do código — nesta etapa a
+  // API ainda não diz quem é o usuário.
+  if (isMfaChallenge(data)) {
+    const response = NextResponse.json({
+      mfa_required: true,
+      mfa_setup_required: data.mfa_setup_required ?? false,
+    });
+    setMfaCookie(response, data.mfa_token);
+    return response;
+  }
+
+  const panel = toPanelSession(data.user);
+  if (!panel) {
     return NextResponse.json({ error: "Acesso não permitido para este perfil." }, { status: 403 });
   }
 
-  const response = NextResponse.json({
-    role,
-    user: {
-      id: String(data.user.id),
-      email: data.user.email,
-      name: data.user.profile?.name ?? "",
-      role: data.user.profile?.role ?? "",
-      clinic_id: data.user.profile?.clinic_id ?? null,
-    },
-  });
-
-  const isProduction = process.env.NODE_ENV === "production";
-
-  const accessPayload = decodeJwt(data.access);
-  const refreshPayload = decodeJwt(data.refresh);
-  const now = Math.floor(Date.now() / 1000);
-  const accessMaxAge = accessPayload ? accessPayload.exp - now : 60 * 60 * 24;
-  const refreshMaxAge = refreshPayload ? refreshPayload.exp - now : 60 * 60 * 24 * 7;
-
-  response.cookies.set("ze_access", data.access, {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: "lax",
-    maxAge: accessMaxAge,
-    path: "/",
-  });
-
-  response.cookies.set("ze_refresh", data.refresh, {
-    httpOnly: true,
-    secure: isProduction,
-    sameSite: "lax",
-    maxAge: refreshMaxAge,
-    path: "/",
-  });
-
+  const response = NextResponse.json(panel);
+  setSessionCookies(response, data.access, data.refresh);
   return response;
 }

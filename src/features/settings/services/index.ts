@@ -9,4 +9,8 @@ export {
   exportPatientDataFetch,
   anonymizeUserFetch,
   anonymizePatientFetch,
+  fetchMfaStatus,
+  disableMfaFetch,
+  regenerateRecoveryCodesFetch,
 } from "./settings.service";
+export type { MfaStatus } from "./settings.service";
