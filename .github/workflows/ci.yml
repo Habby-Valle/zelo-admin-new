@@ -2,7 +2,8 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, dev]
+  pull_request:
 
 jobs:
   check:
@@ -14,6 +15,7 @@ jobs:
           node-version: "20"
           cache: npm
       - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run build

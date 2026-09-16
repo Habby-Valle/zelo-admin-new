@@ -6,6 +6,7 @@ import { Smartphone, Copy, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const VALID_ROLES = ["caregiver", "family"];
+const INVITE_TOKEN_RE = /^[0-9a-f]{64}$/;
 const PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=com.habby_valle_15.zeloapp";
 const APP_STORE_URL = "https://apps.apple.com/app/zelo";
 
@@ -26,15 +27,21 @@ export default function InviteRedirectPage() {
   const [copied, setCopied] = useState(false);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const deepLink = `zeloapp://invite/${role}/${token}`;
+  const safeToken = INVITE_TOKEN_RE.test(token) ? token : null;
+  const safeRole = VALID_ROLES.includes(role) ? encodeURIComponent(role) : null;
+
+  const deepLink = safeToken && safeRole ? `zeloapp://invite/${safeRole}/${safeToken}` : "";
   const inviteUrl = typeof window !== "undefined" ? window.location.href : "";
 
-  const androidIntentUrl = `intent://invite/${role}/${token}#Intent;scheme=zeloapp;package=com.habby_valle_15.zeloapp;S.browser_fallback_url=${encodeURIComponent(inviteUrl || PLAY_STORE_URL)};end;`;
+  const androidIntentUrl =
+    safeToken && safeRole
+      ? `intent://invite/${safeRole}/${safeToken}#Intent;scheme=zeloapp;package=com.habby_valle_15.zeloapp;S.browser_fallback_url=${encodeURIComponent(inviteUrl || PLAY_STORE_URL)};end;`
+      : "";
 
   const appUrl = platform === "android" ? androidIntentUrl : deepLink;
 
   useEffect(() => {
-    if (!VALID_ROLES.includes(role)) {
+    if (!VALID_ROLES.includes(role) || !INVITE_TOKEN_RE.test(token)) {
       window.location.href = "/";
       return;
     }
@@ -82,7 +89,7 @@ export default function InviteRedirectPage() {
     }
   }, [inviteUrl]);
 
-  if (!VALID_ROLES.includes(role)) return null;
+  if (!VALID_ROLES.includes(role) || !INVITE_TOKEN_RE.test(token)) return null;
 
   if (!showFallback) {
     return (
